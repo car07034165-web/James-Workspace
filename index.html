@@ -5,26 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>James C Workspace</title>
     
+    <!-- FIREBASE CLOUD SDK COMPATIBILITY LIBRARIES -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
     <style>
         :root {
-            /* Vibrant Ripe Backgrounds */
             --bg-main: #131e3a;          
             --bg-sidebar: #2e102f;       
             --card-bg: #143226;          
             --border-color: #3b4f66;     
             
-            /* Text Hierarchy */
             --text-main: #ffffff;        
             --text-muted: #cbd5e1;       
             
-            /* Interactive elements */
             --primary-accent: #6366f1;   
             --primary-hover: #818cf8;
 
-            /* Vibrant Tag Tones */
             --vibrant-brand-bg: #1d4ed8;    
             --vibrant-customer-bg: #a21caf; 
             --vibrant-assignee-bg: #7c3aed; 
@@ -32,16 +29,10 @@
             --vibrant-expense-bg: #059669;  
             --vibrant-completed-bg: #0284c7;
             
-            /* Priorities & Status */
             --urgent-color: #e11d48;     
             --high-color: #f97316;       
             --med-color: #f59e0b;        
             --low-color: #10b981;        
-
-            --status-not-started: #64748b;
-            --status-awaiting: #f59e0b;
-            --status-progress: #3b82f6;
-            --status-complete: #10b981;        
         }
 
         * { box-sizing: border-box; }
@@ -57,7 +48,7 @@
         .top-navbar { height: 75px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; z-index: 10; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
         .navbar-brand { font-size: 22px; font-weight: 800; letter-spacing: -0.03em; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
         .navbar-tabs { display: flex; gap: 10px; background-color: var(--bg-main); padding: 6px; border-radius: 12px; border: 1px solid var(--border-color); }
-        .tab-btn { background: none; border: none; padding: 12px 20px; font-size: 15px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-radius: 10px; transition: all 0.2s ease; display: flex; align-items: center; gap: 8px; }
+        .tab-btn { background: none; border: none; padding: 10px 18px; font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-radius: 10px; transition: all 0.2s ease; display: flex; align-items: center; gap: 8px; }
         .tab-btn:hover { color: var(--text-main); background-color: rgba(255, 255, 255, 0.03); }
         .tab-btn.active { background-color: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 
@@ -65,74 +56,72 @@
         .workspace-body { flex: 1; display: flex; overflow: hidden; position: relative; }
 
         /* --- LEFT SIDEBAR --- */
-        .sidebar-left { width: 300px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 25px 20px; gap: 22px; overflow-y: auto; flex-shrink: 0; }
-        .sidebar-left h2 { font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 0; padding-left: 4px; }
-        .filter-section { display: flex; flex-direction: column; gap: 6px; }
-        .filter-section h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 0 0 4px 4px; opacity: 0.7; }
-        .filter-btn { background: none; border: none; text-align: left; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--text-muted); display: flex; align-items: center; gap: 10px; transition: all 0.2s ease; }
+        .sidebar-left { width: 280px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 25px 20px; gap: 22px; overflow-y: auto; flex-shrink: 0; transition: width 0.3s ease; position: relative; }
+        .sidebar-left.collapsed { width: 60px; padding: 25px 10px; overflow-x: hidden; }
+        .sidebar-left.collapsed h2, .sidebar-left.collapsed h3, .sidebar-left.collapsed .filter-btn span { display: none; }
+        .sidebar-left.collapsed .filter-btn { justify-content: center; padding: 10px; }
+        
+        .collapse-btn { background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-main); position: absolute; right: 10px; top: 20px; border-radius: 6px; cursor: pointer; padding: 4px 8px; font-size: 12px; }
+        .sidebar-left.collapsed .collapse-btn { right: 50%; transform: translateX(50%); }
+
+        .sidebar-left h2 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 0; padding-left: 4px; }
+        .filter-section { display: flex; flex-direction: column; gap: 4px; }
+        .filter-section h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 0 0 4px 4px; opacity: 0.7; }
+        .filter-btn { background: none; border: none; text-align: left; padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text-muted); display: flex; align-items: center; gap: 10px; transition: all 0.2s ease; }
         .filter-btn:hover { background-color: rgba(255, 255, 255, 0.05); color: var(--text-main); }
         .filter-btn.active { background-color: var(--card-bg); color: var(--text-main); font-weight: 600; border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
 
-        /* --- RIGHT SIDEBARS --- */
-        .sidebar-right { width: 360px; background-color: var(--bg-sidebar); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 25px 20px; gap: 20px; overflow-y: auto; flex-shrink: 0; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .sidebar-right h2 { font-size: 17px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 0; padding-left: 4px; display: flex; justify-content: space-between; align-items: center; }
+        /* --- RIGHT SIDEBAR (3-DAY PLANNER) --- */
+        .sidebar-right { width: 340px; background-color: var(--bg-sidebar); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 20px; gap: 16px; overflow-y: auto; flex-shrink: 0; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .sidebar-right h2 { font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 0; padding-left: 4px; display: flex; justify-content: space-between; align-items: center; }
         
-        /* Planner Normal & Expanded View */
-        .sidebar-right.expanded-planner { position: fixed; top: 0; right: 0; bottom: 0; width: 75vw; z-index: 50; box-shadow: -10px 0 50px rgba(0,0,0,0.8); background-color: var(--bg-main); border-left: 1px solid var(--border-color); }
-        .sidebar-planner-zone { display: flex; flex-direction: column; gap: 18px; height: 100%; }
+        .sidebar-right.expanded-planner { position: fixed; top: 0; right: 0; bottom: 0; width: 75vw; z-index: 50; box-shadow: -10px 0 50px rgba(0,0,0,0.8); background-color: var(--bg-main); }
+        .sidebar-planner-zone { display: flex; flex-direction: column; gap: 14px; height: 100%; }
         .expanded-planner .sidebar-planner-zone { flex-direction: row; }
         .mini-planner-col { display: flex; flex-direction: column; flex: 1; }
-        .mini-planner-col h4 { font-size: 15px; font-weight: 700; color: var(--text-main); margin: 0 0 8px 4px; display: flex; justify-content: space-between; align-items: center; }
-        .mini-planner-col h4 span { color: var(--text-main); background-color: var(--vibrant-date-bg); padding: 4px 8px; border-radius: 6px; font-size: 13px; font-weight: 800; }
-        .mini-dropzone { flex: 1; min-height: 140px; background-color: rgba(0,0,0,0.2); border: 2px dashed var(--border-color); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 10px; transition: all 0.2s; overflow-y: auto; }
+        .mini-planner-col h4 { font-size: 14px; font-weight: 700; color: var(--text-main); margin: 0 0 6px 4px; display: flex; justify-content: space-between; align-items: center; }
+        .mini-planner-col h4 span { color: var(--text-main); background-color: var(--vibrant-date-bg); padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 800; }
+        .mini-dropzone { flex: 1; min-height: 100px; background-color: rgba(0,0,0,0.2); border: 2px dashed var(--border-color); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px; transition: all 0.2s; overflow-y: auto; }
         .mini-dropzone.drag-over { background-color: rgba(99, 102, 241, 0.15); border-color: var(--primary-accent); }
         
-        .mini-task-card { background-color: var(--card-bg); padding: 12px 14px; border-radius: 10px; font-size: 14px; font-weight: 600; color: var(--text-main); border-left: 5px solid var(--border-color); cursor: grab; box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 8px; transition: transform 0.1s; }
-        .expanded-planner .mini-task-card { flex-direction: row; justify-content: space-between; align-items: center; padding: 10px 14px; }
+        /* Planner Tile Items */
+        .mini-task-card { background-color: var(--card-bg); padding: 10px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--text-main); border-left: 5px solid var(--border-color); cursor: grab; box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 6px; transition: transform 0.1s; }
+        .expanded-planner .mini-task-card { flex-direction: row; justify-content: space-between; align-items: center; padding: 8px 12px; }
         .mini-task-card.priority-Urgent { border-left-color: var(--urgent-color); }
         .mini-task-card.priority-High { border-left-color: var(--high-color); }
         .mini-task-card.priority-Medium { border-left-color: var(--med-color); }
         .mini-task-card.priority-Low { border-left-color: var(--low-color); }
-        .mini-task-card:active { cursor: grabbing; opacity: 0.8; transform: scale(0.98); }
         
-        .mini-card-left { display: flex; align-items: center; gap: 10px; }
-        .mini-card-left input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary-accent); cursor: pointer; }
+        .mini-card-left { display: flex; align-items: center; gap: 8px; }
+        .mini-card-left input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--primary-accent); cursor: pointer; }
         .mini-card-icons { font-size: 11px; opacity: 0.8; display: flex; gap: 4px; }
 
+        /* Projects Sidebar Status */
         .proj-stats-grid { display: flex; gap: 10px; margin-bottom: 10px; }
-        .proj-stat-box { flex: 1; background: linear-gradient(135deg, var(--card-bg), rgba(255,255,255,0.05)); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; text-align: center; }
-        .proj-stat-box h3 { margin: 0; font-size: 34px; font-weight: 800; color: var(--text-main); }
-        .proj-stat-box p { margin: 4px 0 0 0; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 700; }
-        .proj-directory-list { list-style: none; padding: 0; margin: 0 0 20px 0; display: flex; flex-direction: column; gap: 6px; }
-        .proj-directory-list li { background-color: rgba(0,0,0,0.2); padding: 12px 14px; border-radius: 8px; font-size: 14px; color: var(--text-main); font-weight: 600; border-left: 3px solid var(--primary-accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .proj-directory-list li.completed-dir { border-left-color: var(--status-complete); opacity: 0.7; }
+        .proj-stat-box { flex: 1; background: linear-gradient(135deg, var(--card-bg), rgba(255,255,255,0.05)); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; text-align: center; }
+        .proj-stat-box h3 { margin: 0; font-size: 28px; font-weight: 800; color: var(--text-main); }
+        .proj-stat-box p { margin: 4px 0 0 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 700; }
+        .proj-directory-list { list-style: none; padding: 0; margin: 0 0 15px 0; display: flex; flex-direction: column; gap: 4px; }
+        .proj-directory-list li { background-color: rgba(0,0,0,0.2); padding: 10px 12px; border-radius: 8px; font-size: 13px; color: var(--text-main); font-weight: 600; border-left: 3px solid var(--primary-accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         /* --- MAIN VIEWPORTS --- */
-        .main-content { flex: 1; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
-        .container { width: 100%; max-width: 1600px; padding: 0 10px; }
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
+        .container { width: 100%; max-width: 1600px; padding: 0; }
         .view-panel { display: none; width: 100%; }
         .view-panel.active { display: block; }
-        h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 25px 0; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+        h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 20px 0; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
 
-        /* --- INPUT CARD --- */
-        .input-card { background: var(--card-bg); padding: 26px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); margin-bottom: 30px; display: flex; flex-direction: column; gap: 16px; width: 100%; }
-        .form-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
-        .form-row input, .form-row select { flex: 1; min-width: 150px; padding: 14px 18px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 15px; background-color: var(--bg-main); color: var(--text-main); outline: none; transition: border-color 0.2s; }
-        .form-row input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.4); }
-        .form-row input:focus, .form-row select:focus, textarea:focus { border-color: var(--primary-accent); }
-        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
-        .target-label { font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+        .tile-search-bar { width: 100%; padding: 12px 16px; background-color: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); font-size: 14px; margin-bottom: 20px; outline: none; }
         
-        .submit-btn { background-color: var(--primary-accent); color: #ffffff; border: none; padding: 16px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 15px; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3); transition: all 0.2s; }
-        .submit-btn:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
-
-        .tile-search-bar { width: 100%; padding: 14px 18px; background-color: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-main); font-size: 15px; margin-bottom: 20px; outline: none; }
-        .tile-search-bar:focus { border-color: var(--primary-accent); }
+        /* Grouping Headers (Projects) */
+        .group-header { width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.05); border-left: 4px solid var(--primary-accent); margin: 25px 0 15px 0; border-radius: 8px; font-size: 16px; font-weight: 700; color: var(--text-muted); }
 
         /* --- CONDENSED TILES (GRID) --- */
-        .task-tile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; width: 100%; margin-bottom: 30px; }
+        .task-tile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; width: 100%; margin-bottom: 20px; }
+        
         .task-tile { background: var(--card-bg); border-radius: 12px; padding: 14px; border: 1px solid var(--border-color); border-left: 5px solid var(--border-color); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; position: relative; }
         .task-tile:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+        .task-tile.drag-over { border: 2px dashed var(--primary-accent); opacity: 0.7; }
 
         .task-tile.priority-Urgent { border-left-color: var(--urgent-color); }
         .task-tile.priority-High { border-left-color: var(--high-color); }
@@ -143,124 +132,76 @@
         .task-tile.tile-overdue { background-color: #7f1d1d !important; border-color: #ef4444 !important; }
         .task-tile.tile-overdue-urgent { background-color: #450a0a !important; border-color: #dc2626 !important; border-left-color: #dc2626 !important; }
 
-        .add-new-tile { border: 2px dashed var(--primary-accent); background: rgba(99, 102, 241, 0.05); justify-content: center; align-items: center; text-align: center; min-height: 130px; box-shadow: none; border-left: 2px dashed var(--primary-accent); }
-        .add-new-tile:hover { background: rgba(99, 102, 241, 0.15); transform: translateY(-2px); }
+        .add-new-tile { border: 2px dashed var(--primary-accent); background: rgba(99, 102, 241, 0.05); justify-content: center; align-items: center; text-align: center; min-height: 120px; border-left: 2px dashed var(--primary-accent); }
         .add-new-tile h3 { color: var(--primary-hover); font-size: 15px; margin: 0; }
-        
-        .comp-view-tile { border: 2px dashed var(--status-complete); background: rgba(16, 185, 129, 0.05); border-left: 2px dashed var(--status-complete); justify-content: center; align-items: center; text-align: center; min-height: 130px; cursor: pointer; }
-        .comp-view-tile:hover { background: rgba(16, 185, 129, 0.15); transform: translateY(-2px); }
+        .comp-view-tile { border: 2px dashed var(--status-complete); background: rgba(16, 185, 129, 0.05); border-left: 2px dashed var(--status-complete); justify-content: center; align-items: center; text-align: center; min-height: 120px; }
         .comp-view-tile h3 { color: var(--status-complete); font-size: 15px; margin: 0; }
 
         .task-tile-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; }
-        .task-tile-title { font-size: 15px; font-weight: 800; color: var(--text-main); line-height: 1.3; }
+        .task-tile-title { font-size: 14px; font-weight: 800; color: var(--text-main); line-height: 1.3; }
 
-        /* --- TAGS & ACTIONS --- */
-        .task-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-        .tag { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; color: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.15); display: inline-block; }
+        /* --- TAGS & INPUTS --- */
+        .task-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+        .tag { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; color: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.15); display: inline-flex; align-items: center; gap: 4px; }
+        .tag .del-tag { cursor: pointer; opacity: 0.6; } .tag .del-tag:hover { opacity: 1; }
         .tag.tag-brand { background-color: var(--vibrant-brand-bg); }
         .tag.tag-customer { background-color: var(--vibrant-customer-bg); }
         .tag.tag-assignee { background-color: var(--vibrant-assignee-bg); }
         .tag.tag-date { background-color: var(--vibrant-date-bg); }
-        .tag.tag-action { background-color: #b45309; }
-        .tag.tag-ongoing { background-color: #7c3aed; }
+
+        .tag-input-wrapper { display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px dashed var(--border-color); flex: 1; min-width: 200px; }
+        .tag-input-wrapper input { background: transparent; border: none; color: var(--text-main); font-size: 13px; outline: none; width: 100%; }
+        .tag-input-wrapper input::placeholder { color: rgba(255,255,255,0.3); }
+
+        .form-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-start; margin-bottom: 12px; }
+        .form-row > input, .form-row > select { flex: 1; min-width: 150px; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 14px; background-color: var(--bg-main); color: var(--text-main); outline: none; }
+        .form-row > input:focus, .form-row > select:focus { border-color: var(--primary-accent); }
+        input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+        .target-label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+        
+        .submit-btn { background-color: var(--primary-accent); color: #ffffff; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; width: 100%; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3); }
 
         .actions { display: flex; gap: 8px; flex-direction: column; align-items: flex-end; }
-        .action-row { display: flex; gap: 8px; }
-        .action-btn { border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; transition: background-color 0.2s; }
+        .action-btn { border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
         .done-btn { background-color: rgba(255,255,255,0.08); color: var(--text-main); border: 1px solid var(--border-color); }
-        .done-btn:hover { background-color: rgba(255,255,255,0.15); }
-        .delete-btn { background-color: #451a03; color: #f97316; border: 1px solid #7c2d12; }
-        .delete-btn:hover { background-color: #7c2d12; color: #ffedd5; }
-        
-        .icon-row { display: flex; gap: 4px; }
-        .icon-btn { background: none; border: none; font-size: 16px; cursor: pointer; opacity: 0.6; transition: opacity 0.2s; color: white; padding: 2px; }
+        .icon-btn { background: none; border: none; font-size: 15px; cursor: pointer; opacity: 0.6; color: white; padding: 2px; }
         .icon-btn:hover { opacity: 1; color: var(--primary-hover); }
         .icon-btn.del:hover { color: #f43f5e; }
 
-        /* --- BEAUTIFUL SUBTASK ARCHITECTURE --- */
-        .subtasks-box { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 16px; }
-        .subtask-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background-color: var(--bg-main); border-radius: 10px; border: 1px solid rgba(255,255,255,0.03); font-size: 14px; transition: background-color 0.2s; }
-        .subtask-row:hover { background-color: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.1); }
-        
-        .subtask-left { display: flex; align-items: center; gap: 12px; flex: 1; }
-        .status-dropdown { appearance: none; background-color: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; outline: none; }
-        
-        .status-Not-Started { border-left: 4px solid var(--status-not-started); }
-        .status-Awaiting { border-left: 4px solid var(--status-awaiting); }
-        .status-Progress { border-left: 4px solid var(--status-progress); }
-        .status-Complete { border-left: 4px solid var(--status-complete); opacity: 0.7; }
-        
-        .subtask-text { font-weight: 600; color: var(--text-main); letter-spacing: 0.01em; font-size: 15px; }
-        .subtask-text.done { text-decoration: line-through; color: var(--text-muted); opacity: 0.6; }
-        
-        .subtask-right { display: flex; align-items: center; gap: 10px; }
-        .subtask-owner-badge { font-size: 12px; background: rgba(255,255,255,0.05); padding: 6px 10px; border-radius: 6px; color: var(--text-muted); font-weight: 600; }
-        
-        .subtask-entry-row { display: flex; gap: 10px; margin-top: 10px; align-items: center; background-color: rgba(0,0,0,0.2); padding: 14px; border-radius: 12px; border: 1px dashed var(--border-color); flex-wrap: wrap; }
-        .subtask-entry-row input { background-color: var(--bg-main); color: var(--text-main); border: 1px solid var(--border-color); padding: 12px 14px; border-radius: 8px; font-size: 14px; outline: none; }
-        .subtask-entry-row input:focus { border-color: var(--primary-accent); }
+        /* --- PROJECT PROGRESS BAR --- */
+        .progress-wrapper { width: 100%; display: flex; flex-direction: column; gap: 4px; margin: 4px 0; }
+        .progress-text { font-size: 10px; font-weight: 700; color: var(--text-muted); text-align: right; }
+        .progress-bar-outer { width: 100%; height: 6px; background-color: rgba(0,0,0,0.3); border-radius: 10px; overflow: hidden; }
+        .progress-bar-inner { height: 100%; background: linear-gradient(90deg, #6366f1, #10b981); transition: width 0.3s ease; }
 
         /* --- MODALS --- */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.75); z-index: 200; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-        .modal-content { background-color: var(--card-bg); width: 100%; max-width: 900px; max-height: 90vh; border-radius: 16px; border: 1px solid var(--border-color); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
-        .modal-header { padding: 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background-color: rgba(255,255,255,0.02); }
-        .modal-header h2 { margin: 0; font-size: 22px; color: var(--text-main); display: flex; align-items: center; gap: 12px; }
-        .close-modal { background: none; border: none; color: var(--text-muted); font-size: 28px; cursor: pointer; padding: 0 10px; }
-        .close-modal:hover { color: var(--text-main); }
-        .modal-body { padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
+        .modal-content { background-color: var(--card-bg); width: 100%; max-width: 850px; max-height: 90vh; border-radius: 14px; border: 1px solid var(--border-color); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+        .modal-header { padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background-color: rgba(255,255,255,0.02); }
+        .modal-header h2 { margin: 0; font-size: 20px; color: var(--text-main); }
+        .close-modal { background: none; border: none; color: var(--text-muted); font-size: 26px; cursor: pointer; }
+        .modal-body { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
         
-        .task-comment-box { width: 100%; min-height: 100px; background-color: rgba(0, 0, 0, 0.15); color: var(--text-main); border: 1px dashed var(--border-color); border-radius: 12px; padding: 16px; font-size: 15px; outline: none; resize: vertical; transition: border-color 0.2s; font-family: inherit; line-height: 1.5; }
-        .task-comment-box:focus { border-color: var(--primary-accent); background-color: rgba(0, 0, 0, 0.25); }
+        .task-comment-box { width: 100%; min-height: 80px; background-color: rgba(0, 0, 0, 0.15); color: var(--text-main); border: 1px dashed var(--border-color); border-radius: 10px; padding: 12px; font-size: 14px; outline: none; font-family: inherit; }
+        .modal-edit-bar { display: flex; gap: 10px; background: rgba(0,0,0,0.2); padding: 14px; border-radius: 10px; flex-wrap: wrap; align-items: flex-end; }
+        .modal-edit-bar select, .modal-edit-bar input { flex: 1; background: var(--bg-main); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px; border-radius: 6px; font-size: 13px; }
+
+        /* --- SUBTASKS --- */
+        .subtasks-box { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 14px; }
+        .subtask-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background-color: var(--bg-main); border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); font-size: 13px; }
+        .subtask-left { display: flex; align-items: center; gap: 10px; flex: 1; }
+        .status-dropdown { appearance: none; background-color: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+        .status-Complete { opacity: 0.6; } .subtask-text.done { text-decoration: line-through; opacity: 0.6; }
+        .subtask-right { display: flex; align-items: center; gap: 8px; }
         
-        .modal-edit-bar { display: flex; gap: 10px; background: rgba(0,0,0,0.2); padding: 16px; border-radius: 12px; flex-wrap: wrap; }
-        .modal-edit-bar input, .modal-edit-bar select { flex: 1; background: var(--bg-main); color: var(--text-main); border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: 14px; outline: none; }
+        .subtask-entry-row { display: flex; gap: 8px; margin-top: 8px; align-items: center; background-color: rgba(0,0,0,0.2); padding: 12px; border-radius: 10px; border: 1px dashed var(--border-color); flex-wrap: wrap; }
+        .subtask-entry-row input { background-color: var(--bg-main); color: var(--text-main); border: 1px solid var(--border-color); padding: 10px 12px; border-radius: 6px; font-size: 13px; }
 
-        /* --- MEETING NOTES SYSTEM --- */
-        .meeting-notes-area { width: 100%; min-height: 120px; background-color: rgba(0, 0, 0, 0.15); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; font-size: 14px; outline: none; resize: vertical; font-family: inherit; line-height: 1.6; }
-        .action-log-container { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
-        .meeting-action-item { background: rgba(99, 102, 241, 0.1); border-left: 3px solid var(--primary-accent); padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; display: flex; justify-content: space-between; }
-        
-        /* List Layout */
-        .task-list { display: flex; flex-direction: column; gap: 16px; width: 100%; }
-        .task-card { background: var(--card-bg); border-radius: 16px; padding: 20px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 16px; position: relative; }
-        .task-card.archive-card { opacity: 0.6; background-color: rgba(0, 0, 0, 0.2); box-shadow: none; border: 1px solid rgba(255,255,255,0.05); }
-        .task-card.archive-card .task-title { text-decoration: line-through; color: var(--text-muted); }
-        .project-main-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; width: 100%; }
-        .task-details { display: flex; flex-direction: column; gap: 8px; flex: 1; padding-left: 6px; }
-        .task-title { font-size: 19px; font-weight: 800; color: var(--text-main); line-height: 1.4; }
-        .ongoing-expense-card { border: 2px solid var(--primary-accent); background: linear-gradient(135deg, var(--card-bg), rgba(99, 102, 241, 0.1)); }
-
-        /* --- MOBILE RESPONSIVE MEDIA QUERIES --- */
-        @media (max-width: 1024px) {
-            body { overflow-y: auto; }
-            .workspace-body { flex-direction: column; overflow-y: visible; }
-            
-            /* Order the mobile layout: Main Content first, Filters second, Planner third */
-            .main-content { order: 1; padding: 20px 10px; width: 100%; overflow: visible; }
-            .sidebar-left { order: 2; width: 100% !important; border-right: none; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
-            .sidebar-right { order: 3; width: 100% !important; border-left: none; }
-
-            .top-navbar { height: auto; flex-direction: column; padding: 15px; gap: 15px; }
-            .navbar-tabs { flex-wrap: wrap; justify-content: center; width: 100%; }
-            .tab-btn { padding: 8px 12px; font-size: 13px; }
-            
-            .task-tile-grid { grid-template-columns: 1fr; }
-            .form-row { flex-direction: column; align-items: stretch; }
-            .target-label { width: 100%; }
-            .modal-content { margin: 10px; width: calc(100% - 20px); max-height: 95vh; }
-            
-            .project-main-row { flex-direction: column; align-items: flex-start; }
-            .actions { width: 100%; flex-direction: row; justify-content: flex-end; }
-            .subtask-row { flex-direction: column; align-items: flex-start; gap: 10px; }
-            .subtask-right { width: 100%; justify-content: space-between; }
-            
-            .sidebar-right.expanded-planner { width: 100vw !important; }
-            .expanded-planner .sidebar-planner-zone { flex-direction: column; }
-        }
     </style>
 </head>
 <body>
 
+    <!-- TOP NAVIGATION -->
     <div class="top-navbar">
         <div class="navbar-brand">🥃 James C Workspace</div>
         <div class="navbar-tabs">
@@ -269,14 +210,18 @@
             <button id="tab-meet" class="tab-btn" onclick="switchView('meetings')">🤝 Meeting Notes</button>
             <button id="tab-exp" class="tab-btn" onclick="switchView('expenses')">💷 Monthly Expenses</button>
         </div>
+        <div style="width:50px;"></div>
     </div>
 
+    <!-- CORE FRAME -->
     <div class="workspace-body">
         
+        <!-- LEFT SIDEBAR: TASK FILTERS -->
         <div class="sidebar-left" id="app-sidebar-left">
+            <button class="collapse-btn" onclick="toggleSidebar('app-sidebar-left')">👁️</button>
             <h2>🔎 Workspace Filters</h2>
             <div class="filter-section">
-                <h3>🚦 Priority Threshold</h3>
+                <h3>🚦 Priority</h3>
                 <button class="filter-btn active" onclick="setFilter('priority', 'all', this)">🏁 All Tasks</button>
                 <button class="filter-btn" onclick="setFilter('priority', 'Urgent', this)">🚨 Urgent</button>
                 <button class="filter-btn" onclick="setFilter('priority', 'High', this)">🔴 High</button>
@@ -288,7 +233,9 @@
             <div class="filter-section"><h3>👤 Assignees</h3><div id="assigneeFilters" class="filter-section"></div></div>
         </div>
 
+        <!-- LEFT SIDEBAR: PROJECT FILTERS -->
         <div class="sidebar-left" id="app-sidebar-left-projects" style="display:none;">
+            <button class="collapse-btn" onclick="toggleSidebar('app-sidebar-left-projects')">👁️</button>
             <h2>🔎 Project Filters</h2>
             <div class="filter-section"><button class="filter-btn active" onclick="setProjFilter('all', 'all', this)">🏁 All Projects</button></div>
             <div class="filter-section"><h3>🏷️ Brands</h3><div id="projBrandFilters" class="filter-section"></div></div>
@@ -296,12 +243,13 @@
             <div class="filter-section"><h3>👤 Owners</h3><div id="projOwnerFilters" class="filter-section"></div></div>
         </div>
 
+        <!-- MAIN VIEWPORTS -->
         <div class="main-content">
             
             <div id="panel-dashboard" class="view-panel active">
                 <div class="container">
                     <h1>⚡ Active Workspace Tasks</h1>
-                    <input type="text" id="tileSearchInput" class="tile-search-bar" placeholder="🔍 Quick filter visible tiles by keyword or tag..." onkeyup="filterTiles(this.value)">
+                    <input type="text" id="tileSearchInput" class="tile-search-bar" placeholder="🔍 Quick filter tiles by keyword..." onkeyup="filterTiles(this.value)">
                     <div id="taskTileGrid" class="task-tile-grid"></div>
                 </div>
             </div>
@@ -309,184 +257,144 @@
             <div id="panel-projects" class="view-panel">
                 <div class="container">
                     <h1>🚀 Long-Term Strategic Projects</h1>
-                    <input type="text" id="projTileSearchInput" class="tile-search-bar" placeholder="🔍 Quick filter visible projects by name, brand, or owner..." onkeyup="filterProjectTiles(this.value)">
-                    <div id="projectTileGrid" class="task-tile-grid"></div>
+                    <input type="text" id="projTileSearchInput" class="tile-search-bar" placeholder="🔍 Quick filter projects..." onkeyup="filterProjectTiles(this.value)">
+                    <div id="projectTileGridContainer"></div>
                 </div>
             </div>
 
             <div id="panel-meetings" class="view-panel">
                 <div class="container">
-                    <h1>🤝 Meeting Transcripts & Actions</h1>
-                    <input type="text" id="meetTileSearchInput" class="tile-search-bar" placeholder="🔍 Search past meetings..." onkeyup="filterMeetingTiles(this.value)">
+                    <h1>🤝 Meeting Transcripts</h1>
                     <div id="meetingTileGrid" class="task-tile-grid"></div>
                 </div>
             </div>
 
             <div id="panel-expenses" class="view-panel">
                 <div class="container">
-                    <h1>💷 Monthly Ledger Adjustments</h1>
-                    <div class="sub-nav" style="max-width: 800px; margin: 0 auto 25px auto;">
-                        <button id="subnav-add" class="sub-nav-btn active" onclick="switchExpenseSubView('add')">➕ Add Expense</button>
-                        <button id="subnav-review" class="sub-nav-btn" onclick="switchExpenseSubView('review')">📊 Review Ledger</button>
+                    <h1>💷 Monthly Ledger</h1>
+                    <div class="sub-nav" style="max-width: 800px; margin: 0 auto 25px auto; display:flex; gap:10px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+                        <button id="subnav-add" class="tab-btn active" onclick="switchExpenseSubView('add')">➕ Add Expense</button>
+                        <button id="subnav-review" class="tab-btn" onclick="switchExpenseSubView('review')">📊 Review Ledger</button>
                     </div>
-                    <div id="expense-sub-add">
-                        <div class="input-card" style="max-width: 800px; margin: 0 auto;">
-                            <div class="form-row">
-                                <input type="text" id="expItemInput" placeholder="What is it?">
-                                <input type="number" id="expCostInput" step="0.01" placeholder="Cost (£)">
-                            </div>
-                            <div class="form-row" style="align-items: center;">
-                                <input type="text" id="expReceiptInput" list="receiptOptions" placeholder="Receipt Location">
-                                <input type="date" id="expDateInput">
-                                <label style="display:flex; align-items:center; gap:8px; color:var(--text-main); font-size:14px; cursor:pointer; flex: 0.5;">
-                                    <input type="checkbox" id="expOngoingInput" style="width:18px; height:18px; accent-color:var(--primary-accent); margin:0;">
-                                    🔁 Permanent
-                                </label>
-                            </div>
-                            <button class="submit-btn" onclick="addExpense()">💷 Log Expense Entry</button>
-                        </div>
+                    <div id="expense-sub-add" style="max-width:800px; margin:0 auto; background:var(--card-bg); padding:20px; border-radius:12px; border:1px solid var(--border-color);">
+                        <div class="form-row"><input type="text" id="expItemInput" placeholder="What is it?"><input type="number" id="expCostInput" step="0.01" placeholder="Cost (£)"></div>
+                        <div class="form-row"><input type="text" id="expReceiptInput" placeholder="Receipt Location"><input type="date" id="expDateInput"></div>
+                        <label style="display:flex; align-items:center; gap:8px; margin-bottom:15px; cursor:pointer;"><input type="checkbox" id="expOngoingInput"> 🔁 Permanent / Ongoing</label>
+                        <button class="submit-btn" onclick="addExpense()">Log Expense</button>
                     </div>
-                    <div id="expense-sub-review" style="display:none;">
-                        <div class="total-banner" style="max-width: 800px; margin: 0 auto 30px auto;">
-                            <div><h3>💳 Total Running Expenditures</h3></div>
-                            <div class="amount" id="expense-total-display">£0.00</div>
+                    <div id="expense-sub-review" style="display:none; max-width:800px; margin:0 auto;">
+                        <div style="background:var(--vibrant-expense-bg); padding:20px; border-radius:12px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
+                            <h3>💳 Total Running</h3><h2 id="expense-total-display" style="margin:0;">£0.00</h2>
                         </div>
-                        <div id="expenseLedgerList" class="task-list" style="max-width: 800px; margin: 0 auto;"></div>
+                        <div id="expenseLedgerList" style="display:flex; flex-direction:column; gap:10px;"></div>
                     </div>
                 </div>
             </div>
 
         </div>
 
+        <!-- RIGHT SIDEBARS -->
         <div class="sidebar-right" id="app-sidebar-right-planner">
-            <h2>📅 3-Day Planner <button class="icon-btn" onclick="togglePlannerExpanded()" title="Expand Planner">⛶</button></h2>
-            <p style="font-size:13px; color:var(--text-muted); margin:0 0 14px 4px; line-height: 1.4;">Drag active tiles here to schedule.</p>
+            <h2>📅 3-Day Planner <button class="icon-btn" onclick="togglePlannerExpanded()">⛶</button></h2>
             <div class="sidebar-planner-zone">
-                <div class="mini-planner-col">
-                    <h4>📍 Today <span id="sb-date-0"></span></h4>
-                    <div id="sb-col-0" class="mini-dropzone" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondrop="handleDrop(event, 0)"></div>
-                </div>
-                <div class="mini-planner-col">
-                    <h4>⏭️ Tomorrow <span id="sb-date-1"></span></h4>
-                    <div id="sb-col-1" class="mini-dropzone" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondrop="handleDrop(event, 1)"></div>
-                </div>
-                <div class="mini-planner-col">
-                    <h4>⏭️ Day After <span id="sb-date-2"></span></h4>
-                    <div id="sb-col-2" class="mini-dropzone" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondrop="handleDrop(event, 2)"></div>
-                </div>
+                <div class="mini-planner-col"><h4>📍 Today <span id="sb-date-0"></span></h4><div id="sb-col-0" class="mini-dropzone" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondrop="handlePlannerDrop(event, 0)"></div></div>
+                <div class="mini-planner-col"><h4>⏭️ Tomorrow <span id="sb-date-1"></span></h4><div id="sb-col-1" class="mini-dropzone" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondrop="handlePlannerDrop(event, 1)"></div></div>
+                <div class="mini-planner-col"><h4>⏭️ Day After <span id="sb-date-2"></span></h4><div id="sb-col-2" class="mini-dropzone" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondrop="handlePlannerDrop(event, 2)"></div></div>
             </div>
         </div>
 
         <div class="sidebar-right" id="app-sidebar-right-projects" style="display:none;">
-            <h2>📊 Project Status</h2>
-            <div class="proj-stats-grid">
-                <div class="proj-stat-box"><h3 id="stat-live-proj">0</h3><p>Live</p></div>
-                <div class="proj-stat-box" style="opacity: 0.7;"><h3 id="stat-comp-proj">0</h3><p>Completed</p></div>
-            </div>
-            <h3 style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 0 0 6px 0;">⚡ Live Projects</h3>
-            <ul class="proj-directory-list" id="dir-live-proj"></ul>
-            <h3 style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 0 0 6px 0;">📁 Historical</h3>
-            <ul class="proj-directory-list" id="dir-comp-proj"></ul>
+            <h2>📊 Portfolio Overview</h2>
+            <div class="proj-stats-grid"><div class="proj-stat-box"><h3 id="stat-live-proj">0</h3><p>Live</p></div><div class="proj-stat-box" style="opacity: 0.7;"><h3 id="stat-comp-proj">0</h3><p>Completed</p></div></div>
+            <h3 style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin: 0 0 4px 0;">⚡ Live Projects</h3><ul class="proj-directory-list" id="dir-live-proj"></ul>
             <hr style="border-top: 1px solid var(--border-color); border-bottom: none; margin: 15px 0;">
-            <h2>⏳ Upcoming Deadlines</h2>
-            <div id="upcoming-deadlines-container" style="display:flex; flex-direction:column; gap:16px; margin-top:10px;"></div>
+            <h2>⏳ Upcoming Deadlines</h2><div id="upcoming-deadlines-container" style="display:flex; flex-direction:column; gap:12px; margin-top:10px;"></div>
         </div>
     </div>
 
-    <datalist id="brandOptions"></datalist>
-    <datalist id="customerOptions"></datalist>
-    <datalist id="assigneeOptions"></datalist>
-    <datalist id="subtaskOwnerOptions"></datalist>
-    <datalist id="receiptOptions"></datalist>
-
+    <!-- MODALS -->
+    <!-- NEW TASK MODAL -->
     <div class="modal-overlay" id="newTaskModal">
-        <div class="modal-content" style="max-width: 700px;">
+        <div class="modal-content" style="max-width: 600px;">
             <div class="modal-header"><h2>➕ Initialize New Task</h2><button class="close-modal" onclick="closeModal('newTaskModal')">×</button></div>
             <div class="modal-body">
-                <div class="form-row"><input type="text" id="taskInput" placeholder="Headline task description..."></div>
+                <input type="text" id="taskInput" placeholder="Headline task description..." style="width:100%; padding:12px; background:var(--bg-main); color:white; border:1px solid var(--border-color); border-radius:8px; margin-bottom:15px; font-size:15px;">
                 <div class="form-row">
-                    <select id="priorityInput">
-                        <option value="Low">🟢 Low Priority</option>
-                        <option value="Medium" selected>🟡 Medium Priority</option>
-                        <option value="High">🔴 High Priority</option>
-                        <option value="Urgent">🚨 Urgent</option>
-                    </select>
-                    <label class="target-label">🎯 Target Date <input type="date" id="dateInput"></label>
+                    <label class="target-label">Priority<select id="priorityInput"><option value="Low">🟢 Low</option><option value="Medium" selected>🟡 Medium</option><option value="High">🔴 High</option><option value="Urgent">🚨 Urgent</option></select></label>
+                    <label class="target-label">Target Date<input type="date" id="dateInput"></label>
+                    <label class="target-label">Recurrence<select id="recurrenceInput"><option value="None">No Repeat</option><option value="Weekly">Weekly</option><option value="Bi-Weekly">Bi-Weekly</option><option value="Monthly">Monthly</option></select></label>
                 </div>
-                <div class="form-row">
-                    <input type="text" id="brandInput" list="brandOptions" placeholder="Brand / Label">
-                    <input type="text" id="customerInput" list="customerOptions" placeholder="Customer / Client">
-                    <input type="text" id="assigneeInput" list="assigneeOptions" placeholder="Assignee name">
-                </div>
-                <button class="submit-btn" style="margin-top: 10px;" onclick="addTask()">➕ Create Task Workspace</button>
+                
+                <label class="target-label">🏷️ Brands <span style="font-size:10px; font-weight:normal; text-transform:none;">(Type & hit Enter)</span></label>
+                <div class="tag-input-wrapper"><div class="task-tags" id="new-task-brands-ui"></div><input type="text" placeholder="Add brand..." onkeydown="handleGlobalTagAdd(event, 'new-task', 'brands')"></div>
+                
+                <label class="target-label" style="margin-top:10px;">🏢 Customers</label>
+                <div class="tag-input-wrapper"><div class="task-tags" id="new-task-customers-ui"></div><input type="text" placeholder="Add customer..." onkeydown="handleGlobalTagAdd(event, 'new-task', 'customers')"></div>
+                
+                <label class="target-label" style="margin-top:10px;">👤 Assignees</label>
+                <div class="tag-input-wrapper"><div class="task-tags" id="new-task-assignees-ui"></div><input type="text" placeholder="Add assignee..." onkeydown="handleGlobalTagAdd(event, 'new-task', 'assignees')"></div>
+                
+                <button class="submit-btn" style="margin-top: 20px;" onclick="addTask()">➕ Create Task</button>
             </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="completedTasksModal">
-        <div class="modal-content" style="max-width: 800px;">
-            <div class="modal-header"><h2>📁 Archive: Completed Tasks</h2><button class="close-modal" onclick="closeModal('completedTasksModal')">×</button></div>
-            <div class="modal-body" id="modal-completed-body"></div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="taskDetailsModal">
-        <div class="modal-content">
-            <div class="modal-header"><h2 id="modal-task-title">Task Details</h2><button class="close-modal" onclick="closeModal('taskDetailsModal')">×</button></div>
-            <div class="modal-body" id="modal-task-body"></div>
-        </div>
-    </div>
-
+    <!-- NEW PROJECT MODAL -->
     <div class="modal-overlay" id="newProjectModal">
-        <div class="modal-content" style="max-width: 700px;">
+        <div class="modal-content" style="max-width: 600px;">
             <div class="modal-header"><h2>🚀 Initialize Strategic Project</h2><button class="close-modal" onclick="closeModal('newProjectModal')">×</button></div>
             <div class="modal-body">
-                <div class="form-row"><input type="text" id="projTitleInput" placeholder="Project Workspace Title..."></div>
-                <div class="form-row">
-                    <input type="text" id="projCustomerInput" list="customerOptions" placeholder="Customer Name">
-                    <input type="text" id="projBrandsInput" placeholder="Brands (comma-separated)">
-                </div>
-                <div class="form-row">
-                    <input type="text" id="projOwnerInput" list="subtaskOwnerOptions" placeholder="Overall Owner">
-                    <label class="target-label">🎯 Target Completion <input type="date" id="projDateInput"></label>
-                </div>
-                <button class="submit-btn" style="margin-top: 10px;" onclick="addProject()">🚀 Deploy Project Workspace</button>
+                <input type="text" id="projTitleInput" placeholder="Project Title..." style="width:100%; padding:12px; background:var(--bg-main); color:white; border:1px solid var(--border-color); border-radius:8px; margin-bottom:15px;">
+                <div class="form-row"><label class="target-label">Target Completion<input type="date" id="projDateInput"></label></div>
+                
+                <label class="target-label">🏷️ Brands <span style="font-size:10px; font-weight:normal; text-transform:none;">(Type & hit Enter)</span></label>
+                <div class="tag-input-wrapper"><div class="task-tags" id="new-proj-brands-ui"></div><input type="text" placeholder="Add brand..." onkeydown="handleGlobalTagAdd(event, 'new-proj', 'brands')"></div>
+                
+                <label class="target-label" style="margin-top:10px;">🏢 Customers</label>
+                <div class="tag-input-wrapper"><div class="task-tags" id="new-proj-customers-ui"></div><input type="text" placeholder="Add customer..." onkeydown="handleGlobalTagAdd(event, 'new-proj', 'customers')"></div>
+                
+                <label class="target-label" style="margin-top:10px;">👤 Assignees / Owners</label>
+                <div class="tag-input-wrapper"><div class="task-tags" id="new-proj-assignees-ui"></div><input type="text" placeholder="Add assignee..." onkeydown="handleGlobalTagAdd(event, 'new-proj', 'assignees')"></div>
+
+                <button class="submit-btn" style="margin-top: 20px;" onclick="addProject()">🚀 Deploy Project</button>
             </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="projectDetailsModal">
-        <div class="modal-content"><div class="modal-header"><h2 id="modal-proj-title">Project Details</h2><button class="close-modal" onclick="closeModal('projectDetailsModal')">×</button></div><div class="modal-body" id="modal-proj-body"></div></div>
-    </div>
-
+    <!-- NEW MEETING MODAL -->
     <div class="modal-overlay" id="newMeetingModal">
-        <div class="modal-content" style="max-width: 700px;">
+        <div class="modal-content" style="max-width: 600px;">
             <div class="modal-header"><h2>🤝 Log New Meeting</h2><button class="close-modal" onclick="closeModal('newMeetingModal')">×</button></div>
             <div class="modal-body">
-                <div class="form-row"><input type="text" id="meetTitleInput" placeholder="Meeting Subject / Title..."></div>
+                <input type="text" id="meetTitleInput" placeholder="Meeting Subject..." style="width:100%; padding:12px; background:var(--bg-main); color:white; border:1px solid var(--border-color); border-radius:8px; margin-bottom:15px;">
                 <div class="form-row">
-                    <input type="date" id="meetDateInput">
-                    <input type="time" id="meetTimeInput" style="flex: 0.5;">
-                    <input type="text" id="meetPlaceInput" placeholder="Location / Link">
+                    <label class="target-label">Date<input type="date" id="meetDateInput"></label>
+                    <label class="target-label">Time<input type="time" id="meetTimeInput"></label>
+                    <label class="target-label">Location/Link<input type="text" id="meetPlaceInput"></label>
                 </div>
-                <div class="form-row">
-                    <input type="text" id="meetParticipantsInput" placeholder="Participants (comma-separated)">
-                </div>
-                <div class="form-row">
-                    <input type="text" id="meetBrandInput" list="brandOptions" placeholder="Brand Focus">
-                    <input type="text" id="meetCustomerInput" list="customerOptions" placeholder="Customer / Client">
-                </div>
-                <button class="submit-btn" style="margin-top: 10px;" onclick="addMeeting()">📝 Initialize Transcript</button>
+                
+                <label class="target-label">🏷️ Brands Focus <span style="font-size:10px; font-weight:normal; text-transform:none;">(Type & hit Enter)</span></label>
+                <div class="tag-input-wrapper"><div class="task-tags" id="new-meet-brands-ui"></div><input type="text" placeholder="Add brand..." onkeydown="handleGlobalTagAdd(event, 'new-meet', 'brands')"></div>
+                
+                <label class="target-label" style="margin-top:10px;">🏢 Customers</label>
+                <div class="tag-input-wrapper"><div class="task-tags" id="new-meet-customers-ui"></div><input type="text" placeholder="Add customer..." onkeydown="handleGlobalTagAdd(event, 'new-meet', 'customers')"></div>
+                
+                <label class="target-label" style="margin-top:10px;">👥 Participants</label>
+                <div class="tag-input-wrapper"><div class="task-tags" id="new-meet-assignees-ui"></div><input type="text" placeholder="Add participant..." onkeydown="handleGlobalTagAdd(event, 'new-meet', 'assignees')"></div>
+
+                <button class="submit-btn" style="margin-top: 20px;" onclick="addMeeting()">📝 Initialize Transcript</button>
             </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="meetingDetailsModal">
-        <div class="modal-content"><div class="modal-header"><h2 id="modal-meet-title">Meeting Transcript</h2><button class="close-modal" onclick="closeModal('meetingDetailsModal')">×</button></div><div class="modal-body" id="modal-meet-body"></div></div>
-    </div>
+    <!-- DYNAMIC DETAILS MODALS -->
+    <div class="modal-overlay" id="taskDetailsModal"><div class="modal-content"><div class="modal-header"><h2 id="modal-task-title"></h2><button class="close-modal" onclick="closeModal('taskDetailsModal')">×</button></div><div class="modal-body" id="modal-task-body"></div></div></div>
+    <div class="modal-overlay" id="projectDetailsModal"><div class="modal-content"><div class="modal-header"><h2 id="modal-proj-title"></h2><button class="close-modal" onclick="closeModal('projectDetailsModal')">×</button></div><div class="modal-body" id="modal-proj-body"></div></div></div>
+    <div class="modal-overlay" id="meetingDetailsModal"><div class="modal-content"><div class="modal-header"><h2 id="modal-meet-title"></h2><button class="close-modal" onclick="closeModal('meetingDetailsModal')">×</button></div><div class="modal-body" id="modal-meet-body"></div></div></div>
+    <div class="modal-overlay" id="completedTasksModal"><div class="modal-content" style="max-width:800px;"><div class="modal-header"><h2>📁 Archive</h2><button class="close-modal" onclick="closeModal('completedTasksModal')">×</button></div><div class="modal-body" id="modal-completed-body"></div></div></div>
 
 <script>
-    // --- REAL-TIME CLOUD INITIALIZATION ---
+    // --- FIREBASE CONFIGURATION ---
     const firebaseConfig = {
       apiKey: "AIzaSyDS30e2jgHMVbPae6Vs-YCwJQc-yy8SISg",
       authDomain: "james-workspace-proof.firebaseapp.com",
@@ -496,17 +404,20 @@
       appId: "1:262154953604:web:20afb2efac0ffbaf5f33d1",
       measurementId: "G-CFV3LPFRBN"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const dataRef = db.collection('workspace').doc('james_central_data');
 
     // --- STATE VARIABLES ---
-    let tasks = [];
-    let expenses = [];
-    let projects = [];
-    let meetings = [];
+    let tasks = [], expenses = [], projects = [], meetings = [];
     
+    // Temporary UI State for multi-tag inputs
+    window.tagState = {
+        'new-task': { brands: [], customers: [], assignees: [] },
+        'new-proj': { brands: [], customers: [], assignees: [] },
+        'new-meet': { brands: [], customers: [], assignees: [] }
+    };
+
     window.currentFilter = { type: 'priority', value: 'all' };
     window.currentProjFilter = { type: 'all', value: 'all' };
     window.activeView = 'dashboard';
@@ -520,39 +431,54 @@
     window.datesArray = [];
     for(let i=0; i<3; i++) { const d = new Date(); d.setDate(d.getDate() + i); datesArray.push(d); }
 
-    // --- THE LIVE SYNC LISTENER ---
+    // --- DATA MIGRATION & SYNC ---
     dataRef.onSnapshot((doc) => {
         if (doc.exists) {
             const data = doc.data();
             tasks = data.tasks || []; projects = data.projects || [];
             meetings = data.meetings || []; expenses = data.expenses || [];
             
+            // AGGRESSIVE DATA ARRAY MIGRATION
+            tasks = tasks.map(t => {
+                if(typeof t.brand === 'string') { t.brands = t.brand !== 'No Brand' && t.brand ? [t.brand] : []; delete t.brand; }
+                if(typeof t.customer === 'string') { t.customers = t.customer !== 'No Customer' && t.customer ? [t.customer] : []; delete t.customer; }
+                if(typeof t.assignee === 'string') { t.assignees = t.assignee !== 'Unassigned' && t.assignee ? [t.assignee] : []; delete t.assignee; }
+                if(!t.brands) t.brands = []; if(!t.customers) t.customers = []; if(!t.assignees) t.assignees = [];
+                if(!t.subtasks) t.subtasks = []; if(t.comments === undefined) t.comments = '';
+                if(!t.priority) t.priority = 'Medium'; if(!t.recurrence) t.recurrence = 'None';
+                if(!t.order) t.order = Date.now() + Math.random();
+                return t;
+            });
             projects = projects.map(p => {
-                if(!p.status) p.status = 'Live'; if(!p.brands) p.brands = [];
-                if(!Array.isArray(p.brands)) { p.brands = typeof p.brands === 'string' ? [p.brands] : ['Global']; }
-                if(p.brand && p.brands.length === 0) p.brands = [p.brand]; 
-                if(!p.subtasks) p.subtasks = []; if(!p.files) p.files = []; if(p.comments === undefined) p.comments = '';
+                if(typeof p.customer === 'string') { p.customers = p.customer !== 'General' && p.customer ? [p.customer] : []; delete p.customer; }
+                if(typeof p.owner === 'string') { p.assignees = p.owner !== 'Unassigned' && p.owner ? [p.owner] : []; delete p.owner; }
+                if(!p.brands) p.brands = []; if(!p.customers) p.customers = []; if(!p.assignees) p.assignees = [];
+                if(!p.status) p.status = 'Live'; if(!p.subtasks) p.subtasks = []; if(!p.files) p.files = []; if(p.comments === undefined) p.comments = '';
                 p.subtasks = p.subtasks.map(s => { if(!s.status) s.status = s.done ? 'Complete' : 'Not Started'; return s; });
                 return p;
             });
-            tasks = tasks.map(t => {
-                if(!t.subtasks) t.subtasks = []; if(t.comments === undefined) t.comments = '';
-                if(!t.priority) t.priority = 'Medium';
-                return t;
+            meetings = meetings.map(m => {
+                if(typeof m.brand === 'string') { m.brands = m.brand ? [m.brand] : []; delete m.brand; }
+                if(typeof m.customer === 'string') { m.customers = m.customer ? [m.customer] : []; delete m.customer; }
+                if(typeof m.participants === 'string') { m.assignees = m.participants ? [m.participants] : []; delete m.participants; }
+                if(!m.brands) m.brands = []; if(!m.customers) m.customers = []; if(!m.assignees) m.assignees = [];
+                if(!m.actions) m.actions = []; if(!m.notes) m.notes = '';
+                return m;
             });
-            meetings = meetings.map(m => { if(!m.actions) m.actions = []; if(!m.notes) m.notes = ''; return m; });
             expenses = expenses.map(e => { if(e.isOngoing === undefined) e.isOngoing = false; return e; });
 
             refreshAllViews();
-        } else {
-            syncToCloud();
-        }
+        } else { syncToCloud(); }
     });
 
     function syncToCloud() { dataRef.set({ tasks, projects, meetings, expenses }, { merge: true }); }
+    window.saveTasks = function() { syncToCloud(); }
+    window.saveExpenses = function() { syncToCloud(); }
+    window.saveProjects = function() { syncToCloud(); }
+    window.saveMeetings = function() { syncToCloud(); }
 
     function refreshAllViews() {
-        renderSidebarFilters(); renderProjectSidebar(); renderInputDatalists(); renderUpcomingDeadlines();
+        renderSidebarFilters(); renderProjectSidebar(); renderUpcomingDeadlines();
         if (activeView === 'dashboard') { renderTasks(); renderSidebarPlanner(); }
         else if (activeView === 'projects') { renderProjects(); }
         else if (activeView === 'meetings') { renderMeetings(); }
@@ -568,16 +494,29 @@
         }
     }
 
-    window.saveTasks = function() { syncToCloud(); }
-    window.saveExpenses = function() { syncToCloud(); }
-    window.saveProjects = function() { syncToCloud(); }
-    window.saveMeetings = function() { syncToCloud(); }
-
+    // --- UI NAVIGATION ---
+    window.toggleSidebar = function(id) { document.getElementById(id).classList.toggle('collapsed'); }
+    window.togglePlannerExpanded = function() {
+        const sidebar = document.getElementById('app-sidebar-right-planner');
+        isPlannerExpanded = !isPlannerExpanded;
+        if(isPlannerExpanded) sidebar.classList.add('expanded-planner'); else sidebar.classList.remove('expanded-planner');
+    }
+    window.openModal = function(id) { document.getElementById(id).style.display = 'flex'; }
+    window.closeModal = function(id) { 
+        document.getElementById(id).style.display = 'none'; 
+        if(id === 'newTaskModal' || id === 'newProjectModal' || id === 'newMeetingModal') {
+            const context = id.replace('Modal', '');
+            tagState[context] = { brands: [], customers: [], assignees: [] };
+            renderGlobalTagsUI(context, 'brands'); renderGlobalTagsUI(context, 'customers'); renderGlobalTagsUI(context, 'assignees');
+        }
+        if(id === 'taskDetailsModal') { currentActiveTaskModalId = null; renderTasks(); renderSidebarPlanner(); }
+        if(id === 'projectDetailsModal') { currentActiveProjModalId = null; renderProjects(); }
+        if(id === 'meetingDetailsModal') { currentActiveMeetModalId = null; renderMeetings(); }
+    }
     window.switchView = function(viewName) {
         activeView = viewName;
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
-        
         document.getElementById('app-sidebar-left').style.display = 'none'; document.getElementById('app-sidebar-left-projects').style.display = 'none';
         document.getElementById('app-sidebar-right-planner').style.display = 'none'; document.getElementById('app-sidebar-right-projects').style.display = 'none';
 
@@ -588,7 +527,7 @@
         } else if (viewName === 'projects') {
             document.getElementById('tab-projects').classList.add('active'); document.getElementById('panel-projects').classList.add('active');
             document.getElementById('app-sidebar-left-projects').style.display = 'flex'; document.getElementById('app-sidebar-right-projects').style.display = 'flex';
-            renderProjects(); renderUpcomingDeadlines();
+            renderProjects();
         } else if (viewName === 'meetings') {
             document.getElementById('tab-meet').classList.add('active'); document.getElementById('panel-meetings').classList.add('active');
             renderMeetings();
@@ -597,200 +536,246 @@
             switchExpenseSubView(activeExpenseSubView);
         }
     }
-
     window.switchExpenseSubView = function(subView) {
         activeExpenseSubView = subView;
         document.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
         document.getElementById('expense-sub-add').style.display = 'none'; document.getElementById('expense-sub-review').style.display = 'none';
+        if(subView === 'add') { document.getElementById('subnav-add').classList.add('active'); document.getElementById('expense-sub-add').style.display = 'block'; } 
+        else { document.getElementById('subnav-review').classList.add('active'); document.getElementById('expense-sub-review').style.display = 'block'; renderExpenses(); }
+    }
 
-        if(subView === 'add') {
-            document.getElementById('subnav-add').classList.add('active'); document.getElementById('expense-sub-add').style.display = 'block';
-        } else {
-            document.getElementById('subnav-review').classList.add('active'); document.getElementById('expense-sub-review').style.display = 'block';
-            renderExpenses();
+    // --- UNIVERSAL TAG SYSTEM ---
+    window.handleGlobalTagAdd = function(e, context, arrayName) {
+        if(e.key === 'Enter') {
+            e.preventDefault(); const val = e.target.value.trim();
+            if(val) { tagState[context][arrayName].push(val); e.target.value = ''; renderGlobalTagsUI(context, arrayName); }
         }
     }
-
-    window.openModal = function(id) { document.getElementById(id).style.display = 'flex'; }
-    window.closeModal = function(id) { 
-        document.getElementById(id).style.display = 'none'; 
-        if(id === 'taskDetailsModal') { currentActiveTaskModalId = null; renderTasks(); renderUpcomingDeadlines(); renderSidebarPlanner(); }
-        if(id === 'projectDetailsModal') { currentActiveProjModalId = null; renderProjects(); renderUpcomingDeadlines(); renderProjectSidebar(); }
-        if(id === 'meetingDetailsModal') { currentActiveMeetModalId = null; renderMeetings(); renderTasks(); }
+    window.removeGlobalTag = function(context, arrayName, index) { tagState[context][arrayName].splice(index, 1); renderGlobalTagsUI(context, arrayName); }
+    window.renderGlobalTagsUI = function(context, arrayName) {
+        const container = document.getElementById(`${context}-${arrayName}-ui`); if(!container) return;
+        const colorClass = arrayName === 'brands' ? 'brand' : (arrayName === 'customers' ? 'customer' : 'assignee');
+        container.innerHTML = tagState[context][arrayName].map((t, idx) => `<span class="tag tag-${colorClass}">${t} <span class="del-tag" onclick="removeGlobalTag('${context}','${arrayName}',${idx})">×</span></span>`).join('');
     }
 
-    window.togglePlannerExpanded = function() {
-        const sidebar = document.getElementById('app-sidebar-right-planner');
-        isPlannerExpanded = !isPlannerExpanded;
-        if(isPlannerExpanded) { sidebar.classList.add('expanded-planner'); } else { sidebar.classList.remove('expanded-planner'); }
+    window.handleEntityTagAdd = function(e, entityType, entityId, arrayName) {
+        if(e.key === 'Enter') {
+            e.preventDefault(); const val = e.target.value.trim();
+            if(val) {
+                let col = entityType === 'task' ? tasks : (entityType === 'proj' ? projects : meetings);
+                let item = col.find(x => x.id === entityId);
+                if(item) { item[arrayName].push(val); syncToCloud(); e.target.value = ''; }
+            }
+        }
+    }
+    window.removeEntityTag = function(entityType, entityId, arrayName, index) {
+        let col = entityType === 'task' ? tasks : (entityType === 'proj' ? projects : meetings);
+        let item = col.find(x => x.id === entityId);
+        if(item) { item[arrayName].splice(index, 1); syncToCloud(); }
     }
 
-    /* --- CREATION ACTIONS --- */
+    /* --- CREATORS --- */
     window.addTask = function() {
-        const text = document.getElementById('taskInput').value.trim();
-        const priority = document.getElementById('priorityInput').value;
-        const brand = document.getElementById('brandInput').value.trim() || 'No Brand';
-        const customer = document.getElementById('customerInput').value.trim() || 'No Customer';
-        const assignee = document.getElementById('assigneeInput').value.trim() || 'Unassigned';
-        const targetDate = document.getElementById('dateInput').value;
-
-        if (!text) return;
-        tasks.push({ id: Date.now(), text, priority, brand, customer, assignee, dueDate: targetDate, completed: false, completedTimestamp: '', comments: '', subtasks: [], requiresAction: false });
-        
-        document.getElementById('taskInput').value = ''; document.getElementById('brandInput').value = ''; document.getElementById('customerInput').value = ''; document.getElementById('assigneeInput').value = ''; document.getElementById('dateInput').value = '';
+        const text = document.getElementById('taskInput').value.trim(); if (!text) return;
+        tasks.push({
+            id: Date.now(), text, priority: document.getElementById('priorityInput').value, recurrence: document.getElementById('recurrenceInput').value,
+            dueDate: document.getElementById('dateInput').value, completed: false, completedTimestamp: '', comments: '', subtasks: [], requiresAction: false, order: Date.now(),
+            brands: [...tagState['new-task'].brands], customers: [...tagState['new-task'].customers], assignees: [...tagState['new-task'].assignees]
+        });
+        document.getElementById('taskInput').value = ''; document.getElementById('dateInput').value = '';
         closeModal('newTaskModal'); saveTasks();
     }
-
     window.addProject = function() {
-        const title = document.getElementById('projTitleInput').value.trim();
-        const customer = document.getElementById('projCustomerInput').value.trim() || 'General';
-        const brandsRaw = document.getElementById('projBrandsInput').value.trim() || 'Global';
-        const owner = document.getElementById('projOwnerInput').value.trim() || 'Unassigned';
-        const targetDate = document.getElementById('projDateInput').value;
-
-        if(!title) return;
-        const brands = brandsRaw.split(',').map(b => b.trim()).filter(b => b.length > 0);
-        projects.push({ id: Date.now(), title, customer, brands, owner, targetDate, subtasks: [], files: [], status: 'Live', comments: '' });
-        
-        document.getElementById('projTitleInput').value = ''; document.getElementById('projCustomerInput').value = ''; document.getElementById('projBrandsInput').value = ''; document.getElementById('projOwnerInput').value = ''; document.getElementById('projDateInput').value = '';
+        const title = document.getElementById('projTitleInput').value.trim(); if(!title) return;
+        projects.push({
+            id: Date.now(), title, targetDate: document.getElementById('projDateInput').value, status: 'Live', subtasks: [], files: [], comments: '', order: Date.now(),
+            brands: [...tagState['new-proj'].brands], customers: [...tagState['new-proj'].customers], assignees: [...tagState['new-proj'].assignees]
+        });
+        document.getElementById('projTitleInput').value = ''; document.getElementById('projDateInput').value = '';
         closeModal('newProjectModal'); saveProjects();
     }
-
     window.addMeeting = function() {
-        const title = document.getElementById('meetTitleInput').value.trim();
-        const date = document.getElementById('meetDateInput').value || new Date().toISOString().split('T')[0];
-        const time = document.getElementById('meetTimeInput').value;
-        const place = document.getElementById('meetPlaceInput').value.trim();
-        const participants = document.getElementById('meetParticipantsInput').value.trim();
-        const brand = document.getElementById('meetBrandInput').value.trim();
-        const customer = document.getElementById('meetCustomerInput').value.trim();
-
-        if(!title) return;
-        meetings.push({ id: Date.now(), title, date, time, place, participants, brand, customer, notes: '', actions: [] });
-        
-        document.getElementById('meetTitleInput').value = ''; document.getElementById('meetPlaceInput').value = ''; document.getElementById('meetParticipantsInput').value = '';
+        const title = document.getElementById('meetTitleInput').value.trim(); if(!title) return;
+        meetings.push({
+            id: Date.now(), title, date: document.getElementById('meetDateInput').value || new Date().toISOString().split('T')[0], time: document.getElementById('meetTimeInput').value,
+            place: document.getElementById('meetPlaceInput').value.trim(), notes: '', actions: [],
+            brands: [...tagState['new-meet'].brands], customers: [...tagState['new-meet'].customers], assignees: [...tagState['new-meet'].assignees]
+        });
+        document.getElementById('meetTitleInput').value = ''; document.getElementById('meetPlaceInput').value = '';
         closeModal('newMeetingModal'); saveMeetings();
     }
-
     window.addExpense = function() {
-        const item = document.getElementById('expItemInput').value.trim();
-        const cost = parseFloat(document.getElementById('expCostInput').value);
-        const receipt = document.getElementById('expReceiptInput').value.trim() || 'Not Specified';
-        const date = document.getElementById('expDateInput').value || new Date().toISOString().split('T')[0];
-        const isOngoing = document.getElementById('expOngoingInput').checked;
-
+        const item = document.getElementById('expItemInput').value.trim(); const cost = parseFloat(document.getElementById('expCostInput').value);
         if(!item || isNaN(cost)) return;
-        expenses.push({ id: Date.now(), item, cost, receipt, date, isOngoing });
-        
-        document.getElementById('expItemInput').value = ''; document.getElementById('expCostInput').value = ''; document.getElementById('expReceiptInput').value = ''; document.getElementById('expDateInput').value = '';
-        document.getElementById('expOngoingInput').checked = false;
-        saveExpenses();
+        expenses.push({ id: Date.now(), item, cost, receipt: document.getElementById('expReceiptInput').value.trim(), date: document.getElementById('expDateInput').value || new Date().toISOString().split('T')[0], isOngoing: document.getElementById('expOngoingInput').checked });
+        document.getElementById('expItemInput').value = ''; document.getElementById('expCostInput').value = ''; document.getElementById('expReceiptInput').value = ''; document.getElementById('expDateInput').value = ''; document.getElementById('expOngoingInput').checked = false;
+        saveExpenses(); switchExpenseSubView('review');
     }
 
-    /* --- TASK SPECIFIC LOGIC --- */
+    /* --- EDIT MODALS --- */
     window.openTaskModal = function(taskId) {
-        currentActiveTaskModalId = taskId;
-        const task = tasks.find(t => t.id === taskId);
-        if(!task) return;
-
-        document.getElementById('modal-task-title').innerHTML = `⚡ ${task.text}`;
+        currentActiveTaskModalId = taskId; const task = tasks.find(t => t.id === taskId); if(!task) return;
+        document.getElementById('modal-task-title').innerHTML = `⚡ <input type="text" value="${task.text}" onblur="updateTaskMeta(${task.id}, 'text', this.value)" style="background:transparent; border:none; color:white; font-weight:800; font-size:22px; outline:none; width:100%;">`;
         
-        let editBanner = '';
-        if(task.requiresAction) {
-            editBanner = `
-                <div style="background: rgba(245, 158, 11, 0.15); border: 2px dashed #f59e0b; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
-                    <h3 style="margin: 0 0 10px 0; color: #f59e0b; font-size: 15px;">⚠️ Pending Setup Required</h3>
-                    <div class="modal-edit-bar">
-                        <select id="edit-pri-${task.id}" onchange="updateTaskMeta(${task.id}, 'priority', this.value)">
-                            <option value="Low" ${task.priority==='Low'?'selected':''}>🟢 Low Priority</option>
-                            <option value="Medium" ${task.priority==='Medium'?'selected':''}>🟡 Medium Priority</option>
-                            <option value="High" ${task.priority==='High'?'selected':''}>🔴 High Priority</option>
-                            <option value="Urgent" ${task.priority==='Urgent'?'selected':''}>🚨 Urgent</option>
-                        </select>
-                        <input type="text" placeholder="Assignee" value="${task.assignee || ''}" onchange="updateTaskMeta(${task.id}, 'assignee', this.value)">
-                        <input type="date" value="${task.dueDate || ''}" onchange="updateTaskMeta(${task.id}, 'dueDate', this.value)">
-                        <button class="action-btn done-btn" style="background:#10b981; color:white; border:none;" onclick="promoteToStandardTask(${task.id})">✓ Promote to Active Tracker</button>
-                    </div>
-                </div>
-            `;
-        }
-
         let subtasksHTML = `<div class="subtasks-box" style="${task.completed ? 'opacity:0.6;' : ''}">`;
         if(task.subtasks && task.subtasks.length > 0) {
             task.subtasks.forEach(sub => {
-                const statusClass = sub.status ? sub.status.replace(/ /g, '-') : 'Not-Started';
                 const isSubDone = sub.status === 'Complete';
-                subtasksHTML += `
-                    <div class="subtask-row status-${statusClass}">
-                        <div class="subtask-left">
-                            <select class="status-dropdown" onchange="updateTaskSubtaskStatus(${task.id}, ${sub.id}, this.value)" ${task.completed ? 'disabled' : ''}>
-                                <option value="Not Started" ${sub.status === 'Not Started' ? 'selected' : ''}>Not Started</option>
-                                <option value="Awaiting Reply" ${sub.status === 'Awaiting Reply' ? 'selected' : ''}>Awaiting Reply</option>
-                                <option value="In Progress" ${sub.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
-                                <option value="Complete" ${isSubDone ? 'selected' : ''}>Complete</option>
-                            </select>
-                            <span class="subtask-text ${isSubDone ? 'done' : ''}">${sub.text}</span>
-                        </div>
-                        <div class="subtask-right">
-                            ${sub.owner ? `<span class="subtask-owner-badge">👤 ${sub.owner}</span>` : ''}
-                            ${sub.date ? `<span class="subtask-date">🎯 ${new Date(sub.date).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</span>` : ''}
-                        </div>
-                    </div>`;
+                subtasksHTML += `<div class="subtask-row status-${sub.status ? sub.status.replace(/ /g, '-') : 'Not-Started'}"><div class="subtask-left"><select class="status-dropdown" onchange="updateTaskSubtaskStatus(${task.id}, ${sub.id}, this.value)" ${task.completed ? 'disabled' : ''}><option value="Not Started" ${sub.status === 'Not Started' ? 'selected' : ''}>Not Started</option><option value="Awaiting Reply" ${sub.status === 'Awaiting Reply' ? 'selected' : ''}>Awaiting Reply</option><option value="In Progress" ${sub.status === 'In Progress' ? 'selected' : ''}>In Progress</option><option value="Complete" ${isSubDone ? 'selected' : ''}>Complete</option></select><span class="subtask-text ${isSubDone ? 'done' : ''}">${sub.text}</span></div><div class="subtask-right">${sub.owner ? `<span class="subtask-owner-badge">👤 ${sub.owner}</span>` : ''} ${sub.date ? `<span class="subtask-date">🎯 ${new Date(sub.date).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</span>` : ''}</div></div>`;
             });
         }
-        
         if(!task.completed) {
-            subtasksHTML += `
-                <div class="subtask-entry-row">
-                    <label style="font-size:12px; font-weight:700; color:var(--text-muted); display:flex; flex-direction:column; gap:4px;">🎯 Target
-                        <input type="date" id="modal-sub-date-${task.id}" style="padding:10px;">
-                    </label>
-                    <input type="text" id="modal-sub-text-${task.id}" placeholder="New subtask description..." style="flex:2;">
-                    <input type="text" id="modal-sub-owner-${task.id}" list="subtaskOwnerOptions" placeholder="Owner" style="flex:1;">
-                    <button class="action-btn done-btn" onclick="commitTaskSubtask(${task.id})">➕ Add</button>
-                </div>`;
+            subtasksHTML += `<div class="subtask-entry-row"><label class="target-label" style="flex:0.5;">Target<input type="date" id="modal-sub-date-${task.id}"></label><input type="text" id="modal-sub-text-${task.id}" placeholder="New subtask description..." style="flex:2;"><input type="text" id="modal-sub-owner-${task.id}" placeholder="Owner" style="flex:1;"><button class="action-btn done-btn" onclick="commitTaskSubtask(${task.id})">➕ Add</button></div>`;
         }
         subtasksHTML += `</div>`;
 
+        let bHTML = task.brands.map((t, i) => `<span class="tag tag-brand">${t} <span class="del-tag" onclick="removeEntityTag('task',${task.id},'brands',${i})">×</span></span>`).join('');
+        let cHTML = task.customers.map((t, i) => `<span class="tag tag-customer">${t} <span class="del-tag" onclick="removeEntityTag('task',${task.id},'customers',${i})">×</span></span>`).join('');
+        let aHTML = task.assignees.map((t, i) => `<span class="tag tag-assignee">👤 ${t} <span class="del-tag" onclick="removeEntityTag('task',${task.id},'assignees',${i})">×</span></span>`).join('');
+
         document.getElementById('modal-task-body').innerHTML = `
-            ${editBanner}
-            <div style="font-weight: 700; color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">📝 Working Notes & Comments</div>
-            <textarea class="task-comment-box" placeholder="Add free-flow notes, links, or comments here..." onblur="updateTaskComment(${task.id}, this.value)" ${task.completed ? 'disabled' : ''}>${task.comments || ''}</textarea>
+            ${task.requiresAction ? `<div style="background: rgba(245, 158, 11, 0.15); border: 2px dashed #f59e0b; padding: 16px; border-radius: 12px; margin-bottom: 20px;"><h3 style="margin: 0 0 10px 0; color: #f59e0b;">⚠️ Setup Required</h3><button class="action-btn done-btn" style="background:#10b981; color:white; border:none;" onclick="promoteToStandardTask(${task.id})">✓ Promote to Active Tracker</button></div>` : ''}
             
-            <div style="font-weight: 700; color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 10px;">📋 Associated Subtasks</div>
+            <div class="modal-edit-bar">
+                <label class="target-label">Priority<select onchange="updateTaskMeta(${task.id}, 'priority', this.value)"><option value="Low" ${task.priority==='Low'?'selected':''}>🟢 Low</option><option value="Medium" ${task.priority==='Medium'?'selected':''}>🟡 Medium</option><option value="High" ${task.priority==='High'?'selected':''}>🔴 High</option><option value="Urgent" ${task.priority==='Urgent'?'selected':''}>🚨 Urgent</option></select></label>
+                <label class="target-label">Recurrence<select onchange="updateTaskMeta(${task.id}, 'recurrence', this.value)"><option value="None" ${task.recurrence==='None'?'selected':''}>No Repeat</option><option value="Weekly" ${task.recurrence==='Weekly'?'selected':''}>Weekly</option><option value="Bi-Weekly" ${task.recurrence==='Bi-Weekly'?'selected':''}>Bi-Weekly</option><option value="Monthly" ${task.recurrence==='Monthly'?'selected':''}>Monthly</option></select></label>
+                <label class="target-label">Target Date<input type="date" value="${task.dueDate || ''}" onchange="updateTaskMeta(${task.id}, 'dueDate', this.value)"></label>
+            </div>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <div class="tag-input-wrapper"><div class="task-tags">${bHTML}</div><input type="text" placeholder="Add brand + Enter" onkeydown="handleEntityTagAdd(event, 'task', ${task.id}, 'brands')"></div>
+                <div class="tag-input-wrapper"><div class="task-tags">${cHTML}</div><input type="text" placeholder="Add customer + Enter" onkeydown="handleEntityTagAdd(event, 'task', ${task.id}, 'customers')"></div>
+                <div class="tag-input-wrapper"><div class="task-tags">${aHTML}</div><input type="text" placeholder="Add assignee + Enter" onkeydown="handleEntityTagAdd(event, 'task', ${task.id}, 'assignees')"></div>
+            </div>
+
+            <div style="font-weight: 700; color: var(--text-muted); font-size: 13px; text-transform: uppercase; margin-top: 15px;">📝 Notes & Comments</div>
+            <textarea class="task-comment-box" placeholder="Free-flow notes..." onblur="updateTaskMeta(${task.id}, 'comments', this.value)">${task.comments || ''}</textarea>
+            
+            <div style="font-weight: 700; color: var(--text-muted); font-size: 13px; text-transform: uppercase; margin-top: 10px;">📋 Associated Subtasks</div>
             ${subtasksHTML}
         `;
         openModal('taskDetailsModal');
     }
 
-    window.updateTaskMeta = function(taskId, field, value) { tasks = tasks.map(t => { if(t.id === taskId) { t[field] = value; } return t; }); saveTasks(); }
-    window.promoteToStandardTask = function(taskId) { tasks = tasks.map(t => { if(t.id === taskId) { t.requiresAction = false; } return t; }); saveTasks(); openTaskModal(taskId); }
+    window.openProjectModal = function(projId) {
+        currentActiveProjModalId = projId; const proj = projects.find(p => p.id === projId); if(!proj) return;
+        document.getElementById('modal-proj-title').innerHTML = `🚀 <input type="text" value="${proj.title}" onblur="updateProjMeta(${proj.id}, 'title', this.value)" style="background:transparent; border:none; color:white; font-weight:800; font-size:22px; outline:none; width:100%;">`;
+        const isComp = proj.status === 'Completed';
 
-    window.commitTaskSubtask = function(taskId) {
-        const textInput = document.getElementById(`modal-sub-text-${taskId}`).value.trim();
-        const ownerInput = document.getElementById(`modal-sub-owner-${taskId}`).value.trim() || 'Unassigned';
-        const dateInput = document.getElementById(`modal-sub-date-${taskId}`).value;
-        if(!textInput) return;
+        let subtasksHTML = `<div class="subtasks-box" style="${isComp ? 'opacity:0.6;' : ''}">`;
+        if(proj.subtasks && proj.subtasks.length > 0) {
+            proj.subtasks.forEach(sub => {
+                const isSubDone = sub.status === 'Complete';
+                subtasksHTML += `<div class="subtask-row status-${sub.status ? sub.status.replace(/ /g, '-') : 'Not-Started'}"><div class="subtask-left"><select class="status-dropdown" onchange="updateSubtaskStatus(${proj.id}, ${sub.id}, this.value)" ${isComp ? 'disabled' : ''}><option value="Not Started" ${sub.status === 'Not Started' ? 'selected' : ''}>Not Started</option><option value="Awaiting Reply" ${sub.status === 'Awaiting Reply' ? 'selected' : ''}>Awaiting Reply</option><option value="In Progress" ${sub.status === 'In Progress' ? 'selected' : ''}>In Progress</option><option value="Complete" ${isSubDone ? 'selected' : ''}>Complete</option></select><span class="subtask-text ${isSubDone ? 'done' : ''}">${sub.text}</span></div><div class="subtask-right">${sub.owner ? `<span class="subtask-owner-badge">👤 ${sub.owner}</span>` : ''} ${sub.date ? `<span class="subtask-date">🎯 ${new Date(sub.date).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</span>` : ''}</div></div>`;
+            });
+        }
+        if(!isComp) subtasksHTML += `<div class="subtask-entry-row"><label class="target-label" style="flex:0.5;">Target<input type="date" id="modal-proj-sub-date-${proj.id}"></label><input type="text" id="modal-proj-sub-text-${proj.id}" placeholder="Next subtask description..." style="flex:2;"><input type="text" id="modal-proj-sub-owner-${proj.id}" placeholder="Owner" style="flex:1;"><button class="action-btn done-btn" onclick="commitSubtask(${proj.id})">➕ Add</button></div>`;
+        subtasksHTML += `</div>`;
 
-        tasks = tasks.map(t => {
-            if(t.id === taskId) {
-                t.subtasks.push({ id: Date.now(), text: textInput, owner: ownerInput, date: dateInput, status: 'Not Started' });
-                t.subtasks.sort((a,b) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31'));
-            }
-            return t;
-        });
-        saveTasks(); openTaskModal(taskId); 
+        let bHTML = proj.brands.map((t, i) => `<span class="tag tag-brand">${t} <span class="del-tag" onclick="removeEntityTag('proj',${proj.id},'brands',${i})">×</span></span>`).join('');
+        let cHTML = proj.customers.map((t, i) => `<span class="tag tag-customer">${t} <span class="del-tag" onclick="removeEntityTag('proj',${proj.id},'customers',${i})">×</span></span>`).join('');
+        let aHTML = proj.assignees.map((t, i) => `<span class="tag tag-assignee">👤 ${t} <span class="del-tag" onclick="removeEntityTag('proj',${proj.id},'assignees',${i})">×</span></span>`).join('');
+
+        document.getElementById('modal-proj-body').innerHTML = `
+            <div class="modal-edit-bar" style="margin-bottom:10px;">
+                <label class="target-label">Target Completion<input type="date" value="${proj.targetDate || ''}" onchange="updateProjMeta(${proj.id}, 'targetDate', this.value)"></label>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:15px;">
+                <div class="tag-input-wrapper"><div class="task-tags">${bHTML}</div><input type="text" placeholder="Add brand + Enter" onkeydown="handleEntityTagAdd(event, 'proj', ${proj.id}, 'brands')"></div>
+                <div class="tag-input-wrapper"><div class="task-tags">${cHTML}</div><input type="text" placeholder="Add customer + Enter" onkeydown="handleEntityTagAdd(event, 'proj', ${proj.id}, 'customers')"></div>
+                <div class="tag-input-wrapper"><div class="task-tags">${aHTML}</div><input type="text" placeholder="Add owner + Enter" onkeydown="handleEntityTagAdd(event, 'proj', ${proj.id}, 'assignees')"></div>
+            </div>
+
+            <div style="font-weight: 700; color: var(--text-muted); font-size: 13px; text-transform: uppercase;">📝 Project Brief / Notes</div>
+            <textarea class="task-comment-box" placeholder="Notes..." onblur="updateProjMeta(${proj.id}, 'comments', this.value)">${proj.comments || ''}</textarea>
+            
+            <div style="font-weight: 700; color: var(--text-muted); font-size: 13px; text-transform: uppercase; margin-top: 15px;">📋 Execution Matrix</div>
+            ${subtasksHTML}
+            
+            <div class="actions" style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 20px; flex-direction: row; justify-content: flex-end;">
+                <button class="action-btn done-btn" onclick="toggleProjectStatus(${proj.id})">${isComp ? '🔄 Reopen Project' : '✓ Archive Complete'}</button>
+            </div>
+        `;
+        openModal('projectDetailsModal');
     }
 
-    window.updateTaskSubtaskStatus = function(taskId, subId, newStatus) { tasks = tasks.map(t => { if(t.id === taskId) { t.subtasks = t.subtasks.map(s => s.id === subId ? { ...s, status: newStatus } : s); } return t; }); saveTasks(); openTaskModal(taskId); }
-    window.updateTaskComment = function(taskId, text) { tasks = tasks.map(t => { if(t.id === taskId) return { ...t, comments: text }; return t; }); saveTasks(); }
+    window.openMeetingModal = function(meetId) {
+        currentActiveMeetModalId = meetId; const meet = meetings.find(m => m.id === meetId); if(!meet) return;
+        document.getElementById('modal-meet-title').innerHTML = `🤝 <input type="text" value="${meet.title}" onblur="updateMeetingMeta(${meet.id}, 'title', this.value)" style="background:transparent; border:none; color:white; font-weight:800; font-size:22px; outline:none; width:100%;">`;
+        
+        let actionLogs = meet.actions.map((act) => `<div class="meeting-action-item"><span>🚀 ${act}</span> <span style="font-size:11px; opacity:0.6;">(Exported)</span></div>`).join('');
+        let bHTML = meet.brands.map((t, i) => `<span class="tag tag-brand">${t} <span class="del-tag" onclick="removeEntityTag('meet',${meet.id},'brands',${i})">×</span></span>`).join('');
+        let cHTML = meet.customers.map((t, i) => `<span class="tag tag-customer">${t} <span class="del-tag" onclick="removeEntityTag('meet',${meet.id},'customers',${i})">×</span></span>`).join('');
+        let aHTML = meet.assignees.map((t, i) => `<span class="tag tag-assignee">👥 ${t} <span class="del-tag" onclick="removeEntityTag('meet',${meet.id},'assignees',${i})">×</span></span>`).join('');
 
+        document.getElementById('modal-meet-body').innerHTML = `
+            <div class="modal-edit-bar" style="margin-bottom:10px;">
+                <label class="target-label">Date<input type="date" value="${meet.date || ''}" onchange="updateMeetingMeta(${meet.id}, 'date', this.value)"></label>
+                <label class="target-label">Time<input type="time" value="${meet.time || ''}" onchange="updateMeetingMeta(${meet.id}, 'time', this.value)"></label>
+                <label class="target-label">Location<input type="text" value="${meet.place || ''}" onblur="updateMeetingMeta(${meet.id}, 'place', this.value)"></label>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:15px;">
+                <div class="tag-input-wrapper"><div class="task-tags">${bHTML}</div><input type="text" placeholder="Add brand..." onkeydown="handleEntityTagAdd(event, 'meet', ${meet.id}, 'brands')"></div>
+                <div class="tag-input-wrapper"><div class="task-tags">${cHTML}</div><input type="text" placeholder="Add customer..." onkeydown="handleEntityTagAdd(event, 'meet', ${meet.id}, 'customers')"></div>
+                <div class="tag-input-wrapper"><div class="task-tags">${aHTML}</div><input type="text" placeholder="Add participant..." onkeydown="handleEntityTagAdd(event, 'meet', ${meet.id}, 'assignees')"></div>
+            </div>
+            <div style="font-weight: 700; color: var(--text-muted); font-size: 13px; text-transform: uppercase;">📝 Transcript / Notes</div>
+            <textarea class="meeting-notes-area" placeholder="• Add notes..." onblur="updateMeetingMeta(${meet.id}, 'notes', this.value)">${meet.notes}</textarea>
+            
+            <div style="font-weight: 700; color: var(--text-muted); font-size: 13px; text-transform: uppercase; margin-top: 15px;">🚀 Export Action Items</div>
+            <div class="subtask-entry-row" style="background: rgba(99, 102, 241, 0.05);"><input type="text" id="meet-action-text-${meet.id}" placeholder="Next action..." style="flex:1;"><button class="action-btn done-btn" style="background: var(--primary-accent); color:white; border:none;" onclick="exportMeetingAction(${meet.id})">Export to Dashboard</button></div>
+            <div class="action-log-container">${actionLogs}</div>
+        `;
+        openModal('meetingDetailsModal');
+    }
+
+    // Modal Field Updaters
+    window.updateTaskMeta = function(id, field, value) { tasks = tasks.map(t => { if(t.id === id) t[field] = value; return t; }); saveTasks(); }
+    window.updateProjMeta = function(id, field, value) { projects = projects.map(p => { if(p.id === id) p[field] = value; return p; }); saveProjects(); }
+    window.updateMeetingMeta = function(id, field, value) { meetings = meetings.map(m => { if(m.id === id) m[field] = value; return m; }); saveMeetings(); }
+
+    window.promoteToStandardTask = function(taskId) { tasks = tasks.map(t => { if(t.id === taskId) t.requiresAction = false; return t; }); saveTasks(); openTaskModal(taskId); }
+    window.commitTaskSubtask = function(taskId) {
+        const textInput = document.getElementById(`modal-sub-text-${taskId}`).value.trim(); const ownerInput = document.getElementById(`modal-sub-owner-${taskId}`).value.trim(); const dateInput = document.getElementById(`modal-sub-date-${taskId}`).value;
+        if(!textInput) return;
+        tasks = tasks.map(t => { if(t.id === taskId) { t.subtasks.push({ id: Date.now(), text: textInput, owner: ownerInput, date: dateInput, status: 'Not Started' }); t.subtasks.sort((a,b) => new Date(a.date||'9999-12-31') - new Date(b.date||'9999-12-31')); } return t; });
+        saveTasks(); openTaskModal(taskId); 
+    }
+    window.updateTaskSubtaskStatus = function(taskId, subId, newStatus) { tasks = tasks.map(t => { if(t.id === taskId) { t.subtasks = t.subtasks.map(s => s.id === subId ? { ...s, status: newStatus } : s); } return t; }); saveTasks(); openTaskModal(taskId); }
+    
+    window.commitSubtask = function(projId) {
+        const dateInput = document.getElementById(`modal-proj-sub-date-${projId}`).value; const textInput = document.getElementById(`modal-proj-sub-text-${projId}`).value.trim(); const ownerInput = document.getElementById(`modal-proj-sub-owner-${projId}`).value.trim();
+        if(!textInput) return;
+        projects = projects.map(p => { if(p.id === projId) { p.subtasks.push({ id: Date.now(), date: dateInput, text: textInput, owner: ownerInput, status: 'Not Started' }); p.subtasks.sort((a,b) => new Date(a.date||'9999-12-31') - new Date(b.date||'9999-12-31')); } return p; });
+        saveProjects(); openProjectModal(projId);
+    }
+    window.updateSubtaskStatus = function(projId, subId, newStatus) { projects = projects.map(p => { if(p.id === projId) { p.subtasks = p.subtasks.map(s => s.id === subId ? { ...s, status: newStatus } : s); } return p; }); saveProjects(); openProjectModal(projId); }
+    window.toggleProjectStatus = function(projId) { projects = projects.map(p => { if(p.id === projId) p.status = (p.status === 'Live') ? 'Completed' : 'Live'; return p; }); saveProjects(); closeModal('projectDetailsModal'); }
+    
+    window.exportMeetingAction = function(meetId) {
+        const textInput = document.getElementById(`meet-action-text-${meetId}`).value.trim(); if(!textInput) return;
+        const meet = meetings.find(m => m.id === meetId);
+        meetings = meetings.map(m => { if(m.id === meetId) m.actions.push(textInput); return m; }); saveMeetings();
+        tasks.push({ id: Date.now() + Math.random(), text: textInput, priority: 'Medium', brands: [...meet.brands], customers: [...meet.customers], assignees: [...meet.assignees], dueDate: '', completed: false, completedTimestamp: '', comments: `Exported from meeting: ${meet.title}`, subtasks: [], requiresAction: true, order: Date.now() });
+        saveTasks(); openMeetingModal(meetId); 
+    }
+
+    // Toggle Task & Recurring Engine
     window.toggleTask = function(id, event) {
         if(event) event.stopPropagation();
         tasks = tasks.map(t => {
             if (t.id === id) {
                 const status = !t.completed;
                 const ts = status ? new Date().toLocaleDateString('en-GB', {day:'numeric', month:'short'}) + ' @ ' + new Date().toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'}) : '';
+                
+                // Recurring Engine Trigger
+                if (status && t.recurrence && t.recurrence !== 'None') {
+                    let nextDate = new Date(t.dueDate || new Date());
+                    if(t.recurrence === 'Weekly') nextDate.setDate(nextDate.getDate() + 7);
+                    if(t.recurrence === 'Bi-Weekly') nextDate.setDate(nextDate.getDate() + 14);
+                    if(t.recurrence === 'Monthly') nextDate.setMonth(nextDate.getMonth() + 1);
+                    tasks.push({ ...t, id: Date.now() + Math.random(), dueDate: nextDate.toISOString().split('T')[0], completed: false, completedTimestamp: '', order: Date.now() });
+                }
                 return { ...t, completed: status, completedTimestamp: ts };
             }
             return t;
@@ -799,428 +784,221 @@
         if(currentActiveTaskModalId === id) closeModal('taskDetailsModal');
     }
     window.deleteTask = function(id, event) { if(event) event.stopPropagation(); tasks = tasks.filter(t => t.id !== id); saveTasks(); if(currentActiveTaskModalId === id) closeModal('taskDetailsModal'); }
-
-    /* --- PROJECTS MODAL LOGIC --- */
-    window.openProjectModal = function(projId) {
-        currentActiveProjModalId = projId;
-        const proj = projects.find(p => p.id === projId);
-        if(!proj) return;
-
-        document.getElementById('modal-proj-title').innerText = `🚀 ${proj.title}`;
-        const isProjectCompleted = proj.status === 'Completed';
-
-        let subtasksHTML = `<div class="subtasks-box" style="${isProjectCompleted ? 'opacity:0.6;' : ''}">`;
-        if(proj.subtasks && proj.subtasks.length > 0) {
-            proj.subtasks.forEach(sub => {
-                const statusClass = sub.status ? sub.status.replace(/ /g, '-') : 'Not-Started';
-                const isSubDone = sub.status === 'Complete';
-                subtasksHTML += `
-                    <div class="subtask-row status-${statusClass}">
-                        <div class="subtask-left">
-                            <select class="status-dropdown" onchange="updateSubtaskStatus(${proj.id}, ${sub.id}, this.value)" ${isProjectCompleted ? 'disabled' : ''}>
-                                <option value="Not Started" ${sub.status === 'Not Started' ? 'selected' : ''}>Not Started</option>
-                                <option value="Awaiting Reply" ${sub.status === 'Awaiting Reply' ? 'selected' : ''}>Awaiting Reply</option>
-                                <option value="In Progress" ${sub.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
-                                <option value="Complete" ${isSubDone ? 'selected' : ''}>Complete</option>
-                            </select>
-                            <span class="subtask-text ${isSubDone ? 'done' : ''}">${sub.text}</span>
-                        </div>
-                        <div class="subtask-right">
-                            ${sub.owner ? `<span class="subtask-owner-badge">👤 ${sub.owner}</span>` : ''}
-                            ${sub.date ? `<span class="subtask-date">🎯 ${new Date(sub.date).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</span>` : ''}
-                        </div>
-                    </div>`;
-            });
-        }
-        
-        if(!isProjectCompleted) {
-            subtasksHTML += `
-                <div class="subtask-entry-row">
-                    <label style="font-size:12px; font-weight:700; color:var(--text-muted); display:flex; flex-direction:column; gap:4px;">🎯 Target
-                        <input type="date" id="modal-proj-sub-date-${proj.id}" style="padding:10px;">
-                    </label>
-                    <input type="text" id="modal-proj-sub-text-${proj.id}" placeholder="Next subtask description..." style="flex:2;">
-                    <input type="text" id="modal-proj-sub-owner-${proj.id}" list="subtaskOwnerOptions" placeholder="Owner" style="flex:1;">
-                    <button class="action-btn done-btn" onclick="commitSubtask(${proj.id})">➕ Add</button>
-                </div>`;
-        }
-        subtasksHTML += `</div>`;
-
-        let filesHTML = '';
-        if(proj.files && proj.files.length > 0) {
-            filesHTML = `<div class="file-links-container">`;
-            proj.files.forEach((f, idx) => {
-                filesHTML += `<div class="file-badge">📁 ${f.name} (${f.type}) <span class="remove-file" onclick="removeProjectFile(${proj.id}, ${idx})">×</span></div>`;
-            });
-            filesHTML += `</div>`;
-        }
-
-        const brandsHTML = proj.brands.map(b => `<span class="tag tag-brand">${b}</span>`).join(' ');
-        const formattedTarget = proj.targetDate ? new Date(proj.targetDate).toLocaleDateString('en-GB', {day:'numeric', month:'short', year:'numeric'}) : 'No Target';
-        
-        document.getElementById('modal-proj-body').innerHTML = `
-            <div class="task-tags" style="margin-bottom: 10px;">
-                <span class="tag tag-customer">🏢 Client: ${proj.customer}</span>${brandsHTML}<span class="tag tag-assignee">👤 Owner: ${proj.owner}</span><span class="tag tag-date">🏁 Target: ${formattedTarget}</span>
-            </div>
-            <div style="font-weight: 700; color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 10px;">📝 Project Brief / Comments</div>
-            <textarea class="task-comment-box" placeholder="Add free-flow notes, links, or comments here..." onblur="updateProjComment(${proj.id}, this.value)" ${isProjectCompleted ? 'disabled' : ''}>${proj.comments || ''}</textarea>
-            <div style="font-weight: 700; color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 10px;">📋 Execution Matrix</div>
-            ${subtasksHTML}
-            <div style="font-weight: 700; color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 15px;">📁 Project Assets</div>
-            ${!isProjectCompleted ? `<div class="file-dropzone" id="modal-drop-${proj.id}">📥 Drag & drop tracking files here</div>` : ''}
-            ${filesHTML}
-            <div class="actions" style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 20px; flex-direction: row; justify-content: flex-end;">
-                <button class="action-btn done-btn" onclick="toggleProjectStatus(${proj.id})">${isProjectCompleted ? '🔄 Reopen Project' : '✓ Archive Complete'}</button>
-            </div>
-        `;
-        openModal('projectDetailsModal');
-
-        if(!isProjectCompleted) {
-            const dropzone = document.getElementById(`modal-drop-${proj.id}`);
-            if(dropzone) {
-                dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
-                dropzone.addEventListener('dragleave', () => { dropzone.classList.remove('dragover'); });
-                dropzone.addEventListener('drop', (e) => {
-                    e.preventDefault(); dropzone.classList.remove('dragover'); handleFileDropAssignment(e, proj.id);
-                });
-            }
-        }
-    }
-
-    window.commitSubtask = function(projId) {
-        const dateInput = document.getElementById(`modal-proj-sub-date-${projId}`).value;
-        const textInput = document.getElementById(`modal-proj-sub-text-${projId}`).value.trim();
-        const ownerInput = document.getElementById(`modal-proj-sub-owner-${projId}`).value.trim() || 'Unassigned';
-        if(!textInput) return;
-
-        projects = projects.map(p => {
-            if(p.id === projId) {
-                p.subtasks.push({ id: Date.now(), date: dateInput, text: textInput, owner: ownerInput, status: 'Not Started' });
-                p.subtasks.sort((a,b) => new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31'));
-            }
-            return p;
-        });
-        saveProjects(); openProjectModal(projId);
-    }
-
-    window.updateSubtaskStatus = function(projId, subId, newStatus) { projects = projects.map(p => { if(p.id === projId) { p.subtasks = p.subtasks.map(s => s.id === subId ? { ...s, status: newStatus } : s); } return p; }); saveProjects(); openProjectModal(projId); }
-    window.updateProjComment = function(projId, text) { projects = projects.map(p => { if(p.id === projId) return { ...p, comments: text }; return p; }); saveProjects(); }
-    window.toggleProjectStatus = function(projId) { projects = projects.map(p => { if(p.id === projId) p.status = (p.status === 'Live') ? 'Completed' : 'Live'; return p; }); saveProjects(); closeModal('projectDetailsModal'); }
     window.deleteProject = function(id, e) { if(e) e.stopPropagation(); projects = projects.filter(p => p.id !== id); saveProjects(); if(currentActiveProjModalId === id) closeModal('projectDetailsModal'); }
-
-    /* --- MEETING MODAL LOGIC --- */
-    window.openMeetingModal = function(meetId) {
-        currentActiveMeetModalId = meetId;
-        const meet = meetings.find(m => m.id === meetId);
-        if(!meet) return;
-
-        document.getElementById('modal-meet-title').innerText = `🤝 ${meet.title}`;
-        
-        let tagsHTML = '';
-        if(meet.date) tagsHTML += `<span class="tag tag-date">📅 ${new Date(meet.date).toLocaleDateString('en-GB', {day:'numeric', month:'short'})} ${meet.time || ''}</span>`;
-        if(meet.customer) tagsHTML += `<span class="tag tag-customer">🏢 ${meet.customer}</span>`;
-        if(meet.brand) tagsHTML += `<span class="tag tag-brand">${meet.brand}</span>`;
-        if(meet.participants) tagsHTML += `<span class="tag tag-assignee">👥 ${meet.participants}</span>`;
-        if(meet.place) tagsHTML += `<span class="tag tag-receipt">📍 ${meet.place}</span>`;
-
-        let actionLogs = '';
-        if(meet.actions.length > 0) {
-            actionLogs = meet.actions.map((act) => `<div class="meeting-action-item"><span>🚀 ${act}</span> <span style="font-size:11px; opacity:0.6;">(Exported to Tasks)</span></div>`).join('');
-        }
-
-        document.getElementById('modal-meet-body').innerHTML = `
-            <div class="task-tags" style="margin-bottom: 20px;">${tagsHTML}</div>
-            
-            <div style="font-weight: 700; color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">📝 Bulleted Meeting Notes</div>
-            <textarea class="meeting-notes-area" placeholder="• Add key takeaways here..." onblur="updateMeetingNotes(${meet.id}, this.value)">${meet.notes}</textarea>
-            
-            <div style="font-weight: 700; color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 20px;">🚀 Export Action Items</div>
-            <div class="subtask-entry-row" style="background: rgba(99, 102, 241, 0.05);">
-                <input type="text" id="meet-action-text-${meet.id}" placeholder="Next action required..." style="flex:1;">
-                <button class="action-btn done-btn" style="background: var(--primary-accent); border:none; color:white;" onclick="exportMeetingAction(${meet.id})">Export to Active Dashboard</button>
-            </div>
-            
-            <div class="action-log-container">${actionLogs}</div>
-        `;
-        openModal('meetingDetailsModal');
-    }
-
-    window.updateMeetingNotes = function(meetId, text) { meetings = meetings.map(m => { if(m.id === meetId) return { ...m, notes: text }; return m; }); saveMeetings(); }
-
-    window.exportMeetingAction = function(meetId) {
-        const textInput = document.getElementById(`meet-action-text-${meetId}`).value.trim();
-        if(!textInput) return;
-
-        const meet = meetings.find(m => m.id === meetId);
-        meetings = meetings.map(m => { if(m.id === meetId) { m.actions.push(textInput); } return m; });
-        saveMeetings();
-
-        tasks.push({
-            id: Date.now() + Math.random(), text: textInput,
-            priority: 'Medium', brand: meet.brand || 'No Brand', customer: meet.customer || 'No Customer',
-            assignee: 'Unassigned', dueDate: '', completed: false, completedTimestamp: '',
-            comments: `Exported from meeting: ${meet.title}`, subtasks: [], requiresAction: true
-        });
-        saveTasks(); openMeetingModal(meetId); 
-    }
     window.deleteMeeting = function(id, e) { if(e) e.stopPropagation(); meetings = meetings.filter(m => m.id !== id); saveMeetings(); if(currentActiveMeetModalId===id) closeModal('meetingDetailsModal');}
+    window.deleteExpense = function(id) { expenses = expenses.filter(e => e.id !== id); saveExpenses(); }
+
+    /* --- DRAG & DROP REORDERING --- */
+    window.handleTileDrop = function(e, targetId) {
+        e.preventDefault(); e.stopPropagation();
+        e.currentTarget.classList.remove('drag-over');
+        const draggedId = parseFloat(e.dataTransfer.getData('text/plain'));
+        if(draggedId && draggedId !== targetId) {
+            const t1 = tasks.find(t=>t.id === draggedId); const t2 = tasks.find(t=>t.id === targetId);
+            if(t1 && t2) { const temp = t1.order; t1.order = t2.order; t2.order = temp; saveTasks(); }
+        }
+    }
+    window.handleTileDragOver = function(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+    window.handleTileDragLeave = function(e) { e.currentTarget.classList.remove('drag-over'); }
 
     /* --- DASHBOARD RENDERERS --- */
     window.renderTasks = function() {
-        const activeGrid = document.getElementById('taskTileGrid');
-        if(!activeGrid) return;
-        activeGrid.innerHTML = ''; 
+        const activeGrid = document.getElementById('taskTileGrid'); if(!activeGrid) return; activeGrid.innerHTML = ''; 
 
         const addTile = document.createElement('div'); addTile.className = 'task-tile add-new-tile'; addTile.onclick = () => openModal('newTaskModal'); addTile.innerHTML = `<h3>➕ Add New Task</h3>`; activeGrid.appendChild(addTile);
         const compTile = document.createElement('div'); compTile.className = 'task-tile comp-view-tile'; compTile.onclick = () => renderCompletedModal(); compTile.innerHTML = `<h3>📁 View Completed Archive</h3>`; activeGrid.appendChild(compTile);
 
-        let activeTasksArray = tasks.filter(t => !t.completed);
-        let filteredActive = activeTasksArray.filter(task => {
+        let filteredActive = tasks.filter(t => !t.completed).filter(task => {
             if (currentFilter.type === 'priority') { if (currentFilter.value === 'all') return true; return task.priority === currentFilter.value; }
-            if (currentFilter.type === 'brand') return task.brand === currentFilter.value;
-            if (currentFilter.type === 'customer') return task.customer === currentFilter.value;
-            if (currentFilter.type === 'assignee') return task.assignee === currentFilter.value;
+            if (currentFilter.type === 'brand') return task.brands.includes(currentFilter.value);
+            if (currentFilter.type === 'customer') return task.customers.includes(currentFilter.value);
+            if (currentFilter.type === 'assignee') return task.assignees.includes(currentFilter.value);
             return true;
         });
 
-        // Date logic for sorting and styling
-        const todayTime = new Date();
-        todayTime.setHours(0,0,0,0);
+        const todayTime = new Date(); todayTime.setHours(0,0,0,0);
 
+        // Sort priority > overdue > manual order
         filteredActive.sort((a,b) => {
             const aTime = a.dueDate ? new Date(a.dueDate).setHours(0,0,0,0) : null;
             const bTime = b.dueDate ? new Date(b.dueDate).setHours(0,0,0,0) : null;
             const aUrgentOverdue = aTime !== null && aTime < todayTime.getTime() && a.priority === 'Urgent';
             const bUrgentOverdue = bTime !== null && bTime < todayTime.getTime() && b.priority === 'Urgent';
-            
-            if(aUrgentOverdue && !bUrgentOverdue) return -1;
-            if(!aUrgentOverdue && bUrgentOverdue) return 1;
-            return 0;
+            if(aUrgentOverdue && !bUrgentOverdue) return -1; if(!aUrgentOverdue && bUrgentOverdue) return 1;
+            return (b.order || 0) - (a.order || 0); // Reverse order for newest on top manually
         });
 
         filteredActive.forEach(task => {
-            let isOverdue = false;
-            let titlePrefix = '';
-            
+            let isOverdue = false; let titlePrefix = '';
             if(task.dueDate) {
                 const dueTime = new Date(task.dueDate).setHours(0,0,0,0);
                 const diffDays = Math.ceil((dueTime - todayTime.getTime()) / (1000 * 60 * 60 * 24));
-                if(diffDays < 0) isOverdue = true;
-                else if(diffDays >= 0 && diffDays <= 2) titlePrefix = '⏰ ';
+                if(diffDays < 0) isOverdue = true; else if(diffDays >= 0 && diffDays <= 2) titlePrefix = '⏰ ';
             }
-
             const isUrgentOverdue = isOverdue && task.priority === 'Urgent';
             if(isUrgentOverdue) titlePrefix = '❗ ';
-
-            let extraClasses = '';
-            if(isUrgentOverdue) extraClasses = 'tile-overdue-urgent';
-            else if(isOverdue) extraClasses = 'tile-overdue';
+            let extraClasses = ''; if(isUrgentOverdue) extraClasses = 'tile-overdue-urgent'; else if(isOverdue) extraClasses = 'tile-overdue';
 
             const tile = document.createElement('div'); 
             tile.className = `task-tile priority-${task.priority} ${task.requiresAction ? 'requires-action-tile' : ''} ${extraClasses}`;
             tile.setAttribute('draggable', 'true'); 
             tile.addEventListener('dragstart', (e) => e.dataTransfer.setData('text/plain', task.id));
-            tile.style.cursor = 'pointer';
+            tile.addEventListener('dragover', window.handleTileDragOver);
+            tile.addEventListener('dragleave', window.handleTileDragLeave);
+            tile.addEventListener('drop', (e) => window.handleTileDrop(e, task.id));
+
             tile.onclick = (e) => { if(!e.target.closest('.icon-row') && !e.target.closest('button')) openTaskModal(task.id); };
             
             let tagsHTML = '';
             if (task.requiresAction) tagsHTML += `<span class="tag tag-action">⚠️ Setup Required</span>`;
-            if (task.brand !== 'No Brand') tagsHTML += `<span class="tag tag-brand">${task.brand}</span>`;
-            if (task.customer !== 'No Customer') tagsHTML += `<span class="tag tag-customer">${task.customer}</span>`;
-            if (task.assignee !== 'Unassigned') tagsHTML += `<span class="tag tag-assignee">👤 ${task.assignee}</span>`;
+            task.brands.forEach(b => tagsHTML += `<span class="tag tag-brand">${b}</span>`);
+            task.customers.forEach(c => tagsHTML += `<span class="tag tag-customer">${c}</span>`);
+            task.assignees.forEach(a => tagsHTML += `<span class="tag tag-assignee">👤 ${a}</span>`);
             if (task.dueDate) tagsHTML += `<span class="tag tag-date">🎯 ${new Date(task.dueDate).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</span>`;
+            if(task.recurrence && task.recurrence !== 'None') tagsHTML += `<span class="tag" style="background:#0284c7;">🔁 ${task.recurrence}</span>`;
             
             const doneSubs = task.subtasks.filter(s => s.status === 'Complete').length;
             if(task.subtasks.length > 0) tagsHTML += `<span class="tag" style="background:#475569;">📋 ${doneSubs}/${task.subtasks.length}</span>`;
             if(task.comments) tagsHTML += `<span class="tag" style="background:#475569;">💬</span>`;
 
-            tile.innerHTML = `
-                <div class="task-tile-header">
-                    <div class="task-tile-title">${titlePrefix}${task.text}</div>
-                    <div class="icon-row">
-                        <button class="icon-btn del" onclick="deleteTask(${task.id}, event)" title="Delete">🗑️</button>
-                        <button class="icon-btn" onclick="openTaskModal(${task.id})" title="Expand Task">⛶</button>
-                    </div>
-                </div>
-                <div class="task-tags">${tagsHTML}</div>
-                <div class="actions" style="flex-direction: row; justify-content: flex-end; margin-top: auto;">
-                    <button class="action-btn done-btn" style="padding: 6px 12px; font-size: 12px;" onclick="toggleTask(${task.id}, event)">✓ Complete</button>
-                </div>
-            `;
+            tile.innerHTML = `<div class="task-tile-header"><div class="task-tile-title">${titlePrefix}${task.text}</div><div class="icon-row"><button class="icon-btn del" onclick="deleteTask(${task.id}, event)">🗑️</button><button class="icon-btn" onclick="openTaskModal(${task.id})">⛶</button></div></div><div class="task-tags">${tagsHTML}</div><div class="actions" style="flex-direction: row; justify-content: flex-end; margin-top: auto;"><button class="action-btn done-btn" onclick="toggleTask(${task.id}, event)">✓ Complete</button></div>`;
             activeGrid.appendChild(tile);
         });
-        
-        const query = document.getElementById('tileSearchInput').value;
-        if(query) filterTiles(query);
     }
 
     window.renderCompletedModal = function() {
-        const completedList = document.getElementById('modal-completed-body');
-        completedList.innerHTML = '';
+        const completedList = document.getElementById('modal-completed-body'); completedList.innerHTML = '';
         const completedTasksArray = tasks.filter(t => t.completed);
-
-        if(completedTasksArray.length === 0) {
-            completedList.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-style:italic; margin: 20px 0; font-size:15px;">Archive tray is completely empty.</p>`;
-        } else {
+        if(completedTasksArray.length === 0) { completedList.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-style:italic; margin: 20px 0; font-size:15px;">Archive tray is empty.</p>`; } else {
             completedTasksArray.sort((a,b) => b.id - a.id).forEach(task => {
                 const card = document.createElement('div'); card.className = `task-card archive-card`;
                 let tagsHTML = '';
-                if (task.brand !== 'No Brand') tagsHTML += `<span class="tag tag-brand">${task.brand}</span>`;
-                if (task.customer !== 'No Customer') tagsHTML += `<span class="tag tag-customer">${task.customer}</span>`;
+                task.brands.forEach(b => tagsHTML += `<span class="tag tag-brand">${b}</span>`);
+                task.customers.forEach(c => tagsHTML += `<span class="tag tag-customer">${c}</span>`);
                 if (task.completedTimestamp) tagsHTML += `<span class="tag tag-completed">✓ Done: ${task.completedTimestamp}</span>`;
-                
-                card.innerHTML = `
-                    <div class="project-main-row">
-                        <div class="task-details">
-                            <span class="task-title" style="font-size:16px;">${task.text}</span>
-                            <div class="task-tags">${tagsHTML}</div>
-                        </div>
-                        <div class="actions" style="flex-direction: row; align-items:center;">
-                            <button class="action-btn done-btn" onclick="toggleTask(${task.id}, event); closeModal('completedTasksModal');">🔄 Undo</button>
-                            <button class="icon-btn del" onclick="deleteTask(${task.id}, event); renderCompletedModal();" style="padding:8px;">🗑️</button>
-                        </div>
-                    </div>`;
+                card.innerHTML = `<div class="project-main-row"><div class="task-details"><span class="task-title" style="font-size:16px;">${task.text}</span><div class="task-tags">${tagsHTML}</div></div><div class="actions" style="flex-direction: row; align-items:center;"><button class="action-btn done-btn" onclick="toggleTask(${task.id}, event); closeModal('completedTasksModal');">🔄 Undo</button><button class="icon-btn del" onclick="deleteTask(${task.id}, event); renderCompletedModal();" style="padding:8px;">🗑️</button></div></div>`;
                 completedList.appendChild(card);
             });
         }
         openModal('completedTasksModal');
     }
 
-    window.renderMeetings = function() {
-        const activeGrid = document.getElementById('meetingTileGrid');
-        if(!activeGrid) return;
-        activeGrid.innerHTML = ''; 
+    window.renderProjects = function() {
+        const container = document.getElementById('projectTileGridContainer'); if(!container) return; container.innerHTML = '';
 
+        const addTileRow = document.createElement('div'); addTileRow.style.marginBottom = '30px';
+        addTileRow.innerHTML = `<div class="task-tile add-new-tile" onclick="openModal('newProjectModal')" style="width: 100%; max-width: 300px;"><h3>🚀 Add New Project</h3></div>`;
+        container.appendChild(addTileRow);
+
+        let filteredProjects = projects.filter(p => {
+            if (currentProjFilter.type === 'all') return true;
+            if (currentProjFilter.type === 'brand') return p.brands.includes(currentProjFilter.value);
+            if (currentProjFilter.type === 'customer') return p.customers.includes(currentProjFilter.value);
+            if (currentProjFilter.type === 'owner') return p.assignees.includes(currentProjFilter.value);
+            return true;
+        });
+
+        // Group by primary assignee
+        const groups = {};
+        filteredProjects.forEach(p => {
+            const primary = p.assignees.length > 0 ? p.assignees[0] : 'Unassigned / Team';
+            if(!groups[primary]) groups[primary] = [];
+            groups[primary].push(p);
+        });
+
+        const todayTime = new Date(); todayTime.setHours(0,0,0,0);
+
+        Object.keys(groups).sort().forEach(assignee => {
+            // Sort within group by targetDate
+            groups[assignee].sort((a,b) => {
+                const aD = a.targetDate ? new Date(a.targetDate).getTime() : 9999999999999;
+                const bD = b.targetDate ? new Date(b.targetDate).getTime() : 9999999999999;
+                return aD - bD;
+            });
+
+            const header = document.createElement('div'); header.className = 'group-header'; header.innerText = `👤 Owner: ${assignee}`;
+            container.appendChild(header);
+
+            const grid = document.createElement('div'); grid.className = 'task-tile-grid';
+
+            groups[assignee].forEach(proj => {
+                const totalSubs = proj.subtasks.length; const doneSubs = proj.subtasks.filter(s => s.status === 'Complete').length;
+                const percent = totalSubs > 0 ? Math.round((doneSubs / totalSubs) * 100) : 0;
+                const isProjectCompleted = proj.status === 'Completed';
+
+                let titlePrefix = ''; let extraClasses = '';
+                if(!isProjectCompleted && proj.targetDate) {
+                    const dueTime = new Date(proj.targetDate).setHours(0,0,0,0);
+                    const diffDays = Math.ceil((dueTime - todayTime.getTime()) / (1000 * 60 * 60 * 24));
+                    if(diffDays < 0) extraClasses = 'tile-overdue'; else if(diffDays <= 2) titlePrefix = '⏰ ';
+                }
+
+                const tile = document.createElement('div'); tile.className = `task-tile ${isProjectCompleted ? 'archive-card' : ''} ${extraClasses}`;
+                tile.onclick = (e) => { if(!e.target.closest('.icon-row')) openProjectModal(proj.id); };
+                
+                let tagsHTML = '';
+                proj.brands.forEach(b => tagsHTML += `<span class="tag tag-brand">${b}</span>`);
+                proj.customers.forEach(c => tagsHTML += `<span class="tag tag-customer">${c}</span>`);
+                
+                tile.innerHTML = `
+                    <div class="task-tile-header"><div class="task-tile-title" style="${isProjectCompleted ? 'text-decoration:line-through; opacity:0.6;' : ''}">${titlePrefix}${proj.title}</div><div class="icon-row"><button class="icon-btn del" onclick="deleteProject(${proj.id}, event)">🗑️</button><button class="icon-btn" onclick="openProjectModal(${proj.id})">⛶</button></div></div>
+                    <div class="progress-wrapper"><div class="progress-text">${percent}%</div><div class="progress-bar-outer"><div class="progress-bar-inner" style="width: ${percent}%;"></div></div></div>
+                    <div class="task-tags">${tagsHTML}</div>
+                    <div style="font-size:11px; margin-top:auto; color:var(--text-muted); font-weight:700;">🎯 Target: ${proj.targetDate ? new Date(proj.targetDate).toLocaleDateString('en-GB', {day:'numeric', month:'short'}) : 'TBD'}</div>
+                `;
+                grid.appendChild(tile);
+            });
+            container.appendChild(grid);
+        });
+    }
+
+    window.renderMeetings = function() {
+        const activeGrid = document.getElementById('meetingTileGrid'); if(!activeGrid) return; activeGrid.innerHTML = ''; 
         const addTile = document.createElement('div'); addTile.className = 'task-tile add-new-tile'; addTile.onclick = () => openModal('newMeetingModal'); addTile.innerHTML = `<h3>🤝 Log New Meeting</h3>`; activeGrid.appendChild(addTile);
 
         meetings.sort((a,b) => b.id - a.id).forEach(meet => {
             const tile = document.createElement('div'); tile.className = `task-tile`;
-            tile.style.cursor = 'pointer';
             tile.onclick = (e) => { if(!e.target.closest('.icon-row')) openMeetingModal(meet.id); };
-            
             let tagsHTML = '';
-            if (meet.customer) tagsHTML += `<span class="tag tag-customer">${meet.customer}</span>`;
-            if (meet.brand) tagsHTML += `<span class="tag tag-brand">${meet.brand}</span>`;
-            if (meet.date) tagsHTML += `<span class="tag tag-date">📅 ${new Date(meet.date).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</span>`;
-            if (meet.participants) tagsHTML += `<span class="tag tag-assignee">👥 ${meet.participants}</span>`;
+            meet.customers.forEach(c => tagsHTML += `<span class="tag tag-customer">${c}</span>`);
+            meet.brands.forEach(b => tagsHTML += `<span class="tag tag-brand">${b}</span>`);
+            if (meet.date) tagsHTML += `<span class="tag tag-date">📅 ${new Date(meet.date).toLocaleDateString('en-GB', {day:'numeric', month:'short'})} ${meet.time || ''}</span>`;
+            meet.assignees.forEach(p => tagsHTML += `<span class="tag tag-assignee">👥 ${p}</span>`);
             if (meet.actions.length > 0) tagsHTML += `<span class="tag tag-action">🚀 ${meet.actions.length} Actions</span>`;
 
-            tile.innerHTML = `
-                <div class="task-tile-header">
-                    <div class="task-tile-title">${meet.title}</div>
-                    <div class="icon-row">
-                        <button class="icon-btn del" onclick="deleteMeeting(${meet.id}, event)" title="Delete">🗑️</button>
-                        <button class="icon-btn" onclick="openMeetingModal(${meet.id})" title="Expand Notes">⛶</button>
-                    </div>
-                </div>
-                <div class="task-tags">${tagsHTML}</div>
-            `;
+            tile.innerHTML = `<div class="task-tile-header"><div class="task-tile-title">${meet.title}</div><div class="icon-row"><button class="icon-btn del" onclick="deleteMeeting(${meet.id}, event)">🗑️</button><button class="icon-btn" onclick="openMeetingModal(${meet.id})">⛶</button></div></div><div class="task-tags">${tagsHTML}</div>`;
             activeGrid.appendChild(tile);
         });
-
-        const query = document.getElementById('meetTileSearchInput').value;
-        if(query) filterMeetingTiles(query);
     }
 
     window.renderSidebarPlanner = function() {
         for(let i=0; i<3; i++) document.getElementById(`sb-date-${i}`).innerText = datesArray[i].toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
         const dateStrings = datesArray.map(d => d.toISOString().split('T')[0]);
-        
         for(let i=0; i<3; i++) {
             const colZone = document.getElementById(`sb-col-${i}`); colZone.innerHTML = '';
             const dayTasks = tasks.filter(t => !t.completed && t.dueDate === dateStrings[i]);
-            
-            if(dayTasks.length === 0) {
-                colZone.innerHTML = `<div style="text-align:center; color:var(--text-muted); font-size:13px; margin-top:20px; opacity:0.6;">Drag to schedule</div>`;
-            } else {
+            if(dayTasks.length === 0) { colZone.innerHTML = `<div style="text-align:center; color:var(--text-muted); font-size:13px; margin-top:20px; opacity:0.6;">Drag to schedule</div>`; } 
+            else {
                 dayTasks.forEach(task => {
-                    const card = document.createElement('div'); 
-                    card.className = `mini-task-card priority-${task.priority}`;
-                    card.setAttribute('draggable', 'true'); 
-                    card.addEventListener('dragstart', (e) => e.dataTransfer.setData('text/plain', task.id));
-                    
-                    card.innerHTML = `
-                        <div class="mini-card-left">
-                            <input type="checkbox" onclick="toggleTask(${task.id}, event)">
-                            <span style="cursor:pointer;" onclick="openTaskModal(${task.id})">${task.text}</span>
-                        </div>
-                        <div class="mini-card-icons">
-                            ${task.subtasks.length > 0 ? '📋' : ''}
-                            ${task.comments ? '💬' : ''}
-                        </div>
-                    `;
+                    const card = document.createElement('div'); card.className = `mini-task-card priority-${task.priority}`; card.setAttribute('draggable', 'true'); card.addEventListener('dragstart', (e) => e.dataTransfer.setData('text/plain', task.id));
+                    card.innerHTML = `<div class="mini-card-left"><input type="checkbox" onclick="toggleTask(${task.id}, event)"><span style="cursor:pointer;" onclick="openTaskModal(${task.id})">${task.text}</span></div><div class="mini-card-icons">${task.subtasks.length > 0 ? '📋' : ''} ${task.comments ? '💬' : ''}</div>`;
                     colZone.appendChild(card);
                 });
             }
         }
     }
 
-    /* --- REST OF EXISTING LOGIC --- */
-    window.renderProjects = function() {
-        const container = document.getElementById('projectTileGrid');
-        if(!container) return;
-        container.innerHTML = '';
-
-        const addTile = document.createElement('div'); addTile.className = 'task-tile add-new-tile'; addTile.onclick = () => openModal('newProjectModal'); addTile.innerHTML = `<h3>🚀 Add New Project</h3>`; container.appendChild(addTile);
-
-        const filteredProjects = projects.filter(p => {
-            if (currentProjFilter.type === 'all') return true;
-            if (currentProjFilter.type === 'brand') return p.brands.includes(currentProjFilter.value);
-            if (currentProjFilter.type === 'customer') return p.customer === currentProjFilter.value;
-            if (currentProjFilter.type === 'owner') return p.owner === currentProjFilter.value;
-            return true;
-        });
-
-        const todayTime = new Date(); todayTime.setHours(0,0,0,0);
-
-        filteredProjects.sort((a,b) => (a.status === 'Live' ? -1 : 1)).forEach(proj => {
-            const totalSubs = proj.subtasks.length;
-            const doneSubs = proj.subtasks.filter(s => s.status === 'Complete').length;
-            const percent = totalSubs > 0 ? Math.round((doneSubs / totalSubs) * 100) : 0;
-            const isProjectCompleted = proj.status === 'Completed';
-
-            let titlePrefix = '';
-            let extraClasses = '';
-            if(!isProjectCompleted && proj.targetDate) {
-                const dueTime = new Date(proj.targetDate).setHours(0,0,0,0);
-                const diffDays = Math.ceil((dueTime - todayTime.getTime()) / (1000 * 60 * 60 * 24));
-                if(diffDays < 0) {
-                    extraClasses = 'tile-overdue';
-                } else if(diffDays >= 0 && diffDays <= 2) {
-                    titlePrefix = '⏰ ';
-                }
-            }
-
-            const tile = document.createElement('div');
-            tile.className = `task-tile ${isProjectCompleted ? 'archive-card' : ''} ${extraClasses}`;
-            tile.style.cursor = 'pointer';
-            tile.onclick = (e) => { if(!e.target.closest('.icon-row')) openProjectModal(proj.id); };
-            
-            const brandsHTML = proj.brands.map(b => `<span class="tag tag-brand">${b}</span>`).join(' ');
-            const formattedTarget = proj.targetDate ? new Date(proj.targetDate).toLocaleDateString('en-GB', {day:'numeric', month:'short'}) : 'TBD';
-
-            tile.innerHTML = `
-                <div class="task-tile-header">
-                    <div class="task-tile-title" style="${isProjectCompleted ? 'text-decoration:line-through; opacity:0.6;' : ''}">${titlePrefix}${proj.title}</div>
-                    <div class="icon-row">
-                        <button class="icon-btn del" onclick="deleteProject(${proj.id}, event)" title="Delete">🗑️</button>
-                        <button class="icon-btn" onclick="openProjectModal(${proj.id})" title="Expand">⛶</button>
-                    </div>
-                </div>
-                <div class="progress-wrapper" style="margin: 6px 0; max-width: 100%;">
-                    <div class="progress-bar-outer"><div class="progress-bar-inner" style="width: ${percent}%;"></div></div>
-                </div>
-                <div class="task-tags">${brandsHTML} <span class="tag tag-customer">${proj.customer}</span> ${proj.owner ? `<span class="tag tag-assignee">👤 ${proj.owner}</span>` : ''}</div>
-                <div style="font-size:12px; margin-top:auto; color:var(--text-muted); font-weight:700;">🎯 Target: ${formattedTarget}</div>
-            `;
-            container.appendChild(tile);
-        });
-
-        const query = document.getElementById('projTileSearchInput').value;
-        if(query) filterProjectTiles(query);
+    window.allowDrop = function(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+    window.dragLeave = function(e) { e.currentTarget.classList.remove('drag-over'); }
+    window.handlePlannerDrop = function(e, targetDayIndex) {
+        e.preventDefault(); e.currentTarget.classList.remove('drag-over');
+        const taskId = parseInt(e.dataTransfer.getData('text/plain'));
+        const targetDateString = datesArray[targetDayIndex].toISOString().split('T')[0];
+        tasks = tasks.map(t => t.id === taskId ? { ...t, dueDate: targetDateString } : t);
+        saveTasks();
     }
-    
-    window.renderUpcomingDeadlines = function() {
+
+    function renderUpcomingDeadlines() {
         const container = document.getElementById('upcoming-deadlines-container'); if(!container) return;
         const today = new Date(); today.setHours(0,0,0,0); let deadlines = [];
         
@@ -1235,24 +1013,19 @@
 
         deadlines.sort((a,b) => a.date - b.date);
         let htmlToday = '', htmlThisWeek = '', htmlNextWeek = '';
-        
         deadlines.forEach(d => {
             d.date.setHours(0,0,0,0); const diffDays = Math.ceil((d.date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
             const bColor = d.type.includes('Project') ? '#7c3aed' : '#3b82f6';
             const itemHTML = `<div class="mini-task-card" style="margin-bottom:10px; padding:10px; border-left:3px solid ${bColor};"><div style="font-size:10px; color:${bColor}; margin-bottom:4px; text-transform:uppercase; font-weight:800; letter-spacing:0.05em;">${d.type} ${d.parent ? `• ${d.parent}` : ''}</div><div style="font-size:13px;">${d.text}</div><div style="font-size:11px; margin-top:6px; opacity:0.8;">🎯 ${d.date.toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</div></div>`;
             if (diffDays <= 0) htmlToday += itemHTML; else if (diffDays <= 7) htmlThisWeek += itemHTML; else if (diffDays <= 14) htmlNextWeek += itemHTML;
         });
-        container.innerHTML = `<div class="mini-planner-col"><h4>📍 Today & Overdue</h4>${htmlToday || '<p style="font-size:12px;opacity:0.5;margin-left:4px;">No immediate deadlines.</p>'}</div><div class="mini-planner-col" style="margin-top:16px;"><h4>⏭️ This Week</h4>${htmlThisWeek || '<p style="font-size:12px;opacity:0.5;margin-left:4px;">Clear.</p>'}</div><div class="mini-planner-col" style="margin-top:16px;"><h4>⏭️ Next Week</h4>${htmlNextWeek || '<p style="font-size:12px;opacity:0.5;margin-left:4px;">Clear.</p>'}</div>`;
+        container.innerHTML = `<div class="mini-planner-col"><h4>📍 Today & Overdue</h4>${htmlToday || '<p style="font-size:12px;opacity:0.5;">No immediate deadlines.</p>'}</div><div class="mini-planner-col" style="margin-top:16px;"><h4>⏭️ This Week</h4>${htmlThisWeek || '<p style="font-size:12px;opacity:0.5;">Clear.</p>'}</div><div class="mini-planner-col" style="margin-top:16px;"><h4>⏭️ Next Week</h4>${htmlNextWeek || '<p style="font-size:12px;opacity:0.5;">Clear.</p>'}</div>`;
     }
 
-    window.renderExpenses = function() {
+    function renderExpenses() {
         const ledger = document.getElementById('expenseLedgerList'); if(!ledger) return; ledger.innerHTML = '';
         let runningTotal = 0;
-
-        if(expenses.length === 0) {
-            ledger.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-style:italic; margin-top: 30px;">No expense logs recorded yet.</p>`;
-            document.getElementById('expense-total-display').innerText = '£0.00'; return;
-        }
+        if(expenses.length === 0) { ledger.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-style:italic; margin-top: 30px;">No expense logs recorded yet.</p>`; document.getElementById('expense-total-display').innerText = '£0.00'; return; }
 
         expenses.sort((a,b) => {
             if(a.isOngoing && !b.isOngoing) return -1;
@@ -1263,67 +1036,42 @@
             const card = document.createElement('div'); card.className = `task-card ${exp.isOngoing ? 'ongoing-expense-card' : ''}`;
             let badges = `<span class="tag tag-date">📅 ${new Date(exp.date).toLocaleDateString('en-GB', {day:'numeric', month:'short', year:'numeric'})}</span>`;
             if(exp.isOngoing) badges += `<span class="tag tag-ongoing">♾️ Permanent</span>`;
-            
-            card.innerHTML = `
-                <div class="project-main-row">
-                    <div class="task-details">
-                        <span class="task-title" style="cursor:default;">${exp.item}</span>
-                        <div class="task-tags">${badges}<span class="tag tag-receipt">📁 Receipt: ${exp.receipt}</span><span class="tag tag-brand" style="background-color:var(--vibrant-expense-bg);">Cost: £${exp.cost.toFixed(2)}</span></div>
-                    </div>
-                    <div class="actions"><button class="action-btn delete-btn" onclick="deleteExpense(${exp.id})">Remove</button></div>
-                </div>`;
+            card.innerHTML = `<div class="project-main-row"><div class="task-details"><span class="task-title" style="cursor:default;">${exp.item}</span><div class="task-tags">${badges}<span class="tag tag-receipt">📁 Receipt: ${exp.receipt}</span><span class="tag tag-brand" style="background-color:var(--vibrant-expense-bg);">Cost: £${exp.cost.toFixed(2)}</span></div></div><div class="actions"><button class="action-btn delete-btn" onclick="deleteExpense(${exp.id})">Remove</button></div></div>`;
             ledger.appendChild(card);
         });
         document.getElementById('expense-total-display').innerText = `£${runningTotal.toFixed(2)}`;
     }
 
-    window.renderProjectSidebar = function() {
+    function renderProjectSidebar() {
         const liveProjs = projects.filter(p => p.status === 'Live'); const compProjs = projects.filter(p => p.status === 'Completed');
         document.getElementById('stat-live-proj').innerText = liveProjs.length; document.getElementById('stat-comp-proj').innerText = compProjs.length;
         const liveList = document.getElementById('dir-live-proj'); const compList = document.getElementById('dir-comp-proj');
         liveList.innerHTML = liveProjs.length ? liveProjs.map(p => `<li>${p.title}</li>`).join('') : '<li style="background:transparent; border:none; opacity:0.5;">No active projects</li>';
         compList.innerHTML = compProjs.length ? compProjs.map(p => `<li class="completed-dir">${p.title}</li>`).join('') : '<li style="background:transparent; border:none; opacity:0.5;">None completed</li>';
         const bSet=new Set(), cSet=new Set(), oSet=new Set();
-        projects.forEach(p => { p.brands.forEach(b => bSet.add(b)); if(p.customer) cSet.add(p.customer); if(p.owner) oSet.add(p.owner); });
+        projects.forEach(p => { p.brands.forEach(b => bSet.add(b)); p.customers.forEach(c => cSet.add(c)); p.assignees.forEach(o => oSet.add(o)); });
         document.getElementById('projBrandFilters').innerHTML = [...bSet].map(b => `<button class="filter-btn ${currentProjFilter.type==='brand' && currentProjFilter.value===b ? 'active':''}" onclick="setProjFilter('brand','${b}',this)">🏷️ ${b}</button>`).join('');
         document.getElementById('projCustomerFilters').innerHTML = [...cSet].map(c => `<button class="filter-btn ${currentProjFilter.type==='customer' && currentProjFilter.value===c ? 'active':''}" onclick="setProjFilter('customer','${c}',this)">🏢 ${c}</button>`).join('');
         document.getElementById('projOwnerFilters').innerHTML = [...oSet].map(o => `<button class="filter-btn ${currentProjFilter.type==='owner' && currentProjFilter.value===o ? 'active':''}" onclick="setProjFilter('owner','${o}',this)">👤 ${o}</button>`).join('');
     }
 
-    window.renderSidebarFilters = function() {
+    function renderSidebarFilters() {
         const bCont = document.getElementById('brandFilters'), cCont = document.getElementById('customerFilters'), aCont = document.getElementById('assigneeFilters');
-        const bSet=[...new Set(tasks.map(t=>t.brand).filter(b=>b&&b!=='No Brand'))], cSet=[...new Set(tasks.map(t=>t.customer).filter(c=>c&&c!=='No Customer'))], aSet=[...new Set(tasks.map(t=>t.assignee).filter(a=>a&&a!=='Unassigned'))];
+        const bSet=[...new Set(tasks.flatMap(t=>t.brands).filter(b=>b))], cSet=[...new Set(tasks.flatMap(t=>t.customers).filter(c=>c))], aSet=[...new Set(tasks.flatMap(t=>t.assignees).filter(a=>a))];
         bCont.innerHTML = bSet.map(b => `<button class="filter-btn ${currentFilter.type==='brand' && currentFilter.value===b ? 'active':''}" onclick="setFilter('brand','${b}',this)">🏷️ ${b}</button>`).join('');
         cCont.innerHTML = cSet.map(c => `<button class="filter-btn ${currentFilter.type==='customer' && currentFilter.value===c ? 'active':''}" onclick="setFilter('customer','${c}',this)">🏢 ${c}</button>`).join('');
         aCont.innerHTML = aSet.map(a => `<button class="filter-btn ${currentFilter.type==='assignee' && currentFilter.value===a ? 'active':''}" onclick="setFilter('assignee','${a}',this)">👤 ${a}</button>`).join('');
     }
 
-    window.renderInputDatalists = function() {
+    function renderInputDatalists() {
         const bData = document.getElementById('brandOptions'), cData = document.getElementById('customerOptions'), aData = document.getElementById('assigneeOptions'), rData = document.getElementById('receiptOptions'), sData = document.getElementById('subtaskOwnerOptions');
-        const uBrands = [...new Set([...tasks.map(t=>t.brand), ...projects.flatMap(p=>p.brands), ...meetings.map(m=>m.brand)].filter(b=>b&&b!=='No Brand'))];
-        const uCusts = [...new Set([...tasks.map(t=>t.customer), ...projects.map(p=>p.customer), ...meetings.map(m=>m.customer)].filter(c=>c&&c!=='No Customer' && c!=='General'))];
-        const uAssigns = [...new Set([...tasks.map(t=>t.assignee), ...projects.map(p=>p.owner), ...projects.flatMap(p=>p.subtasks.map(s=>s.owner)), ...tasks.flatMap(t=>t.subtasks.map(s=>s.owner))].filter(a=>a&&a!=='Unassigned'))];
+        const uBrands = [...new Set([...tasks.flatMap(t=>t.brands), ...projects.flatMap(p=>p.brands), ...meetings.flatMap(m=>m.brands)].filter(b=>b))];
+        const uCusts = [...new Set([...tasks.flatMap(t=>t.customers), ...projects.flatMap(p=>p.customers), ...meetings.flatMap(m=>m.customers)].filter(c=>c))];
+        const uAssigns = [...new Set([...tasks.flatMap(t=>t.assignees), ...projects.flatMap(p=>p.assignees), ...projects.flatMap(p=>p.subtasks.map(s=>s.owner)), ...tasks.flatMap(t=>t.subtasks.map(s=>s.owner))].filter(a=>a))];
         const uReceipts = [...new Set(expenses.map(e=>e.receipt).filter(r=>r&&r!=='Not Specified'))];
         bData.innerHTML = uBrands.map(b=>`<option value="${b}">`).join(''); cData.innerHTML = uCusts.map(c=>`<option value="${c}">`).join(''); 
         aData.innerHTML = uAssigns.map(a=>`<option value="${a}">`).join(''); sData.innerHTML = uAssigns.map(a=>`<option value="${a}">`).join(''); rData.innerHTML = uReceipts.map(r=>`<option value="${r}">`).join('');
     }
-
-    window.setFilter = function(type, value, element) { currentFilter = { type, value }; document.querySelectorAll('#app-sidebar-left .filter-btn').forEach(btn => btn.classList.remove('active')); if(element) element.classList.add('active'); renderTasks(); }
-    window.setProjFilter = function(type, value, element) { currentProjFilter = { type, value }; document.querySelectorAll('#app-sidebar-left-projects .filter-btn').forEach(btn => btn.classList.remove('active')); if(element) element.classList.add('active'); renderProjects(); }
-    window.filterTiles = function(query) { const lq = query.toLowerCase(); document.querySelectorAll('#taskTileGrid .task-tile:not(.add-new-tile):not(.comp-view-tile)').forEach(t => { t.style.display = t.innerText.toLowerCase().includes(lq) ? 'flex' : 'none'; }); }
-    window.filterProjectTiles = function(query) { const lq = query.toLowerCase(); document.querySelectorAll('#projectTileGrid .task-tile:not(.add-new-tile)').forEach(t => { t.style.display = t.innerText.toLowerCase().includes(lq) ? 'flex' : 'none'; }); }
-    window.filterMeetingTiles = function(query) { const lq = query.toLowerCase(); document.querySelectorAll('#meetingTileGrid .task-tile:not(.add-new-tile)').forEach(t => { t.style.display = t.innerText.toLowerCase().includes(lq) ? 'flex' : 'none'; }); }
-
-    window.allowDrop = function(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
-    window.dragLeave = function(e) { e.currentTarget.classList.remove('drag-over'); }
-    window.handleDrop = function(e, targetDayIndex) {
-        e.preventDefault(); e.currentTarget.classList.remove('drag-over');
-        const taskId = parseInt(e.dataTransfer.getData('text/plain'));
-        const targetDateString = datesArray[targetDayIndex].toISOString().split('T')[0];
-        tasks = tasks.map(t => t.id === taskId ? { ...t, dueDate: targetDateString } : t);
-        saveTasks();
-    }
-
 </script>
 </body>
 </html>

@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>James C Workspace</title>
     
-    <!-- Custom JC Logo Browser Tab Icon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%236366f1%22/><text x=%2250%22 y=%2270%22 font-family=%22Arial, sans-serif%22 font-size=%2255%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22>JC</text></svg>">
 
-    <!-- FIREBASE CLOUD SDK COMPATIBILITY LIBRARIES -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+    
+    <script src="https://bernardo-castilho.github.io/DragDropTouch/DragDropTouch.js"></script>
 
     <style>
         :root {
@@ -86,7 +86,7 @@
         .mini-planner-col { display: flex; flex-direction: column; flex: 1; }
         .mini-planner-col h4 { font-size: 13px; font-weight: 700; color: var(--text-main); margin: 0 0 6px 4px; display: flex; justify-content: space-between; align-items: center; }
         .mini-planner-col h4 span { color: var(--text-main); background-color: var(--vibrant-date-bg); padding: 2px 6px; border-radius: 6px; font-size: 11px; font-weight: 800; }
-        .mini-dropzone { flex: 1; min-height: 100px; background-color: rgba(0,0,0,0.2); border: 2px dashed var(--border-color); border-radius: 12px; padding: 8px; display: flex; flex-direction: column; gap: 6px; transition: all 0.2s; overflow-y: auto; }
+        .mini-dropzone { flex: 1; min-height: 100px; background-color: rgba(0,0,0,0.2); border: 2px dashed var(--border-color); border-radius: 12px; padding: 8px; display: flex; flex-direction: column; gap: 6px; transition: all 0.2s; overflow-y: auto; touch-action: pan-y; }
         .mini-dropzone.drag-over { background-color: rgba(99, 102, 241, 0.15); border-color: var(--primary-accent); }
         
         .mini-task-card { background-color: var(--card-bg); padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--text-main); border-left: 4px solid var(--border-color); cursor: grab; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 4px; transition: transform 0.1s; line-height: 1.3; }
@@ -109,7 +109,7 @@
         .proj-directory-list li { background-color: rgba(0,0,0,0.2); padding: 10px 12px; border-radius: 8px; font-size: 13px; color: var(--text-main); font-weight: 600; border-left: 3px solid var(--primary-accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         /* --- MAIN VIEWPORTS --- */
-        .main-content { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; touch-action: pan-y; }
         .container { width: 100%; max-width: 1600px; padding: 0; }
         .view-panel { display: none; width: 100%; }
         .view-panel.active { display: block; }
@@ -122,7 +122,7 @@
         /* --- CONDENSED 5-COLUMN TILES --- */
         .task-tile-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; width: 100%; margin-bottom: 20px; }
         
-        .task-tile { background: var(--card-bg); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); border-left: 5px solid var(--border-color); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); display: flex; flex-direction: column; gap: 8px; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; position: relative; min-height: 110px; }
+        .task-tile { background: var(--card-bg); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); border-left: 5px solid var(--border-color); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); display: flex; flex-direction: column; gap: 8px; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; position: relative; min-height: 110px; touch-action: pan-y; }
         .task-tile:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
         .task-tile.drag-over { border: 2px dashed var(--primary-accent); opacity: 0.5; }
 
@@ -212,15 +212,28 @@
         .task-card.archive-card { opacity: 0.6; background-color: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); box-shadow: none; }
         .project-main-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; width: 100%; }
         
+        /* --- RESPONSIVE MOBILE LAYOUT --- */
         @media (max-width: 1300px) { .task-tile-grid { grid-template-columns: repeat(4, 1fr); } }
         @media (max-width: 1000px) { .task-tile-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 700px) { .task-tile-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 850px) { 
+            body { height: auto; overflow-y: auto; display: block; }
+            .workspace-body { flex-direction: column; overflow: visible; display: flex; }
+            .sidebar-left, .sidebar-right { width: 100% !important; border: none; border-bottom: 2px solid var(--primary-accent); padding: 20px; }
+            .main-content { overflow: visible; padding: 15px; width: 100%; }
+            .top-navbar { flex-direction: column; height: auto; padding: 15px; gap: 15px; text-align: center; }
+            .navbar-tabs { justify-content: center; flex-wrap: wrap; width: 100%; }
+            .task-tile-grid { grid-template-columns: repeat(2, 1fr); }
+            .modal-content { max-width: 95vw; margin: 10px; max-height: 90vh; }
+            .modal-edit-bar, .form-row { flex-direction: column; align-items: stretch; }
+            .form-row input, .form-row select, .modal-edit-bar input, .modal-edit-bar select, .subtask-entry-row input { width: 100%; }
+            .sidebar-right.expanded-planner { position: static; width: 100% !important; box-shadow: none; }
+            .expanded-planner .sidebar-planner-zone { flex-direction: column; }
+        }
         @media (max-width: 500px) { .task-tile-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <!-- TOP NAVIGATION -->
     <div class="top-navbar">
         <div class="navbar-brand">
             <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%236366f1'/%3E%3Ctext x='50' y='70' font-family='Arial, sans-serif' font-size='55' font-weight='bold' fill='white' text-anchor='middle'%3EJC%3C/text%3E%3C/svg%3E" alt="Logo">
@@ -235,10 +248,8 @@
         <div style="width:50px;"></div>
     </div>
 
-    <!-- CORE FRAME -->
     <div class="workspace-body">
         
-        <!-- LEFT SIDEBAR: TASK FILTERS -->
         <div class="sidebar-left" id="app-sidebar-left">
             <h2>🔎 Workspace Filters</h2>
             <div class="filter-section">
@@ -256,7 +267,6 @@
             <div class="filter-section"><h3 onclick="toggleFilter('assigneeFilters')">👤 Assignees <span class="filter-arrow">▼</span></h3><div id="assigneeFilters" class="filter-body"></div></div>
         </div>
 
-        <!-- LEFT SIDEBAR: PROJECT FILTERS -->
         <div class="sidebar-left" id="app-sidebar-left-projects" style="display:none;">
             <h2>🔎 Project Filters</h2>
             <div class="filter-section">
@@ -268,7 +278,6 @@
             <div class="filter-section"><h3 onclick="toggleFilter('projOwnerFilters')">👤 Owners <span class="filter-arrow">▼</span></h3><div id="projOwnerFilters" class="filter-body"></div></div>
         </div>
 
-        <!-- LEFT SIDEBAR: MEETING FILTERS -->
         <div class="sidebar-left" id="app-sidebar-left-meetings" style="display:none;">
             <h2>🔎 Meeting Filters</h2>
             <div class="filter-section"><button class="filter-btn active" onclick="setMeetFilter('all', 'all', this)">🏁 All Meetings</button></div>
@@ -277,7 +286,6 @@
             <div class="filter-section"><h3 onclick="toggleFilter('meetAssigneeFilters')">👥 Participants <span class="filter-arrow">▼</span></h3><div id="meetAssigneeFilters" class="filter-body"></div></div>
         </div>
 
-        <!-- MAIN VIEWPORTS -->
         <div class="main-content">
             
             <div id="panel-dashboard" class="view-panel active">
@@ -314,7 +322,7 @@
                     <div id="expense-sub-add" style="max-width:800px; margin:0 auto; background:var(--card-bg); padding:20px; border-radius:12px; border:1px solid var(--border-color);">
                         <div class="form-row"><input type="text" id="expItemInput" placeholder="What is it?"><input type="number" id="expCostInput" step="0.01" placeholder="Cost (£)"></div>
                         <div class="form-row"><input type="text" id="expReceiptInput" placeholder="Receipt Location"><input type="date" id="expDateInput"></div>
-                        <label style="display:flex; align-items:center; gap:8px; margin-bottom:15px; cursor:pointer;"><input type="checkbox" id="expOngoingInput"> 🔁 Permanent / Ongoing</label>
+                        <label style="display:flex; align-items:center; gap:8px; margin-bottom:15px; cursor:pointer; color:var(--text-muted); font-size:14px;"><input type="checkbox" id="expOngoingInput" style="width:16px; height:16px; accent-color:var(--primary-accent); margin:0;"> 🔁 Permanent / Ongoing</label>
                         <button class="submit-btn" onclick="addExpense()">Log Expense</button>
                     </div>
                     <div id="expense-sub-review" style="display:none; max-width:800px; margin:0 auto;">
@@ -328,7 +336,6 @@
 
         </div>
 
-        <!-- RIGHT SIDEBARS -->
         <div class="sidebar-right" id="app-sidebar-right-planner">
             <h2>📅 3-Day Planner <button class="icon-btn" onclick="togglePlannerExpanded()">⛶</button></h2>
             <div class="sidebar-planner-zone">
@@ -347,8 +354,6 @@
         </div>
     </div>
 
-    <!-- MODALS -->
-    <!-- NEW TASK MODAL -->
     <div class="modal-overlay" id="newTaskModal">
         <div class="modal-content" style="max-width: 650px;">
             <div class="modal-header"><h2>➕ Initialize New Task</h2><button class="close-modal" onclick="closeModal('newTaskModal')">×</button></div>
@@ -370,7 +375,6 @@
         </div>
     </div>
 
-    <!-- NEW PROJECT MODAL -->
     <div class="modal-overlay" id="newProjectModal">
         <div class="modal-content" style="max-width: 650px;">
             <div class="modal-header"><h2>🚀 Initialize Strategic Project</h2><button class="close-modal" onclick="closeModal('newProjectModal')">×</button></div>
@@ -388,7 +392,6 @@
         </div>
     </div>
 
-    <!-- NEW MEETING MODAL -->
     <div class="modal-overlay" id="newMeetingModal">
         <div class="modal-content" style="max-width: 650px;">
             <div class="modal-header"><h2>🤝 Log New Meeting</h2><button class="close-modal" onclick="closeModal('newMeetingModal')">×</button></div>
@@ -410,13 +413,11 @@
         </div>
     </div>
 
-    <!-- DYNAMIC DETAILS MODALS -->
     <div class="modal-overlay" id="taskDetailsModal"><div class="modal-content"><div class="modal-header"><h2 id="modal-task-title"></h2><button class="close-modal" onclick="closeModal('taskDetailsModal')">×</button></div><div class="modal-body" id="modal-task-body"></div></div></div>
     <div class="modal-overlay" id="projectDetailsModal"><div class="modal-content"><div class="modal-header"><h2 id="modal-proj-title"></h2><button class="close-modal" onclick="closeModal('projectDetailsModal')">×</button></div><div class="modal-body" id="modal-proj-body"></div></div></div>
     <div class="modal-overlay" id="meetingDetailsModal"><div class="modal-content"><div class="modal-header"><h2 id="modal-meet-title"></h2><button class="close-modal" onclick="closeModal('meetingDetailsModal')">×</button></div><div class="modal-body" id="modal-meet-body"></div></div></div>
     <div class="modal-overlay" id="completedTasksModal"><div class="modal-content" style="max-width:800px;"><div class="modal-header"><h2>📁 Archive</h2><button class="close-modal" onclick="closeModal('completedTasksModal')">×</button></div><div class="modal-body" id="modal-completed-body"></div></div></div>
 
-    <!-- AUTOCOMPLETE DATALISTS -->
     <datalist id="subtaskOwnerOptions"></datalist>
 
 <script>
@@ -502,7 +503,6 @@
             });
             expenses = expenses.map(e => { if(e.isOngoing === undefined) e.isOngoing = false; return e; });
 
-            // Do not force refresh if actively typing
             const activeEl = document.activeElement;
             const isTyping = activeEl && (activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'INPUT');
             if(!isTyping) refreshAllViews();
@@ -511,7 +511,6 @@
 
     function syncToCloud() { dataRef.set({ tasks, projects, meetings, expenses }, { merge: true }); }
     
-    // UI Local Sync overrides
     window.saveTasks = function() { syncToCloud(); refreshAllViews(); }
     window.saveExpenses = function() { syncToCloud(); refreshAllViews(); }
     window.saveProjects = function() { syncToCloud(); refreshAllViews(); }
@@ -604,7 +603,7 @@
             if(val) {
                 let col = entityType === 'task' ? tasks : (entityType === 'proj' ? projects : meetings);
                 let item = col.find(x => x.id === entityId);
-                if(item) { item[arrayName].push(val); e.target.value = ''; saveTasks(); /* Triggers sync & UI refresh */ }
+                if(item) { item[arrayName].push(val); e.target.value = ''; saveTasks(); }
             }
         }
     }
@@ -1113,7 +1112,7 @@
     function renderExpenses() {
         const ledger = document.getElementById('expenseLedgerList'); if(!ledger) return; ledger.innerHTML = '';
         let runningTotal = 0;
-        if(expenses.length === 0) { ledger.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-style:italic; margin-top: 30px;">No expense logs recorded yet.</p>`; document.getElementById('expense-total-display').innerText = '£0.00'; return; }
+        if(expenses.length === 0) { ledger.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-style:italic; margin: top: 30px;">No expense logs recorded yet.</p>`; document.getElementById('expense-total-display').innerText = '£0.00'; return; }
 
         expenses.sort((a,b) => {
             if(a.isOngoing && !b.isOngoing) return -1;
@@ -1130,6 +1129,20 @@
         document.getElementById('expense-total-display').innerText = `£${runningTotal.toFixed(2)}`;
     }
 
+    window.setFilter = function(type, value, element) { currentFilter = { type, value }; document.querySelectorAll('#app-sidebar-left .filter-btn').forEach(btn => btn.classList.remove('active')); if(element) element.classList.add('active'); renderTasks(); }
+    window.setProjFilter = function(type, value, element) { currentProjFilter = { type, value }; document.querySelectorAll('#app-sidebar-left-projects .filter-btn').forEach(btn => btn.classList.remove('active')); if(element) element.classList.add('active'); renderProjects(); }
+    window.setMeetFilter = function(type, value, element) { window.currentMeetFilter = { type, value }; document.querySelectorAll('#app-sidebar-left-meetings .filter-btn').forEach(btn => btn.classList.remove('active')); if(element) element.classList.add('active'); renderMeetings(); }
+
+    function renderSidebarFilters() {
+        const bCont = document.getElementById('brandFilters'), cCont = document.getElementById('customerFilters'), aCont = document.getElementById('assigneeFilters');
+        let activeT = tasks.filter(t=>!t.completed); let bC={}, cC={}, aC={};
+        activeT.forEach(t=>{ t.brands.forEach(b=>{if(b)bC[b]=(bC[b]||0)+1;}); t.customers.forEach(c=>{if(c)cC[c]=(cC[c]||0)+1;}); t.assignees.forEach(a=>{if(a)aC[a]=(aC[a]||0)+1;}); });
+        
+        bCont.innerHTML = Object.keys(bC).map(b => `<button class="filter-btn ${currentFilter.type==='brand' && currentFilter.value===b ? 'active':''}" onclick="setFilter('brand','${b}',this)">🏷️ ${b} <span class="filter-count">${bC[b]}</span></button>`).join('');
+        cCont.innerHTML = Object.keys(cC).map(c => `<button class="filter-btn ${currentFilter.type==='customer' && currentFilter.value===c ? 'active':''}" onclick="setFilter('customer','${c}',this)">🏢 ${c} <span class="filter-count">${cC[c]}</span></button>`).join('');
+        aCont.innerHTML = Object.keys(aC).map(a => `<button class="filter-btn ${currentFilter.type==='assignee' && currentFilter.value===a ? 'active':''}" onclick="setFilter('assignee','${a}',this)">👤 ${a} <span class="filter-count">${aC[a]}</span></button>`).join('');
+    }
+
     function renderProjectSidebar() {
         const liveProjs = projects.filter(p => p.status === 'Live'); const compProjs = projects.filter(p => p.status === 'Completed');
         document.getElementById('stat-live-proj').innerText = liveProjs.length; document.getElementById('stat-comp-proj').innerText = compProjs.length;
@@ -1144,16 +1157,6 @@
         bCont.innerHTML = Object.keys(bC).map(b => `<button class="filter-btn ${currentProjFilter.type==='brand' && currentProjFilter.value===b ? 'active':''}" onclick="setProjFilter('brand','${b}',this)">🏷️ ${b} <span class="filter-count">${bC[b]}</span></button>`).join('');
         cCont.innerHTML = Object.keys(cC).map(c => `<button class="filter-btn ${currentProjFilter.type==='customer' && currentProjFilter.value===c ? 'active':''}" onclick="setProjFilter('customer','${c}',this)">🏢 ${c} <span class="filter-count">${cC[c]}</span></button>`).join('');
         aCont.innerHTML = Object.keys(aC).map(a => `<button class="filter-btn ${currentProjFilter.type==='owner' && currentProjFilter.value===a ? 'active':''}" onclick="setProjFilter('owner','${a}',this)">👤 ${a} <span class="filter-count">${aC[a]}</span></button>`).join('');
-    }
-
-    function renderSidebarFilters() {
-        const bCont = document.getElementById('brandFilters'), cCont = document.getElementById('customerFilters'), aCont = document.getElementById('assigneeFilters');
-        let activeT = tasks.filter(t=>!t.completed); let bC={}, cC={}, aC={};
-        activeT.forEach(t=>{ t.brands.forEach(b=>{if(b)bC[b]=(bC[b]||0)+1;}); t.customers.forEach(c=>{if(c)cC[c]=(cC[c]||0)+1;}); t.assignees.forEach(a=>{if(a)aC[a]=(aC[a]||0)+1;}); });
-        
-        bCont.innerHTML = Object.keys(bC).map(b => `<button class="filter-btn ${currentFilter.type==='brand' && currentFilter.value===b ? 'active':''}" onclick="setFilter('brand','${b}',this)">🏷️ ${b} <span class="filter-count">${bC[b]}</span></button>`).join('');
-        cCont.innerHTML = Object.keys(cC).map(c => `<button class="filter-btn ${currentFilter.type==='customer' && currentFilter.value===c ? 'active':''}" onclick="setFilter('customer','${c}',this)">🏢 ${c} <span class="filter-count">${cC[c]}</span></button>`).join('');
-        aCont.innerHTML = Object.keys(aC).map(a => `<button class="filter-btn ${currentFilter.type==='assignee' && currentFilter.value===a ? 'active':''}" onclick="setFilter('assignee','${a}',this)">👤 ${a} <span class="filter-count">${aC[a]}</span></button>`).join('');
     }
 
     function renderMeetingSidebar() {

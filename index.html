@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>James C Workspace</title>
     
+    <!-- Custom 🥃 Browser Tab Icon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥃</text></svg>">
+
     <!-- FIREBASE CLOUD SDK COMPATIBILITY LIBRARIES -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
@@ -55,18 +58,16 @@
         /* --- CORE FRAME LAYOUT --- */
         .workspace-body { flex: 1; display: flex; overflow: hidden; position: relative; }
 
-        /* --- LEFT SIDEBAR --- */
-        .sidebar-left { width: 280px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 25px 20px; gap: 22px; overflow-y: auto; flex-shrink: 0; transition: width 0.3s ease; position: relative; }
-        .sidebar-left.collapsed { width: 60px; padding: 25px 10px; overflow-x: hidden; }
-        .sidebar-left.collapsed h2, .sidebar-left.collapsed h3, .sidebar-left.collapsed .filter-btn span { display: none; }
-        .sidebar-left.collapsed .filter-btn { justify-content: center; padding: 10px; }
+        /* --- LEFT SIDEBAR (Accordion Style) --- */
+        .sidebar-left { width: 280px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 25px 20px; gap: 18px; overflow-y: auto; flex-shrink: 0; }
+        .sidebar-left h2 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 0 0 10px 4px; }
         
-        .collapse-btn { background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-main); position: absolute; right: 10px; top: 20px; border-radius: 6px; cursor: pointer; padding: 4px 8px; font-size: 12px; }
-        .sidebar-left.collapsed .collapse-btn { right: 50%; transform: translateX(50%); }
-
-        .sidebar-left h2 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 0; padding-left: 4px; }
-        .filter-section { display: flex; flex-direction: column; gap: 4px; }
-        .filter-section h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 0 0 4px 4px; opacity: 0.7; }
+        .filter-section { display: flex; flex-direction: column; gap: 6px; }
+        .filter-section h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 0 0 4px 4px; opacity: 0.8; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; transition: opacity 0.2s; }
+        .filter-section h3:hover { opacity: 1; color: var(--text-main); }
+        .filter-body { display: flex; flex-direction: column; gap: 4px; overflow: hidden; transition: max-height 0.3s ease; }
+        .filter-body.collapsed { display: none; }
+        
         .filter-btn { background: none; border: none; text-align: left; padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text-muted); display: flex; align-items: center; gap: 10px; transition: all 0.2s ease; }
         .filter-btn:hover { background-color: rgba(255, 255, 255, 0.05); color: var(--text-main); }
         .filter-btn.active { background-color: var(--card-bg); color: var(--text-main); font-weight: 600; border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
@@ -81,11 +82,11 @@
         .mini-planner-col { display: flex; flex-direction: column; flex: 1; }
         .mini-planner-col h4 { font-size: 14px; font-weight: 700; color: var(--text-main); margin: 0 0 6px 4px; display: flex; justify-content: space-between; align-items: center; }
         .mini-planner-col h4 span { color: var(--text-main); background-color: var(--vibrant-date-bg); padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 800; }
-        .mini-dropzone { flex: 1; min-height: 100px; background-color: rgba(0,0,0,0.2); border: 2px dashed var(--border-color); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px; transition: all 0.2s; overflow-y: auto; }
+        .mini-dropzone { flex: 1; min-height: 100px; background-color: rgba(0,0,0,0.2); border: 2px dashed var(--border-color); border-radius: 12px; padding: 8px; display: flex; flex-direction: column; gap: 6px; transition: all 0.2s; overflow-y: auto; }
         .mini-dropzone.drag-over { background-color: rgba(99, 102, 241, 0.15); border-color: var(--primary-accent); }
         
-        /* Planner Tile Items */
-        .mini-task-card { background-color: var(--card-bg); padding: 10px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--text-main); border-left: 5px solid var(--border-color); cursor: grab; box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 6px; transition: transform 0.1s; }
+        /* High Density Planner Tiles */
+        .mini-task-card { background-color: var(--card-bg); padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--text-main); border-left: 4px solid var(--border-color); cursor: grab; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 4px; transition: transform 0.1s; }
         .expanded-planner .mini-task-card { flex-direction: row; justify-content: space-between; align-items: center; padding: 8px 12px; }
         .mini-task-card.priority-Urgent { border-left-color: var(--urgent-color); }
         .mini-task-card.priority-High { border-left-color: var(--high-color); }
@@ -111,17 +112,17 @@
         .view-panel.active { display: block; }
         h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 20px 0; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
 
-        .tile-search-bar { width: 100%; padding: 12px 16px; background-color: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); font-size: 14px; margin-bottom: 20px; outline: none; }
+        .tile-search-bar { width: 100%; padding: 12px 16px; background-color: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: var(--text-main); font-size: 14px; margin-bottom: 20px; outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); transition: all 0.2s; }
+        .tile-search-bar:focus { border-color: var(--primary-accent); background: rgba(0,0,0,0.4); box-shadow: 0 0 0 2px rgba(99,102,241,0.2); }
         
-        /* Grouping Headers (Projects) */
         .group-header { width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.05); border-left: 4px solid var(--primary-accent); margin: 25px 0 15px 0; border-radius: 8px; font-size: 16px; font-weight: 700; color: var(--text-muted); }
 
-        /* --- CONDENSED TILES (GRID) --- */
-        .task-tile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; width: 100%; margin-bottom: 20px; }
+        /* --- CONDENSED 4-COLUMN TILES --- */
+        .task-tile-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; width: 100%; margin-bottom: 20px; }
         
         .task-tile { background: var(--card-bg); border-radius: 12px; padding: 14px; border: 1px solid var(--border-color); border-left: 5px solid var(--border-color); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; position: relative; }
         .task-tile:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
-        .task-tile.drag-over { border: 2px dashed var(--primary-accent); opacity: 0.7; }
+        .task-tile.drag-over { border: 2px dashed var(--primary-accent); opacity: 0.5; }
 
         .task-tile.priority-Urgent { border-left-color: var(--urgent-color); }
         .task-tile.priority-High { border-left-color: var(--high-color); }
@@ -140,7 +141,7 @@
         .task-tile-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; }
         .task-tile-title { font-size: 14px; font-weight: 800; color: var(--text-main); line-height: 1.3; }
 
-        /* --- TAGS & INPUTS --- */
+        /* --- TAGS & HIGH-END INPUTS --- */
         .task-tags { display: flex; gap: 4px; flex-wrap: wrap; }
         .tag { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; color: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.15); display: inline-flex; align-items: center; gap: 4px; }
         .tag .del-tag { cursor: pointer; opacity: 0.6; } .tag .del-tag:hover { opacity: 1; }
@@ -150,14 +151,42 @@
         .tag.tag-date { background-color: var(--vibrant-date-bg); }
 
         .tag-input-wrapper { display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px dashed var(--border-color); flex: 1; min-width: 200px; }
-        .tag-input-wrapper input { background: transparent; border: none; color: var(--text-main); font-size: 13px; outline: none; width: 100%; }
+        .tag-input-wrapper input { background: transparent !important; border: none !important; color: var(--text-main) !important; font-size: 13px !important; outline: none !important; width: 100% !important; box-shadow: none !important; padding: 0 !important; }
         .tag-input-wrapper input::placeholder { color: rgba(255,255,255,0.3); }
 
         .form-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-start; margin-bottom: 12px; }
-        .form-row > input, .form-row > select { flex: 1; min-width: 150px; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 14px; background-color: var(--bg-main); color: var(--text-main); outline: none; }
-        .form-row > input:focus, .form-row > select:focus { border-color: var(--primary-accent); }
-        input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
-        .target-label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+        
+        /* Premium UI Form Inputs */
+        .form-row input, .form-row select, .modal-edit-bar input, .modal-edit-bar select {
+            flex: 1; min-width: 150px;
+            padding: 12px 14px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 8px; 
+            font-size: 14px; 
+            background: rgba(0,0,0,0.25); 
+            color: var(--text-main); 
+            outline: none;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+        .form-row input:focus, .form-row select:focus, .modal-edit-bar input:focus, .modal-edit-bar select:focus {
+            border-color: var(--primary-accent);
+            background: rgba(0,0,0,0.4);
+            box-shadow: 0 0 0 2px rgba(99,102,241,0.25);
+        }
+        
+        /* Custom Dropdown Arrow */
+        select {
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23cbd5e1" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            padding-right: 32px !important;
+            cursor: pointer;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.7; cursor: pointer; }
+        .target-label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: flex; flex-direction: column; gap: 6px; flex: 1; }
         
         .submit-btn { background-color: var(--primary-accent); color: #ffffff; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; width: 100%; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3); }
 
@@ -182,21 +211,23 @@
         .close-modal { background: none; border: none; color: var(--text-muted); font-size: 26px; cursor: pointer; }
         .modal-body { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
         
-        .task-comment-box { width: 100%; min-height: 80px; background-color: rgba(0, 0, 0, 0.15); color: var(--text-main); border: 1px dashed var(--border-color); border-radius: 10px; padding: 12px; font-size: 14px; outline: none; font-family: inherit; }
-        .modal-edit-bar { display: flex; gap: 10px; background: rgba(0,0,0,0.2); padding: 14px; border-radius: 10px; flex-wrap: wrap; align-items: flex-end; }
-        .modal-edit-bar select, .modal-edit-bar input { flex: 1; background: var(--bg-main); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px; border-radius: 6px; font-size: 13px; }
+        .task-comment-box { width: 100%; min-height: 80px; background: rgba(0,0,0,0.25); border: 1px dashed rgba(255,255,255,0.2); color: var(--text-main); border-radius: 8px; padding: 12px; font-size: 14px; outline: none; font-family: inherit; transition: border-color 0.2s; }
+        .task-comment-box:focus { border-color: var(--primary-accent); }
+        .modal-edit-bar { display: flex; gap: 10px; background: rgba(0,0,0,0.15); padding: 14px; border-radius: 10px; flex-wrap: wrap; align-items: flex-end; border: 1px solid rgba(255,255,255,0.05); }
 
         /* --- SUBTASKS --- */
         .subtasks-box { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 14px; }
         .subtask-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background-color: var(--bg-main); border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); font-size: 13px; }
         .subtask-left { display: flex; align-items: center; gap: 10px; flex: 1; }
-        .status-dropdown { appearance: none; background-color: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+        .status-dropdown { appearance: none; background-color: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; text-transform: uppercase; background-image: none; padding-right:10px !important;}
         .status-Complete { opacity: 0.6; } .subtask-text.done { text-decoration: line-through; opacity: 0.6; }
         .subtask-right { display: flex; align-items: center; gap: 8px; }
         
         .subtask-entry-row { display: flex; gap: 8px; margin-top: 8px; align-items: center; background-color: rgba(0,0,0,0.2); padding: 12px; border-radius: 10px; border: 1px dashed var(--border-color); flex-wrap: wrap; }
-        .subtask-entry-row input { background-color: var(--bg-main); color: var(--text-main); border: 1px solid var(--border-color); padding: 10px 12px; border-radius: 6px; font-size: 13px; }
-
+        
+        @media (max-width: 1200px) { .task-tile-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 900px) { .task-tile-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .task-tile-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -205,10 +236,10 @@
     <div class="top-navbar">
         <div class="navbar-brand">🥃 James C Workspace</div>
         <div class="navbar-tabs">
-            <button id="tab-dash" class="tab-btn active" onclick="switchView('dashboard')">📋 Task Dashboard</button>
-            <button id="tab-projects" class="tab-btn" onclick="switchView('projects')">🚀 Long Term Projects</button>
-            <button id="tab-meet" class="tab-btn" onclick="switchView('meetings')">🤝 Meeting Notes</button>
-            <button id="tab-exp" class="tab-btn" onclick="switchView('expenses')">💷 Monthly Expenses</button>
+            <button id="tab-dash" class="tab-btn active" onclick="switchView('dashboard')">📋 Dashboard</button>
+            <button id="tab-projects" class="tab-btn" onclick="switchView('projects')">🚀 Projects</button>
+            <button id="tab-meet" class="tab-btn" onclick="switchView('meetings')">🤝 Meetings</button>
+            <button id="tab-exp" class="tab-btn" onclick="switchView('expenses')">💷 Ledger</button>
         </div>
         <div style="width:50px;"></div>
     </div>
@@ -218,29 +249,32 @@
         
         <!-- LEFT SIDEBAR: TASK FILTERS -->
         <div class="sidebar-left" id="app-sidebar-left">
-            <button class="collapse-btn" onclick="toggleSidebar('app-sidebar-left')">👁️</button>
             <h2>🔎 Workspace Filters</h2>
             <div class="filter-section">
-                <h3>🚦 Priority</h3>
-                <button class="filter-btn active" onclick="setFilter('priority', 'all', this)">🏁 All Tasks</button>
-                <button class="filter-btn" onclick="setFilter('priority', 'Urgent', this)">🚨 Urgent</button>
-                <button class="filter-btn" onclick="setFilter('priority', 'High', this)">🔴 High</button>
-                <button class="filter-btn" onclick="setFilter('priority', 'Medium', this)">🟡 Medium</button>
-                <button class="filter-btn" onclick="setFilter('priority', 'Low', this)">🟢 Low</button>
+                <h3 onclick="toggleFilter('pri-filters')">🚦 Priority <span class="filter-arrow">▼</span></h3>
+                <div id="pri-filters" class="filter-body">
+                    <button class="filter-btn active" onclick="setFilter('priority', 'all', this)">🏁 All Tasks</button>
+                    <button class="filter-btn" onclick="setFilter('priority', 'Urgent', this)">🚨 Urgent</button>
+                    <button class="filter-btn" onclick="setFilter('priority', 'High', this)">🔴 High</button>
+                    <button class="filter-btn" onclick="setFilter('priority', 'Medium', this)">🟡 Medium</button>
+                    <button class="filter-btn" onclick="setFilter('priority', 'Low', this)">🟢 Low</button>
+                </div>
             </div>
-            <div class="filter-section"><h3>🏷️ Brands</h3><div id="brandFilters" class="filter-section"></div></div>
-            <div class="filter-section"><h3>🏢 Customers</h3><div id="customerFilters" class="filter-section"></div></div>
-            <div class="filter-section"><h3>👤 Assignees</h3><div id="assigneeFilters" class="filter-section"></div></div>
+            <div class="filter-section"><h3 onclick="toggleFilter('brandFilters')">🏷️ Brands <span class="filter-arrow">▼</span></h3><div id="brandFilters" class="filter-body"></div></div>
+            <div class="filter-section"><h3 onclick="toggleFilter('customerFilters')">🏢 Customers <span class="filter-arrow">▼</span></h3><div id="customerFilters" class="filter-body"></div></div>
+            <div class="filter-section"><h3 onclick="toggleFilter('assigneeFilters')">👤 Assignees <span class="filter-arrow">▼</span></h3><div id="assigneeFilters" class="filter-body"></div></div>
         </div>
 
         <!-- LEFT SIDEBAR: PROJECT FILTERS -->
         <div class="sidebar-left" id="app-sidebar-left-projects" style="display:none;">
-            <button class="collapse-btn" onclick="toggleSidebar('app-sidebar-left-projects')">👁️</button>
             <h2>🔎 Project Filters</h2>
-            <div class="filter-section"><button class="filter-btn active" onclick="setProjFilter('all', 'all', this)">🏁 All Projects</button></div>
-            <div class="filter-section"><h3>🏷️ Brands</h3><div id="projBrandFilters" class="filter-section"></div></div>
-            <div class="filter-section"><h3>🏢 Customers</h3><div id="projCustomerFilters" class="filter-section"></div></div>
-            <div class="filter-section"><h3>👤 Owners</h3><div id="projOwnerFilters" class="filter-section"></div></div>
+            <div class="filter-section">
+                <h3 onclick="toggleFilter('proj-all-filters')">🏁 Status <span class="filter-arrow">▼</span></h3>
+                <div id="proj-all-filters" class="filter-body"><button class="filter-btn active" onclick="setProjFilter('all', 'all', this)">🏁 All Projects</button></div>
+            </div>
+            <div class="filter-section"><h3 onclick="toggleFilter('projBrandFilters')">🏷️ Brands <span class="filter-arrow">▼</span></h3><div id="projBrandFilters" class="filter-body"></div></div>
+            <div class="filter-section"><h3 onclick="toggleFilter('projCustomerFilters')">🏢 Customers <span class="filter-arrow">▼</span></h3><div id="projCustomerFilters" class="filter-body"></div></div>
+            <div class="filter-section"><h3 onclick="toggleFilter('projOwnerFilters')">👤 Owners <span class="filter-arrow">▼</span></h3><div id="projOwnerFilters" class="filter-body"></div></div>
         </div>
 
         <!-- MAIN VIEWPORTS -->
@@ -279,7 +313,7 @@
                     <div id="expense-sub-add" style="max-width:800px; margin:0 auto; background:var(--card-bg); padding:20px; border-radius:12px; border:1px solid var(--border-color);">
                         <div class="form-row"><input type="text" id="expItemInput" placeholder="What is it?"><input type="number" id="expCostInput" step="0.01" placeholder="Cost (£)"></div>
                         <div class="form-row"><input type="text" id="expReceiptInput" placeholder="Receipt Location"><input type="date" id="expDateInput"></div>
-                        <label style="display:flex; align-items:center; gap:8px; margin-bottom:15px; cursor:pointer;"><input type="checkbox" id="expOngoingInput"> 🔁 Permanent / Ongoing</label>
+                        <label style="display:flex; align-items:center; gap:8px; margin-bottom:15px; cursor:pointer; color:var(--text-muted); font-size:14px;"><input type="checkbox" id="expOngoingInput" style="width:16px; height:16px; accent-color:var(--primary-accent); margin:0;"> 🔁 Permanent / Ongoing</label>
                         <button class="submit-btn" onclick="addExpense()">Log Expense</button>
                     </div>
                     <div id="expense-sub-review" style="display:none; max-width:800px; margin:0 auto;">
@@ -315,25 +349,21 @@
     <!-- MODALS -->
     <!-- NEW TASK MODAL -->
     <div class="modal-overlay" id="newTaskModal">
-        <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-content" style="max-width: 650px;">
             <div class="modal-header"><h2>➕ Initialize New Task</h2><button class="close-modal" onclick="closeModal('newTaskModal')">×</button></div>
             <div class="modal-body">
-                <input type="text" id="taskInput" placeholder="Headline task description..." style="width:100%; padding:12px; background:var(--bg-main); color:white; border:1px solid var(--border-color); border-radius:8px; margin-bottom:15px; font-size:15px;">
+                <input type="text" id="taskInput" placeholder="Headline task description..." style="width:100%; padding:14px; background:rgba(0,0,0,0.25); color:white; border:1px solid rgba(255,255,255,0.1); border-radius:8px; margin-bottom:15px; font-size:15px; outline:none;">
                 <div class="form-row">
                     <label class="target-label">Priority<select id="priorityInput"><option value="Low">🟢 Low</option><option value="Medium" selected>🟡 Medium</option><option value="High">🔴 High</option><option value="Urgent">🚨 Urgent</option></select></label>
                     <label class="target-label">Target Date<input type="date" id="dateInput"></label>
                     <label class="target-label">Recurrence<select id="recurrenceInput"><option value="None">No Repeat</option><option value="Weekly">Weekly</option><option value="Bi-Weekly">Bi-Weekly</option><option value="Monthly">Monthly</option></select></label>
                 </div>
-                
                 <label class="target-label">🏷️ Brands <span style="font-size:10px; font-weight:normal; text-transform:none;">(Type & hit Enter)</span></label>
                 <div class="tag-input-wrapper"><div class="task-tags" id="new-task-brands-ui"></div><input type="text" placeholder="Add brand..." onkeydown="handleGlobalTagAdd(event, 'new-task', 'brands')"></div>
-                
                 <label class="target-label" style="margin-top:10px;">🏢 Customers</label>
                 <div class="tag-input-wrapper"><div class="task-tags" id="new-task-customers-ui"></div><input type="text" placeholder="Add customer..." onkeydown="handleGlobalTagAdd(event, 'new-task', 'customers')"></div>
-                
                 <label class="target-label" style="margin-top:10px;">👤 Assignees</label>
                 <div class="tag-input-wrapper"><div class="task-tags" id="new-task-assignees-ui"></div><input type="text" placeholder="Add assignee..." onkeydown="handleGlobalTagAdd(event, 'new-task', 'assignees')"></div>
-                
                 <button class="submit-btn" style="margin-top: 20px;" onclick="addTask()">➕ Create Task</button>
             </div>
         </div>
@@ -341,21 +371,17 @@
 
     <!-- NEW PROJECT MODAL -->
     <div class="modal-overlay" id="newProjectModal">
-        <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-content" style="max-width: 650px;">
             <div class="modal-header"><h2>🚀 Initialize Strategic Project</h2><button class="close-modal" onclick="closeModal('newProjectModal')">×</button></div>
             <div class="modal-body">
-                <input type="text" id="projTitleInput" placeholder="Project Title..." style="width:100%; padding:12px; background:var(--bg-main); color:white; border:1px solid var(--border-color); border-radius:8px; margin-bottom:15px;">
+                <input type="text" id="projTitleInput" placeholder="Project Title..." style="width:100%; padding:14px; background:rgba(0,0,0,0.25); color:white; border:1px solid rgba(255,255,255,0.1); border-radius:8px; margin-bottom:15px; font-size:15px; outline:none;">
                 <div class="form-row"><label class="target-label">Target Completion<input type="date" id="projDateInput"></label></div>
-                
                 <label class="target-label">🏷️ Brands <span style="font-size:10px; font-weight:normal; text-transform:none;">(Type & hit Enter)</span></label>
                 <div class="tag-input-wrapper"><div class="task-tags" id="new-proj-brands-ui"></div><input type="text" placeholder="Add brand..." onkeydown="handleGlobalTagAdd(event, 'new-proj', 'brands')"></div>
-                
                 <label class="target-label" style="margin-top:10px;">🏢 Customers</label>
                 <div class="tag-input-wrapper"><div class="task-tags" id="new-proj-customers-ui"></div><input type="text" placeholder="Add customer..." onkeydown="handleGlobalTagAdd(event, 'new-proj', 'customers')"></div>
-                
                 <label class="target-label" style="margin-top:10px;">👤 Assignees / Owners</label>
-                <div class="tag-input-wrapper"><div class="task-tags" id="new-proj-assignees-ui"></div><input type="text" placeholder="Add assignee..." onkeydown="handleGlobalTagAdd(event, 'new-proj', 'assignees')"></div>
-
+                <div class="tag-input-wrapper"><div class="task-tags" id="new-proj-assignees-ui"></div><input type="text" placeholder="Add owner..." onkeydown="handleGlobalTagAdd(event, 'new-proj', 'assignees')"></div>
                 <button class="submit-btn" style="margin-top: 20px;" onclick="addProject()">🚀 Deploy Project</button>
             </div>
         </div>
@@ -363,25 +389,21 @@
 
     <!-- NEW MEETING MODAL -->
     <div class="modal-overlay" id="newMeetingModal">
-        <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-content" style="max-width: 650px;">
             <div class="modal-header"><h2>🤝 Log New Meeting</h2><button class="close-modal" onclick="closeModal('newMeetingModal')">×</button></div>
             <div class="modal-body">
-                <input type="text" id="meetTitleInput" placeholder="Meeting Subject..." style="width:100%; padding:12px; background:var(--bg-main); color:white; border:1px solid var(--border-color); border-radius:8px; margin-bottom:15px;">
+                <input type="text" id="meetTitleInput" placeholder="Meeting Subject..." style="width:100%; padding:14px; background:rgba(0,0,0,0.25); color:white; border:1px solid rgba(255,255,255,0.1); border-radius:8px; margin-bottom:15px; font-size:15px; outline:none;">
                 <div class="form-row">
                     <label class="target-label">Date<input type="date" id="meetDateInput"></label>
                     <label class="target-label">Time<input type="time" id="meetTimeInput"></label>
-                    <label class="target-label">Location/Link<input type="text" id="meetPlaceInput"></label>
+                    <label class="target-label">Location/Link<input type="text" id="meetPlaceInput" placeholder="Zoom / Room..."></label>
                 </div>
-                
                 <label class="target-label">🏷️ Brands Focus <span style="font-size:10px; font-weight:normal; text-transform:none;">(Type & hit Enter)</span></label>
                 <div class="tag-input-wrapper"><div class="task-tags" id="new-meet-brands-ui"></div><input type="text" placeholder="Add brand..." onkeydown="handleGlobalTagAdd(event, 'new-meet', 'brands')"></div>
-                
                 <label class="target-label" style="margin-top:10px;">🏢 Customers</label>
                 <div class="tag-input-wrapper"><div class="task-tags" id="new-meet-customers-ui"></div><input type="text" placeholder="Add customer..." onkeydown="handleGlobalTagAdd(event, 'new-meet', 'customers')"></div>
-                
                 <label class="target-label" style="margin-top:10px;">👥 Participants</label>
                 <div class="tag-input-wrapper"><div class="task-tags" id="new-meet-assignees-ui"></div><input type="text" placeholder="Add participant..." onkeydown="handleGlobalTagAdd(event, 'new-meet', 'assignees')"></div>
-
                 <button class="submit-btn" style="margin-top: 20px;" onclick="addMeeting()">📝 Initialize Transcript</button>
             </div>
         </div>
@@ -392,6 +414,9 @@
     <div class="modal-overlay" id="projectDetailsModal"><div class="modal-content"><div class="modal-header"><h2 id="modal-proj-title"></h2><button class="close-modal" onclick="closeModal('projectDetailsModal')">×</button></div><div class="modal-body" id="modal-proj-body"></div></div></div>
     <div class="modal-overlay" id="meetingDetailsModal"><div class="modal-content"><div class="modal-header"><h2 id="modal-meet-title"></h2><button class="close-modal" onclick="closeModal('meetingDetailsModal')">×</button></div><div class="modal-body" id="modal-meet-body"></div></div></div>
     <div class="modal-overlay" id="completedTasksModal"><div class="modal-content" style="max-width:800px;"><div class="modal-header"><h2>📁 Archive</h2><button class="close-modal" onclick="closeModal('completedTasksModal')">×</button></div><div class="modal-body" id="modal-completed-body"></div></div></div>
+
+    <!-- AUTOCOMPLETE DATALISTS -->
+    <datalist id="subtaskOwnerOptions"></datalist>
 
 <script>
     // --- FIREBASE CONFIGURATION ---
@@ -411,7 +436,7 @@
     // --- STATE VARIABLES ---
     let tasks = [], expenses = [], projects = [], meetings = [];
     
-    // Temporary UI State for multi-tag inputs
+    // UI State for multi-tag inputs
     window.tagState = {
         'new-task': { brands: [], customers: [], assignees: [] },
         'new-proj': { brands: [], customers: [], assignees: [] },
@@ -431,22 +456,22 @@
     window.datesArray = [];
     for(let i=0; i<3; i++) { const d = new Date(); d.setDate(d.getDate() + i); datesArray.push(d); }
 
-    // --- DATA MIGRATION & SYNC ---
+    // --- DATA MIGRATION & LIVE SYNC ---
     dataRef.onSnapshot((doc) => {
         if (doc.exists) {
             const data = doc.data();
             tasks = data.tasks || []; projects = data.projects || [];
             meetings = data.meetings || []; expenses = data.expenses || [];
             
-            // AGGRESSIVE DATA ARRAY MIGRATION
-            tasks = tasks.map(t => {
+            // AGGRESSIVE DATA ARRAY MIGRATION & REPAIR
+            tasks = tasks.map((t, idx) => {
                 if(typeof t.brand === 'string') { t.brands = t.brand !== 'No Brand' && t.brand ? [t.brand] : []; delete t.brand; }
                 if(typeof t.customer === 'string') { t.customers = t.customer !== 'No Customer' && t.customer ? [t.customer] : []; delete t.customer; }
                 if(typeof t.assignee === 'string') { t.assignees = t.assignee !== 'Unassigned' && t.assignee ? [t.assignee] : []; delete t.assignee; }
                 if(!t.brands) t.brands = []; if(!t.customers) t.customers = []; if(!t.assignees) t.assignees = [];
                 if(!t.subtasks) t.subtasks = []; if(t.comments === undefined) t.comments = '';
                 if(!t.priority) t.priority = 'Medium'; if(!t.recurrence) t.recurrence = 'None';
-                if(!t.order) t.order = Date.now() + Math.random();
+                if(!t.order) t.order = Date.now() - idx; // Initialize explicit drag & drop order
                 return t;
             });
             projects = projects.map(p => {
@@ -494,8 +519,8 @@
         }
     }
 
-    // --- UI NAVIGATION ---
-    window.toggleSidebar = function(id) { document.getElementById(id).classList.toggle('collapsed'); }
+    // --- UI NAVIGATION & ACCORDIONS ---
+    window.toggleFilter = function(id) { document.getElementById(id).classList.toggle('collapsed'); }
     window.togglePlannerExpanded = function() {
         const sidebar = document.getElementById('app-sidebar-right-planner');
         isPlannerExpanded = !isPlannerExpanded;
@@ -625,7 +650,7 @@
             });
         }
         if(!task.completed) {
-            subtasksHTML += `<div class="subtask-entry-row"><label class="target-label" style="flex:0.5;">Target<input type="date" id="modal-sub-date-${task.id}"></label><input type="text" id="modal-sub-text-${task.id}" placeholder="New subtask description..." style="flex:2;"><input type="text" id="modal-sub-owner-${task.id}" placeholder="Owner" style="flex:1;"><button class="action-btn done-btn" onclick="commitTaskSubtask(${task.id})">➕ Add</button></div>`;
+            subtasksHTML += `<div class="subtask-entry-row"><label class="target-label" style="flex:0.5;">Target<input type="date" id="modal-sub-date-${task.id}"></label><input type="text" id="modal-sub-text-${task.id}" placeholder="New subtask description..." style="flex:2;"><input type="text" id="modal-sub-owner-${task.id}" list="subtaskOwnerOptions" placeholder="Owner" style="flex:1;"><button class="action-btn done-btn" onclick="commitTaskSubtask(${task.id})">➕ Add</button></div>`;
         }
         subtasksHTML += `</div>`;
 
@@ -669,7 +694,7 @@
                 subtasksHTML += `<div class="subtask-row status-${sub.status ? sub.status.replace(/ /g, '-') : 'Not-Started'}"><div class="subtask-left"><select class="status-dropdown" onchange="updateSubtaskStatus(${proj.id}, ${sub.id}, this.value)" ${isComp ? 'disabled' : ''}><option value="Not Started" ${sub.status === 'Not Started' ? 'selected' : ''}>Not Started</option><option value="Awaiting Reply" ${sub.status === 'Awaiting Reply' ? 'selected' : ''}>Awaiting Reply</option><option value="In Progress" ${sub.status === 'In Progress' ? 'selected' : ''}>In Progress</option><option value="Complete" ${isSubDone ? 'selected' : ''}>Complete</option></select><span class="subtask-text ${isSubDone ? 'done' : ''}">${sub.text}</span></div><div class="subtask-right">${sub.owner ? `<span class="subtask-owner-badge">👤 ${sub.owner}</span>` : ''} ${sub.date ? `<span class="subtask-date">🎯 ${new Date(sub.date).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</span>` : ''}</div></div>`;
             });
         }
-        if(!isComp) subtasksHTML += `<div class="subtask-entry-row"><label class="target-label" style="flex:0.5;">Target<input type="date" id="modal-proj-sub-date-${proj.id}"></label><input type="text" id="modal-proj-sub-text-${proj.id}" placeholder="Next subtask description..." style="flex:2;"><input type="text" id="modal-proj-sub-owner-${proj.id}" placeholder="Owner" style="flex:1;"><button class="action-btn done-btn" onclick="commitSubtask(${proj.id})">➕ Add</button></div>`;
+        if(!isComp) subtasksHTML += `<div class="subtask-entry-row"><label class="target-label" style="flex:0.5;">Target<input type="date" id="modal-proj-sub-date-${proj.id}"></label><input type="text" id="modal-proj-sub-text-${proj.id}" placeholder="Next subtask description..." style="flex:2;"><input type="text" id="modal-proj-sub-owner-${proj.id}" list="subtaskOwnerOptions" placeholder="Owner" style="flex:1;"><button class="action-btn done-btn" onclick="commitSubtask(${proj.id})">➕ Add</button></div>`;
         subtasksHTML += `</div>`;
 
         let bHTML = proj.brands.map((t, i) => `<span class="tag tag-brand">${t} <span class="del-tag" onclick="removeEntityTag('proj',${proj.id},'brands',${i})">×</span></span>`).join('');
@@ -715,9 +740,9 @@
                 <label class="target-label">Location<input type="text" value="${meet.place || ''}" onblur="updateMeetingMeta(${meet.id}, 'place', this.value)"></label>
             </div>
             <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:15px;">
-                <div class="tag-input-wrapper"><div class="task-tags">${bHTML}</div><input type="text" placeholder="Add brand..." onkeydown="handleEntityTagAdd(event, 'meet', ${meet.id}, 'brands')"></div>
-                <div class="tag-input-wrapper"><div class="task-tags">${cHTML}</div><input type="text" placeholder="Add customer..." onkeydown="handleEntityTagAdd(event, 'meet', ${meet.id}, 'customers')"></div>
-                <div class="tag-input-wrapper"><div class="task-tags">${aHTML}</div><input type="text" placeholder="Add participant..." onkeydown="handleEntityTagAdd(event, 'meet', ${meet.id}, 'assignees')"></div>
+                <div class="tag-input-wrapper"><div class="task-tags">${bHTML}</div><input type="text" placeholder="Add brand + Enter" onkeydown="handleEntityTagAdd(event, 'meet', ${meet.id}, 'brands')"></div>
+                <div class="tag-input-wrapper"><div class="task-tags">${cHTML}</div><input type="text" placeholder="Add customer + Enter" onkeydown="handleEntityTagAdd(event, 'meet', ${meet.id}, 'customers')"></div>
+                <div class="tag-input-wrapper"><div class="task-tags">${aHTML}</div><input type="text" placeholder="Add participant + Enter" onkeydown="handleEntityTagAdd(event, 'meet', ${meet.id}, 'assignees')"></div>
             </div>
             <div style="font-weight: 700; color: var(--text-muted); font-size: 13px; text-transform: uppercase;">📝 Transcript / Notes</div>
             <textarea class="meeting-notes-area" placeholder="• Add notes..." onblur="updateMeetingMeta(${meet.id}, 'notes', this.value)">${meet.notes}</textarea>
@@ -763,26 +788,28 @@
     // Toggle Task & Recurring Engine
     window.toggleTask = function(id, event) {
         if(event) event.stopPropagation();
+        let newRecurrences = [];
         tasks = tasks.map(t => {
             if (t.id === id) {
                 const status = !t.completed;
                 const ts = status ? new Date().toLocaleDateString('en-GB', {day:'numeric', month:'short'}) + ' @ ' + new Date().toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'}) : '';
                 
-                // Recurring Engine Trigger
                 if (status && t.recurrence && t.recurrence !== 'None') {
                     let nextDate = new Date(t.dueDate || new Date());
                     if(t.recurrence === 'Weekly') nextDate.setDate(nextDate.getDate() + 7);
                     if(t.recurrence === 'Bi-Weekly') nextDate.setDate(nextDate.getDate() + 14);
                     if(t.recurrence === 'Monthly') nextDate.setMonth(nextDate.getMonth() + 1);
-                    tasks.push({ ...t, id: Date.now() + Math.random(), dueDate: nextDate.toISOString().split('T')[0], completed: false, completedTimestamp: '', order: Date.now() });
+                    newRecurrences.push({ ...t, id: Date.now() + Math.random(), dueDate: nextDate.toISOString().split('T')[0], completed: false, completedTimestamp: '', order: Date.now() });
                 }
                 return { ...t, completed: status, completedTimestamp: ts };
             }
             return t;
         });
+        if(newRecurrences.length > 0) tasks.push(...newRecurrences);
         saveTasks();
         if(currentActiveTaskModalId === id) closeModal('taskDetailsModal');
     }
+    
     window.deleteTask = function(id, event) { if(event) event.stopPropagation(); tasks = tasks.filter(t => t.id !== id); saveTasks(); if(currentActiveTaskModalId === id) closeModal('taskDetailsModal'); }
     window.deleteProject = function(id, e) { if(e) e.stopPropagation(); projects = projects.filter(p => p.id !== id); saveProjects(); if(currentActiveProjModalId === id) closeModal('projectDetailsModal'); }
     window.deleteMeeting = function(id, e) { if(e) e.stopPropagation(); meetings = meetings.filter(m => m.id !== id); saveMeetings(); if(currentActiveMeetModalId===id) closeModal('meetingDetailsModal');}
@@ -793,9 +820,23 @@
         e.preventDefault(); e.stopPropagation();
         e.currentTarget.classList.remove('drag-over');
         const draggedId = parseFloat(e.dataTransfer.getData('text/plain'));
+        
         if(draggedId && draggedId !== targetId) {
-            const t1 = tasks.find(t=>t.id === draggedId); const t2 = tasks.find(t=>t.id === targetId);
-            if(t1 && t2) { const temp = t1.order; t1.order = t2.order; t2.order = temp; saveTasks(); }
+            let active = tasks.filter(t => !t.completed).sort((a,b) => (b.order || 0) - (a.order || 0));
+            const dragIdx = active.findIndex(t => t.id === draggedId);
+            const dropIdx = active.findIndex(t => t.id === targetId);
+            
+            if(dragIdx > -1 && dropIdx > -1) {
+                const [draggedItem] = active.splice(dragIdx, 1);
+                active.splice(dropIdx, 0, draggedItem);
+                
+                const maxOrder = Date.now();
+                active.forEach((t, i) => {
+                    const originalTask = tasks.find(x => x.id === t.id);
+                    if(originalTask) originalTask.order = maxOrder - i;
+                });
+                saveTasks();
+            }
         }
     }
     window.handleTileDragOver = function(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
@@ -806,8 +847,7 @@
         const activeGrid = document.getElementById('taskTileGrid'); if(!activeGrid) return; activeGrid.innerHTML = ''; 
 
         const addTile = document.createElement('div'); addTile.className = 'task-tile add-new-tile'; addTile.onclick = () => openModal('newTaskModal'); addTile.innerHTML = `<h3>➕ Add New Task</h3>`; activeGrid.appendChild(addTile);
-        const compTile = document.createElement('div'); compTile.className = 'task-tile comp-view-tile'; compTile.onclick = () => renderCompletedModal(); compTile.innerHTML = `<h3>📁 View Completed Archive</h3>`; activeGrid.appendChild(compTile);
-
+        
         let filteredActive = tasks.filter(t => !t.completed).filter(task => {
             if (currentFilter.type === 'priority') { if (currentFilter.value === 'all') return true; return task.priority === currentFilter.value; }
             if (currentFilter.type === 'brand') return task.brands.includes(currentFilter.value);
@@ -818,7 +858,6 @@
 
         const todayTime = new Date(); todayTime.setHours(0,0,0,0);
 
-        // Sort priority > overdue > manual order
         filteredActive.sort((a,b) => {
             const aTime = a.dueDate ? new Date(a.dueDate).setHours(0,0,0,0) : null;
             const bTime = b.dueDate ? new Date(b.dueDate).setHours(0,0,0,0) : null;
@@ -864,6 +903,8 @@
             tile.innerHTML = `<div class="task-tile-header"><div class="task-tile-title">${titlePrefix}${task.text}</div><div class="icon-row"><button class="icon-btn del" onclick="deleteTask(${task.id}, event)">🗑️</button><button class="icon-btn" onclick="openTaskModal(${task.id})">⛶</button></div></div><div class="task-tags">${tagsHTML}</div><div class="actions" style="flex-direction: row; justify-content: flex-end; margin-top: auto;"><button class="action-btn done-btn" onclick="toggleTask(${task.id}, event)">✓ Complete</button></div>`;
             activeGrid.appendChild(tile);
         });
+
+        const compTile = document.createElement('div'); compTile.className = 'task-tile comp-view-tile'; compTile.onclick = () => renderCompletedModal(); compTile.innerHTML = `<h3>📁 View Completed Archive</h3>`; activeGrid.appendChild(compTile);
     }
 
     window.renderCompletedModal = function() {
@@ -992,7 +1033,7 @@
     window.dragLeave = function(e) { e.currentTarget.classList.remove('drag-over'); }
     window.handlePlannerDrop = function(e, targetDayIndex) {
         e.preventDefault(); e.currentTarget.classList.remove('drag-over');
-        const taskId = parseInt(e.dataTransfer.getData('text/plain'));
+        const taskId = parseFloat(e.dataTransfer.getData('text/plain'));
         const targetDateString = datesArray[targetDayIndex].toISOString().split('T')[0];
         tasks = tasks.map(t => t.id === taskId ? { ...t, dueDate: targetDateString } : t);
         saveTasks();
@@ -1064,13 +1105,9 @@
     }
 
     function renderInputDatalists() {
-        const bData = document.getElementById('brandOptions'), cData = document.getElementById('customerOptions'), aData = document.getElementById('assigneeOptions'), rData = document.getElementById('receiptOptions'), sData = document.getElementById('subtaskOwnerOptions');
-        const uBrands = [...new Set([...tasks.flatMap(t=>t.brands), ...projects.flatMap(p=>p.brands), ...meetings.flatMap(m=>m.brands)].filter(b=>b))];
-        const uCusts = [...new Set([...tasks.flatMap(t=>t.customers), ...projects.flatMap(p=>p.customers), ...meetings.flatMap(m=>m.customers)].filter(c=>c))];
+        const sData = document.getElementById('subtaskOwnerOptions');
         const uAssigns = [...new Set([...tasks.flatMap(t=>t.assignees), ...projects.flatMap(p=>p.assignees), ...projects.flatMap(p=>p.subtasks.map(s=>s.owner)), ...tasks.flatMap(t=>t.subtasks.map(s=>s.owner))].filter(a=>a))];
-        const uReceipts = [...new Set(expenses.map(e=>e.receipt).filter(r=>r&&r!=='Not Specified'))];
-        bData.innerHTML = uBrands.map(b=>`<option value="${b}">`).join(''); cData.innerHTML = uCusts.map(c=>`<option value="${c}">`).join(''); 
-        aData.innerHTML = uAssigns.map(a=>`<option value="${a}">`).join(''); sData.innerHTML = uAssigns.map(a=>`<option value="${a}">`).join(''); rData.innerHTML = uReceipts.map(r=>`<option value="${r}">`).join('');
+        sData.innerHTML = uAssigns.map(a=>`<option value="${a}">`).join(''); 
     }
 </script>
 </body>

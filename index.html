@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>James C Workspace</title>
     
-    <!-- Custom 🥃 Browser Tab Icon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥃</text></svg>">
+    <!-- Custom JC Logo Browser Tab Icon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%236366f1%22/><text x=%2250%22 y=%2270%22 font-family=%22Arial, sans-serif%22 font-size=%2255%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22>JC</text></svg>">
 
     <!-- FIREBASE CLOUD SDK COMPATIBILITY LIBRARIES -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
@@ -58,7 +58,7 @@
         /* --- CORE FRAME LAYOUT --- */
         .workspace-body { flex: 1; display: flex; overflow: hidden; position: relative; }
 
-        /* --- LEFT SIDEBAR (Accordion Style) --- */
+        /* --- LEFT SIDEBARS (Filters & Counts) --- */
         .sidebar-left { width: 280px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 25px 20px; gap: 18px; overflow-y: auto; flex-shrink: 0; }
         .sidebar-left h2 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 0 0 10px 4px; }
         
@@ -68,9 +68,12 @@
         .filter-body { display: flex; flex-direction: column; gap: 4px; overflow: hidden; transition: max-height 0.3s ease; }
         .filter-body.collapsed { display: none; }
         
-        .filter-btn { background: none; border: none; text-align: left; padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text-muted); display: flex; align-items: center; gap: 10px; transition: all 0.2s ease; }
+        .filter-btn { background: none; border: none; text-align: left; padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text-muted); display: flex; align-items: center; gap: 8px; transition: all 0.2s ease; width: 100%; }
         .filter-btn:hover { background-color: rgba(255, 255, 255, 0.05); color: var(--text-main); }
         .filter-btn.active { background-color: var(--card-bg); color: var(--text-main); font-weight: 600; border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+        
+        .filter-count { background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 8px; font-size: 11px; margin-left: auto; color: var(--text-muted); font-weight: 700; transition: all 0.2s; }
+        .filter-btn:hover .filter-count, .filter-btn.active .filter-count { color: var(--text-main); background: rgba(255,255,255,0.15); }
 
         /* --- RIGHT SIDEBAR (3-DAY PLANNER) --- */
         .sidebar-right { width: 340px; background-color: var(--bg-sidebar); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 20px; gap: 16px; overflow-y: auto; flex-shrink: 0; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
@@ -80,13 +83,12 @@
         .sidebar-planner-zone { display: flex; flex-direction: column; gap: 14px; height: 100%; }
         .expanded-planner .sidebar-planner-zone { flex-direction: row; }
         .mini-planner-col { display: flex; flex-direction: column; flex: 1; }
-        .mini-planner-col h4 { font-size: 14px; font-weight: 700; color: var(--text-main); margin: 0 0 6px 4px; display: flex; justify-content: space-between; align-items: center; }
-        .mini-planner-col h4 span { color: var(--text-main); background-color: var(--vibrant-date-bg); padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 800; }
+        .mini-planner-col h4 { font-size: 13px; font-weight: 700; color: var(--text-main); margin: 0 0 6px 4px; display: flex; justify-content: space-between; align-items: center; }
+        .mini-planner-col h4 span { color: var(--text-main); background-color: var(--vibrant-date-bg); padding: 2px 6px; border-radius: 6px; font-size: 11px; font-weight: 800; }
         .mini-dropzone { flex: 1; min-height: 100px; background-color: rgba(0,0,0,0.2); border: 2px dashed var(--border-color); border-radius: 12px; padding: 8px; display: flex; flex-direction: column; gap: 6px; transition: all 0.2s; overflow-y: auto; }
         .mini-dropzone.drag-over { background-color: rgba(99, 102, 241, 0.15); border-color: var(--primary-accent); }
         
-        /* High Density Planner Tiles */
-        .mini-task-card { background-color: var(--card-bg); padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--text-main); border-left: 4px solid var(--border-color); cursor: grab; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 4px; transition: transform 0.1s; }
+        .mini-task-card { background-color: var(--card-bg); padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--text-main); border-left: 4px solid var(--border-color); cursor: grab; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 4px; transition: transform 0.1s; line-height: 1.3; }
         .expanded-planner .mini-task-card { flex-direction: row; justify-content: space-between; align-items: center; padding: 8px 12px; }
         .mini-task-card.priority-Urgent { border-left-color: var(--urgent-color); }
         .mini-task-card.priority-High { border-left-color: var(--high-color); }
@@ -94,7 +96,7 @@
         .mini-task-card.priority-Low { border-left-color: var(--low-color); }
         
         .mini-card-left { display: flex; align-items: center; gap: 8px; }
-        .mini-card-left input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--primary-accent); cursor: pointer; }
+        .mini-card-left input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--primary-accent); cursor: pointer; margin: 0; }
         .mini-card-icons { font-size: 11px; opacity: 0.8; display: flex; gap: 4px; }
 
         /* Projects Sidebar Status */
@@ -114,13 +116,12 @@
 
         .tile-search-bar { width: 100%; padding: 12px 16px; background-color: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: var(--text-main); font-size: 14px; margin-bottom: 20px; outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); transition: all 0.2s; }
         .tile-search-bar:focus { border-color: var(--primary-accent); background: rgba(0,0,0,0.4); box-shadow: 0 0 0 2px rgba(99,102,241,0.2); }
-        
         .group-header { width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.05); border-left: 4px solid var(--primary-accent); margin: 25px 0 15px 0; border-radius: 8px; font-size: 16px; font-weight: 700; color: var(--text-muted); }
 
-        /* --- CONDENSED 4-COLUMN TILES --- */
-        .task-tile-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; width: 100%; margin-bottom: 20px; }
+        /* --- CONDENSED 5-COLUMN TILES --- */
+        .task-tile-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; width: 100%; margin-bottom: 20px; }
         
-        .task-tile { background: var(--card-bg); border-radius: 12px; padding: 14px; border: 1px solid var(--border-color); border-left: 5px solid var(--border-color); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; position: relative; }
+        .task-tile { background: var(--card-bg); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); border-left: 5px solid var(--border-color); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); display: flex; flex-direction: column; gap: 8px; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; position: relative; min-height: 110px; }
         .task-tile:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
         .task-tile.drag-over { border: 2px dashed var(--primary-accent); opacity: 0.5; }
 
@@ -133,74 +134,53 @@
         .task-tile.tile-overdue { background-color: #7f1d1d !important; border-color: #ef4444 !important; }
         .task-tile.tile-overdue-urgent { background-color: #450a0a !important; border-color: #dc2626 !important; border-left-color: #dc2626 !important; }
 
-        .add-new-tile { border: 2px dashed var(--primary-accent); background: rgba(99, 102, 241, 0.05); justify-content: center; align-items: center; text-align: center; min-height: 120px; border-left: 2px dashed var(--primary-accent); }
-        .add-new-tile h3 { color: var(--primary-hover); font-size: 15px; margin: 0; }
-        .comp-view-tile { border: 2px dashed var(--status-complete); background: rgba(16, 185, 129, 0.05); border-left: 2px dashed var(--status-complete); justify-content: center; align-items: center; text-align: center; min-height: 120px; }
-        .comp-view-tile h3 { color: var(--status-complete); font-size: 15px; margin: 0; }
+        .add-new-tile { border: 2px dashed var(--primary-accent); background: rgba(99, 102, 241, 0.05); justify-content: center; align-items: center; text-align: center; border-left: 2px dashed var(--primary-accent); }
+        .add-new-tile h3 { color: var(--primary-hover); font-size: 14px; margin: 0; }
+        .comp-view-tile { border: 2px dashed var(--status-complete); background: rgba(16, 185, 129, 0.05); border-left: 2px dashed var(--status-complete); justify-content: center; align-items: center; text-align: center; }
+        .comp-view-tile h3 { color: var(--status-complete); font-size: 14px; margin: 0; }
 
         .task-tile-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; }
-        .task-tile-title { font-size: 14px; font-weight: 800; color: var(--text-main); line-height: 1.3; }
+        .task-tile-title { font-size: 13px; font-weight: 800; color: var(--text-main); line-height: 1.3; }
 
         /* --- TAGS & HIGH-END INPUTS --- */
         .task-tags { display: flex; gap: 4px; flex-wrap: wrap; }
         .tag { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; color: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.15); display: inline-flex; align-items: center; gap: 4px; }
-        .tag .del-tag { cursor: pointer; opacity: 0.6; } .tag .del-tag:hover { opacity: 1; }
+        .tag .del-tag { cursor: pointer; opacity: 0.6; font-size: 12px; margin-left: 2px; } .tag .del-tag:hover { opacity: 1; color: #ffb4b4; }
         .tag.tag-brand { background-color: var(--vibrant-brand-bg); }
         .tag.tag-customer { background-color: var(--vibrant-customer-bg); }
         .tag.tag-assignee { background-color: var(--vibrant-assignee-bg); }
         .tag.tag-date { background-color: var(--vibrant-date-bg); }
 
-        .tag-input-wrapper { display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; border: 1px dashed var(--border-color); flex: 1; min-width: 200px; }
+        .tag-input-wrapper { display: flex; flex-direction: column; gap: 6px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px; border: 1px dashed var(--border-color); flex: 1; min-width: 200px; }
         .tag-input-wrapper input { background: transparent !important; border: none !important; color: var(--text-main) !important; font-size: 13px !important; outline: none !important; width: 100% !important; box-shadow: none !important; padding: 0 !important; }
         .tag-input-wrapper input::placeholder { color: rgba(255,255,255,0.3); }
 
         .form-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-start; margin-bottom: 12px; }
         
-        /* Premium UI Form Inputs */
-        .form-row input, .form-row select, .modal-edit-bar input, .modal-edit-bar select {
-            flex: 1; min-width: 150px;
-            padding: 12px 14px; 
-            border: 1px solid rgba(255,255,255,0.1); 
-            border-radius: 8px; 
-            font-size: 14px; 
-            background: rgba(0,0,0,0.25); 
-            color: var(--text-main); 
-            outline: none;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-            transition: all 0.2s ease;
+        .form-row input, .form-row select, .modal-edit-bar input, .modal-edit-bar select, .subtask-date-input {
+            flex: 1; min-width: 150px; padding: 12px 14px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; font-size: 14px; background: rgba(0,0,0,0.25); color: var(--text-main); outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); transition: all 0.2s ease; font-family: inherit;
         }
-        .form-row input:focus, .form-row select:focus, .modal-edit-bar input:focus, .modal-edit-bar select:focus {
-            border-color: var(--primary-accent);
-            background: rgba(0,0,0,0.4);
-            box-shadow: 0 0 0 2px rgba(99,102,241,0.25);
-        }
+        .form-row input:focus, .form-row select:focus, .modal-edit-bar input:focus, .modal-edit-bar select:focus, .subtask-date-input:focus { border-color: var(--primary-accent); background: rgba(0,0,0,0.4); box-shadow: 0 0 0 2px rgba(99,102,241,0.25); }
         
-        /* Custom Dropdown Arrow */
-        select {
-            appearance: none;
-            background-image: url('data:image/svg+xml;utf8,<svg fill="%23cbd5e1" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
-            background-repeat: no-repeat;
-            background-position: right 8px center;
-            padding-right: 32px !important;
-            cursor: pointer;
-        }
-
-        input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.7; cursor: pointer; }
+        select { appearance: none; background-image: url('data:image/svg+xml;utf8,<svg fill="%23cbd5e1" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); background-repeat: no-repeat; background-position: right 8px center; padding-right: 32px !important; cursor: pointer; }
+        input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.8) sepia(1) hue-rotate(200deg); opacity: 1; cursor: pointer; }
+        
         .target-label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: flex; flex-direction: column; gap: 6px; flex: 1; }
-        
         .submit-btn { background-color: var(--primary-accent); color: #ffffff; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; width: 100%; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3); }
 
         .actions { display: flex; gap: 8px; flex-direction: column; align-items: flex-end; }
-        .action-btn { border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
-        .done-btn { background-color: rgba(255,255,255,0.08); color: var(--text-main); border: 1px solid var(--border-color); }
-        .icon-btn { background: none; border: none; font-size: 15px; cursor: pointer; opacity: 0.6; color: white; padding: 2px; }
-        .icon-btn:hover { opacity: 1; color: var(--primary-hover); }
+        .action-btn { border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; }
+        .done-btn { background-color: rgba(255,255,255,0.08); color: var(--text-main); border: 1px solid var(--border-color); transition: all 0.2s; }
+        .done-btn:hover { background-color: rgba(16, 185, 129, 0.2); border-color: var(--low-color); }
+        .delete-btn { background-color: #450a0a; color: #ef4444; border: 1px solid #991b1b; }
+        .icon-btn { background: none; border: none; font-size: 14px; cursor: pointer; opacity: 0.6; color: white; padding: 2px; transition: all 0.2s; }
+        .icon-btn:hover { opacity: 1; color: var(--primary-hover); transform: scale(1.1); }
         .icon-btn.del:hover { color: #f43f5e; }
 
         /* --- PROJECT PROGRESS BAR --- */
-        .progress-wrapper { width: 100%; display: flex; flex-direction: column; gap: 4px; margin: 4px 0; }
-        .progress-text { font-size: 10px; font-weight: 700; color: var(--text-muted); text-align: right; }
-        .progress-bar-outer { width: 100%; height: 6px; background-color: rgba(0,0,0,0.3); border-radius: 10px; overflow: hidden; }
+        .progress-wrapper { width: 100%; display: flex; flex-direction: column; gap: 4px; margin: 2px 0; }
+        .progress-text { font-size: 9px; font-weight: 800; color: var(--text-muted); text-align: right; }
+        .progress-bar-outer { width: 100%; height: 5px; background-color: rgba(0,0,0,0.3); border-radius: 10px; overflow: hidden; }
         .progress-bar-inner { height: 100%; background: linear-gradient(90deg, #6366f1, #10b981); transition: width 0.3s ease; }
 
         /* --- MODALS --- */
@@ -208,7 +188,8 @@
         .modal-content { background-color: var(--card-bg); width: 100%; max-width: 850px; max-height: 90vh; border-radius: 14px; border: 1px solid var(--border-color); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
         .modal-header { padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background-color: rgba(255,255,255,0.02); }
         .modal-header h2 { margin: 0; font-size: 20px; color: var(--text-main); }
-        .close-modal { background: none; border: none; color: var(--text-muted); font-size: 26px; cursor: pointer; }
+        .close-modal { background: none; border: none; color: var(--text-muted); font-size: 26px; cursor: pointer; transition: color 0.2s; }
+        .close-modal:hover { color: white; }
         .modal-body { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
         
         .task-comment-box { width: 100%; min-height: 80px; background: rgba(0,0,0,0.25); border: 1px dashed rgba(255,255,255,0.2); color: var(--text-main); border-radius: 8px; padding: 12px; font-size: 14px; outline: none; font-family: inherit; transition: border-color 0.2s; }
@@ -217,17 +198,23 @@
 
         /* --- SUBTASKS --- */
         .subtasks-box { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 14px; }
-        .subtask-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background-color: var(--bg-main); border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); font-size: 13px; }
+        .subtask-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background-color: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); font-size: 13px; }
         .subtask-left { display: flex; align-items: center; gap: 10px; flex: 1; }
         .status-dropdown { appearance: none; background-color: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; text-transform: uppercase; background-image: none; padding-right:10px !important;}
         .status-Complete { opacity: 0.6; } .subtask-text.done { text-decoration: line-through; opacity: 0.6; }
         .subtask-right { display: flex; align-items: center; gap: 8px; }
         
-        .subtask-entry-row { display: flex; gap: 8px; margin-top: 8px; align-items: center; background-color: rgba(0,0,0,0.2); padding: 12px; border-radius: 10px; border: 1px dashed var(--border-color); flex-wrap: wrap; }
+        .subtask-entry-row { display: flex; gap: 8px; margin-top: 8px; align-items: flex-end; background-color: rgba(0,0,0,0.25); padding: 12px; border-radius: 10px; border: 1px dashed var(--border-color); flex-wrap: wrap; }
         
-        @media (max-width: 1200px) { .task-tile-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 900px) { .task-tile-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 600px) { .task-tile-grid { grid-template-columns: 1fr; } }
+        /* List Layouts */
+        .task-card { background: var(--card-bg); border-radius: 12px; padding: 16px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 12px; }
+        .task-card.archive-card { opacity: 0.6; background-color: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); box-shadow: none; }
+        .project-main-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; width: 100%; }
+        
+        @media (max-width: 1300px) { .task-tile-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (max-width: 1000px) { .task-tile-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 700px) { .task-tile-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 500px) { .task-tile-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -277,6 +264,15 @@
             <div class="filter-section"><h3 onclick="toggleFilter('projOwnerFilters')">👤 Owners <span class="filter-arrow">▼</span></h3><div id="projOwnerFilters" class="filter-body"></div></div>
         </div>
 
+        <!-- LEFT SIDEBAR: MEETING FILTERS -->
+        <div class="sidebar-left" id="app-sidebar-left-meetings" style="display:none;">
+            <h2>🔎 Meeting Filters</h2>
+            <div class="filter-section"><button class="filter-btn active" onclick="setMeetFilter('all', 'all', this)">🏁 All Meetings</button></div>
+            <div class="filter-section"><h3 onclick="toggleFilter('meetBrandFilters')">🏷️ Brands <span class="filter-arrow">▼</span></h3><div id="meetBrandFilters" class="filter-body"></div></div>
+            <div class="filter-section"><h3 onclick="toggleFilter('meetCustomerFilters')">🏢 Customers <span class="filter-arrow">▼</span></h3><div id="meetCustomerFilters" class="filter-body"></div></div>
+            <div class="filter-section"><h3 onclick="toggleFilter('meetAssigneeFilters')">👥 Participants <span class="filter-arrow">▼</span></h3><div id="meetAssigneeFilters" class="filter-body"></div></div>
+        </div>
+
         <!-- MAIN VIEWPORTS -->
         <div class="main-content">
             
@@ -299,6 +295,7 @@
             <div id="panel-meetings" class="view-panel">
                 <div class="container">
                     <h1>🤝 Meeting Transcripts</h1>
+                    <input type="text" id="meetTileSearchInput" class="tile-search-bar" placeholder="🔍 Search meetings..." onkeyup="filterMeetingTiles(this.value)">
                     <div id="meetingTileGrid" class="task-tile-grid"></div>
                 </div>
             </div>
@@ -313,7 +310,7 @@
                     <div id="expense-sub-add" style="max-width:800px; margin:0 auto; background:var(--card-bg); padding:20px; border-radius:12px; border:1px solid var(--border-color);">
                         <div class="form-row"><input type="text" id="expItemInput" placeholder="What is it?"><input type="number" id="expCostInput" step="0.01" placeholder="Cost (£)"></div>
                         <div class="form-row"><input type="text" id="expReceiptInput" placeholder="Receipt Location"><input type="date" id="expDateInput"></div>
-                        <label style="display:flex; align-items:center; gap:8px; margin-bottom:15px; cursor:pointer; color:var(--text-muted); font-size:14px;"><input type="checkbox" id="expOngoingInput" style="width:16px; height:16px; accent-color:var(--primary-accent); margin:0;"> 🔁 Permanent / Ongoing</label>
+                        <label style="display:flex; align-items:center; gap:8px; margin-bottom:15px; cursor:pointer;"><input type="checkbox" id="expOngoingInput"> 🔁 Permanent / Ongoing</label>
                         <button class="submit-btn" onclick="addExpense()">Log Expense</button>
                     </div>
                     <div id="expense-sub-review" style="display:none; max-width:800px; margin:0 auto;">
@@ -415,9 +412,6 @@
     <div class="modal-overlay" id="meetingDetailsModal"><div class="modal-content"><div class="modal-header"><h2 id="modal-meet-title"></h2><button class="close-modal" onclick="closeModal('meetingDetailsModal')">×</button></div><div class="modal-body" id="modal-meet-body"></div></div></div>
     <div class="modal-overlay" id="completedTasksModal"><div class="modal-content" style="max-width:800px;"><div class="modal-header"><h2>📁 Archive</h2><button class="close-modal" onclick="closeModal('completedTasksModal')">×</button></div><div class="modal-body" id="modal-completed-body"></div></div></div>
 
-    <!-- AUTOCOMPLETE DATALISTS -->
-    <datalist id="subtaskOwnerOptions"></datalist>
-
 <script>
     // --- FIREBASE CONFIGURATION ---
     const firebaseConfig = {
@@ -436,15 +430,18 @@
     // --- STATE VARIABLES ---
     let tasks = [], expenses = [], projects = [], meetings = [];
     
-    // UI State for multi-tag inputs
+    // UI State for multi-tag inputs & subtasks
     window.tagState = {
         'new-task': { brands: [], customers: [], assignees: [] },
         'new-proj': { brands: [], customers: [], assignees: [] },
         'new-meet': { brands: [], customers: [], assignees: [] }
     };
+    window.subtaskTagState = {};
 
     window.currentFilter = { type: 'priority', value: 'all' };
     window.currentProjFilter = { type: 'all', value: 'all' };
+    window.currentMeetFilter = { type: 'all', value: 'all' };
+    
     window.activeView = 'dashboard';
     window.activeExpenseSubView = 'add';
     
@@ -463,7 +460,6 @@
             tasks = data.tasks || []; projects = data.projects || [];
             meetings = data.meetings || []; expenses = data.expenses || [];
             
-            // AGGRESSIVE DATA ARRAY MIGRATION & REPAIR
             tasks = tasks.map((t, idx) => {
                 if(typeof t.brand === 'string') { t.brands = t.brand !== 'No Brand' && t.brand ? [t.brand] : []; delete t.brand; }
                 if(typeof t.customer === 'string') { t.customers = t.customer !== 'No Customer' && t.customer ? [t.customer] : []; delete t.customer; }
@@ -471,7 +467,7 @@
                 if(!t.brands) t.brands = []; if(!t.customers) t.customers = []; if(!t.assignees) t.assignees = [];
                 if(!t.subtasks) t.subtasks = []; if(t.comments === undefined) t.comments = '';
                 if(!t.priority) t.priority = 'Medium'; if(!t.recurrence) t.recurrence = 'None';
-                if(!t.order) t.order = Date.now() - idx; // Initialize explicit drag & drop order
+                if(!t.order) t.order = Date.now() - idx; 
                 return t;
             });
             projects = projects.map(p => {
@@ -503,7 +499,7 @@
     window.saveMeetings = function() { syncToCloud(); }
 
     function refreshAllViews() {
-        renderSidebarFilters(); renderProjectSidebar(); renderUpcomingDeadlines();
+        renderSidebarFilters(); renderProjectSidebar(); renderMeetingSidebar(); renderUpcomingDeadlines();
         if (activeView === 'dashboard') { renderTasks(); renderSidebarPlanner(); }
         else if (activeView === 'projects') { renderProjects(); }
         else if (activeView === 'meetings') { renderMeetings(); }
@@ -542,7 +538,9 @@
         activeView = viewName;
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+        
         document.getElementById('app-sidebar-left').style.display = 'none'; document.getElementById('app-sidebar-left-projects').style.display = 'none';
+        document.getElementById('app-sidebar-left-meetings').style.display = 'none';
         document.getElementById('app-sidebar-right-planner').style.display = 'none'; document.getElementById('app-sidebar-right-projects').style.display = 'none';
 
         if (viewName === 'dashboard') {
@@ -555,7 +553,8 @@
             renderProjects();
         } else if (viewName === 'meetings') {
             document.getElementById('tab-meet').classList.add('active'); document.getElementById('panel-meetings').classList.add('active');
-            renderMeetings();
+            document.getElementById('app-sidebar-left-meetings').style.display = 'flex';
+            renderMeetings(); renderMeetingSidebar();
         } else if (viewName === 'expenses') {
             document.getElementById('tab-exp').classList.add('active'); document.getElementById('panel-expenses').classList.add('active');
             switchExpenseSubView(activeExpenseSubView);
@@ -571,10 +570,7 @@
 
     // --- UNIVERSAL TAG SYSTEM ---
     window.handleGlobalTagAdd = function(e, context, arrayName) {
-        if(e.key === 'Enter') {
-            e.preventDefault(); const val = e.target.value.trim();
-            if(val) { tagState[context][arrayName].push(val); e.target.value = ''; renderGlobalTagsUI(context, arrayName); }
-        }
+        if(e.key === 'Enter') { e.preventDefault(); const val = e.target.value.trim(); if(val) { tagState[context][arrayName].push(val); e.target.value = ''; renderGlobalTagsUI(context, arrayName); } }
     }
     window.removeGlobalTag = function(context, arrayName, index) { tagState[context][arrayName].splice(index, 1); renderGlobalTagsUI(context, arrayName); }
     window.renderGlobalTagsUI = function(context, arrayName) {
@@ -599,11 +595,28 @@
         if(item) { item[arrayName].splice(index, 1); syncToCloud(); }
     }
 
+    // --- SUBTASK TAG SYSTEM ---
+    window.handleSubtaskOwnerAdd = function(e, id) {
+        if(e.key === 'Enter') {
+            e.preventDefault(); const val = e.target.value.trim();
+            if(val) {
+                if(!window.subtaskTagState[id]) window.subtaskTagState[id] = [];
+                window.subtaskTagState[id].push(val); e.target.value = '';
+                renderSubtaskOwnerUI(id);
+            }
+        }
+    }
+    window.removeSubtaskOwner = function(id, idx) { window.subtaskTagState[id].splice(idx, 1); renderSubtaskOwnerUI(id); }
+    window.renderSubtaskOwnerUI = function(id) {
+        const container = document.getElementById(`subtask-owner-ui-${id}`); if(!container) return;
+        container.innerHTML = (window.subtaskTagState[id]||[]).map((t, idx) => `<span class="tag tag-assignee">${t} <span class="del-tag" onclick="removeSubtaskOwner(${id},${idx})">×</span></span>`).join('');
+    }
+
     /* --- CREATORS --- */
     window.addTask = function() {
         const text = document.getElementById('taskInput').value.trim(); if (!text) return;
         tasks.push({
-            id: Date.now(), text, priority: document.getElementById('priorityInput').value, recurrence: document.getElementById('recurrenceInput').value,
+            id: Date.now() + Math.random(), text, priority: document.getElementById('priorityInput').value, recurrence: document.getElementById('recurrenceInput').value,
             dueDate: document.getElementById('dateInput').value, completed: false, completedTimestamp: '', comments: '', subtasks: [], requiresAction: false, order: Date.now(),
             brands: [...tagState['new-task'].brands], customers: [...tagState['new-task'].customers], assignees: [...tagState['new-task'].assignees]
         });
@@ -613,7 +626,7 @@
     window.addProject = function() {
         const title = document.getElementById('projTitleInput').value.trim(); if(!title) return;
         projects.push({
-            id: Date.now(), title, targetDate: document.getElementById('projDateInput').value, status: 'Live', subtasks: [], files: [], comments: '', order: Date.now(),
+            id: Date.now() + Math.random(), title, targetDate: document.getElementById('projDateInput').value, status: 'Live', subtasks: [], files: [], comments: '', order: Date.now(),
             brands: [...tagState['new-proj'].brands], customers: [...tagState['new-proj'].customers], assignees: [...tagState['new-proj'].assignees]
         });
         document.getElementById('projTitleInput').value = ''; document.getElementById('projDateInput').value = '';
@@ -622,7 +635,7 @@
     window.addMeeting = function() {
         const title = document.getElementById('meetTitleInput').value.trim(); if(!title) return;
         meetings.push({
-            id: Date.now(), title, date: document.getElementById('meetDateInput').value || new Date().toISOString().split('T')[0], time: document.getElementById('meetTimeInput').value,
+            id: Date.now() + Math.random(), title, date: document.getElementById('meetDateInput').value || new Date().toISOString().split('T')[0], time: document.getElementById('meetTimeInput').value,
             place: document.getElementById('meetPlaceInput').value.trim(), notes: '', actions: [],
             brands: [...tagState['new-meet'].brands], customers: [...tagState['new-meet'].customers], assignees: [...tagState['new-meet'].assignees]
         });
@@ -632,7 +645,7 @@
     window.addExpense = function() {
         const item = document.getElementById('expItemInput').value.trim(); const cost = parseFloat(document.getElementById('expCostInput').value);
         if(!item || isNaN(cost)) return;
-        expenses.push({ id: Date.now(), item, cost, receipt: document.getElementById('expReceiptInput').value.trim(), date: document.getElementById('expDateInput').value || new Date().toISOString().split('T')[0], isOngoing: document.getElementById('expOngoingInput').checked });
+        expenses.push({ id: Date.now() + Math.random(), item, cost, receipt: document.getElementById('expReceiptInput').value.trim(), date: document.getElementById('expDateInput').value || new Date().toISOString().split('T')[0], isOngoing: document.getElementById('expOngoingInput').checked });
         document.getElementById('expItemInput').value = ''; document.getElementById('expCostInput').value = ''; document.getElementById('expReceiptInput').value = ''; document.getElementById('expDateInput').value = ''; document.getElementById('expOngoingInput').checked = false;
         saveExpenses(); switchExpenseSubView('review');
     }
@@ -640,17 +653,18 @@
     /* --- EDIT MODALS --- */
     window.openTaskModal = function(taskId) {
         currentActiveTaskModalId = taskId; const task = tasks.find(t => t.id === taskId); if(!task) return;
+        window.subtaskTagState[taskId] = [];
         document.getElementById('modal-task-title').innerHTML = `⚡ <input type="text" value="${task.text}" onblur="updateTaskMeta(${task.id}, 'text', this.value)" style="background:transparent; border:none; color:white; font-weight:800; font-size:22px; outline:none; width:100%;">`;
         
         let subtasksHTML = `<div class="subtasks-box" style="${task.completed ? 'opacity:0.6;' : ''}">`;
         if(task.subtasks && task.subtasks.length > 0) {
             task.subtasks.forEach(sub => {
                 const isSubDone = sub.status === 'Complete';
-                subtasksHTML += `<div class="subtask-row status-${sub.status ? sub.status.replace(/ /g, '-') : 'Not-Started'}"><div class="subtask-left"><select class="status-dropdown" onchange="updateTaskSubtaskStatus(${task.id}, ${sub.id}, this.value)" ${task.completed ? 'disabled' : ''}><option value="Not Started" ${sub.status === 'Not Started' ? 'selected' : ''}>Not Started</option><option value="Awaiting Reply" ${sub.status === 'Awaiting Reply' ? 'selected' : ''}>Awaiting Reply</option><option value="In Progress" ${sub.status === 'In Progress' ? 'selected' : ''}>In Progress</option><option value="Complete" ${isSubDone ? 'selected' : ''}>Complete</option></select><span class="subtask-text ${isSubDone ? 'done' : ''}">${sub.text}</span></div><div class="subtask-right">${sub.owner ? `<span class="subtask-owner-badge">👤 ${sub.owner}</span>` : ''} ${sub.date ? `<span class="subtask-date">🎯 ${new Date(sub.date).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</span>` : ''}</div></div>`;
+                subtasksHTML += `<div class="subtask-row status-${sub.status ? sub.status.replace(/ /g, '-') : 'Not-Started'}"><div class="subtask-left"><select class="status-dropdown" onchange="updateTaskSubtaskStatus(${task.id}, ${sub.id}, this.value)" ${task.completed ? 'disabled' : ''}><option value="Not Started" ${sub.status === 'Not Started' ? 'selected' : ''}>Not Started</option><option value="Awaiting Reply" ${sub.status === 'Awaiting Reply' ? 'selected' : ''}>Awaiting Reply</option><option value="In Progress" ${sub.status === 'In Progress' ? 'selected' : ''}>In Progress</option><option value="Complete" ${isSubDone ? 'selected' : ''}>Complete</option></select><span class="subtask-text ${isSubDone ? 'done' : ''}">${sub.text}</span></div><div class="subtask-right">${(sub.owners||[sub.owner]).filter(o=>o).map(o=>`<span class="subtask-owner-badge">👤 ${o}</span>`).join('')} ${sub.date ? `<span class="subtask-date">🎯 ${new Date(sub.date).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</span>` : ''}</div></div>`;
             });
         }
         if(!task.completed) {
-            subtasksHTML += `<div class="subtask-entry-row"><label class="target-label" style="flex:0.5;">Target<input type="date" id="modal-sub-date-${task.id}"></label><input type="text" id="modal-sub-text-${task.id}" placeholder="New subtask description..." style="flex:2;"><input type="text" id="modal-sub-owner-${task.id}" list="subtaskOwnerOptions" placeholder="Owner" style="flex:1;"><button class="action-btn done-btn" onclick="commitTaskSubtask(${task.id})">➕ Add</button></div>`;
+            subtasksHTML += `<div class="subtask-entry-row"><label class="target-label" style="flex:0.5;">Target<input type="date" class="subtask-date-input" id="modal-sub-date-${task.id}"></label><input type="text" id="modal-sub-text-${task.id}" placeholder="New subtask description..." style="flex:2;"><div class="tag-input-wrapper" style="flex:1;"><div class="task-tags" id="subtask-owner-ui-${task.id}"></div><input type="text" placeholder="Add owner + Enter" onkeydown="handleSubtaskOwnerAdd(event, ${task.id})"></div><button class="action-btn done-btn" onclick="commitTaskSubtask(${task.id})">➕ Add</button></div>`;
         }
         subtasksHTML += `</div>`;
 
@@ -684,6 +698,7 @@
 
     window.openProjectModal = function(projId) {
         currentActiveProjModalId = projId; const proj = projects.find(p => p.id === projId); if(!proj) return;
+        window.subtaskTagState[projId] = [];
         document.getElementById('modal-proj-title').innerHTML = `🚀 <input type="text" value="${proj.title}" onblur="updateProjMeta(${proj.id}, 'title', this.value)" style="background:transparent; border:none; color:white; font-weight:800; font-size:22px; outline:none; width:100%;">`;
         const isComp = proj.status === 'Completed';
 
@@ -691,10 +706,12 @@
         if(proj.subtasks && proj.subtasks.length > 0) {
             proj.subtasks.forEach(sub => {
                 const isSubDone = sub.status === 'Complete';
-                subtasksHTML += `<div class="subtask-row status-${sub.status ? sub.status.replace(/ /g, '-') : 'Not-Started'}"><div class="subtask-left"><select class="status-dropdown" onchange="updateSubtaskStatus(${proj.id}, ${sub.id}, this.value)" ${isComp ? 'disabled' : ''}><option value="Not Started" ${sub.status === 'Not Started' ? 'selected' : ''}>Not Started</option><option value="Awaiting Reply" ${sub.status === 'Awaiting Reply' ? 'selected' : ''}>Awaiting Reply</option><option value="In Progress" ${sub.status === 'In Progress' ? 'selected' : ''}>In Progress</option><option value="Complete" ${isSubDone ? 'selected' : ''}>Complete</option></select><span class="subtask-text ${isSubDone ? 'done' : ''}">${sub.text}</span></div><div class="subtask-right">${sub.owner ? `<span class="subtask-owner-badge">👤 ${sub.owner}</span>` : ''} ${sub.date ? `<span class="subtask-date">🎯 ${new Date(sub.date).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</span>` : ''}</div></div>`;
+                subtasksHTML += `<div class="subtask-row status-${sub.status ? sub.status.replace(/ /g, '-') : 'Not-Started'}"><div class="subtask-left"><select class="status-dropdown" onchange="updateSubtaskStatus(${proj.id}, ${sub.id}, this.value)" ${isComp ? 'disabled' : ''}><option value="Not Started" ${sub.status === 'Not Started' ? 'selected' : ''}>Not Started</option><option value="Awaiting Reply" ${sub.status === 'Awaiting Reply' ? 'selected' : ''}>Awaiting Reply</option><option value="In Progress" ${sub.status === 'In Progress' ? 'selected' : ''}>In Progress</option><option value="Complete" ${isSubDone ? 'selected' : ''}>Complete</option></select><span class="subtask-text ${isSubDone ? 'done' : ''}">${sub.text}</span></div><div class="subtask-right">${(sub.owners||[sub.owner]).filter(o=>o).map(o=>`<span class="subtask-owner-badge">👤 ${o}</span>`).join('')} ${sub.date ? `<span class="subtask-date">🎯 ${new Date(sub.date).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</span>` : ''}</div></div>`;
             });
         }
-        if(!isComp) subtasksHTML += `<div class="subtask-entry-row"><label class="target-label" style="flex:0.5;">Target<input type="date" id="modal-proj-sub-date-${proj.id}"></label><input type="text" id="modal-proj-sub-text-${proj.id}" placeholder="Next subtask description..." style="flex:2;"><input type="text" id="modal-proj-sub-owner-${proj.id}" list="subtaskOwnerOptions" placeholder="Owner" style="flex:1;"><button class="action-btn done-btn" onclick="commitSubtask(${proj.id})">➕ Add</button></div>`;
+        if(!isComp) {
+            subtasksHTML += `<div class="subtask-entry-row"><label class="target-label" style="flex:0.5;">Target<input type="date" class="subtask-date-input" id="modal-proj-sub-date-${proj.id}"></label><input type="text" id="modal-proj-sub-text-${proj.id}" placeholder="Next subtask description..." style="flex:2;"><div class="tag-input-wrapper" style="flex:1;"><div class="task-tags" id="subtask-owner-ui-${proj.id}"></div><input type="text" placeholder="Add owner + Enter" onkeydown="handleSubtaskOwnerAdd(event, ${proj.id})"></div><button class="action-btn done-btn" onclick="commitSubtask(${proj.id})">➕ Add</button></div>`;
+        }
         subtasksHTML += `</div>`;
 
         let bHTML = proj.brands.map((t, i) => `<span class="tag tag-brand">${t} <span class="del-tag" onclick="removeEntityTag('proj',${proj.id},'brands',${i})">×</span></span>`).join('');
@@ -760,18 +777,19 @@
     window.updateMeetingMeta = function(id, field, value) { meetings = meetings.map(m => { if(m.id === id) m[field] = value; return m; }); saveMeetings(); }
 
     window.promoteToStandardTask = function(taskId) { tasks = tasks.map(t => { if(t.id === taskId) t.requiresAction = false; return t; }); saveTasks(); openTaskModal(taskId); }
+    
     window.commitTaskSubtask = function(taskId) {
-        const textInput = document.getElementById(`modal-sub-text-${taskId}`).value.trim(); const ownerInput = document.getElementById(`modal-sub-owner-${taskId}`).value.trim(); const dateInput = document.getElementById(`modal-sub-date-${taskId}`).value;
+        const textInput = document.getElementById(`modal-sub-text-${taskId}`).value.trim(); const dateInput = document.getElementById(`modal-sub-date-${taskId}`).value;
         if(!textInput) return;
-        tasks = tasks.map(t => { if(t.id === taskId) { t.subtasks.push({ id: Date.now(), text: textInput, owner: ownerInput, date: dateInput, status: 'Not Started' }); t.subtasks.sort((a,b) => new Date(a.date||'9999-12-31') - new Date(b.date||'9999-12-31')); } return t; });
+        tasks = tasks.map(t => { if(t.id === taskId) { t.subtasks.push({ id: Date.now(), text: textInput, owners: [...(window.subtaskTagState[taskId]||[])], date: dateInput, status: 'Not Started' }); t.subtasks.sort((a,b) => new Date(a.date||'9999-12-31') - new Date(b.date||'9999-12-31')); } return t; });
         saveTasks(); openTaskModal(taskId); 
     }
     window.updateTaskSubtaskStatus = function(taskId, subId, newStatus) { tasks = tasks.map(t => { if(t.id === taskId) { t.subtasks = t.subtasks.map(s => s.id === subId ? { ...s, status: newStatus } : s); } return t; }); saveTasks(); openTaskModal(taskId); }
     
     window.commitSubtask = function(projId) {
-        const dateInput = document.getElementById(`modal-proj-sub-date-${projId}`).value; const textInput = document.getElementById(`modal-proj-sub-text-${projId}`).value.trim(); const ownerInput = document.getElementById(`modal-proj-sub-owner-${projId}`).value.trim();
+        const dateInput = document.getElementById(`modal-proj-sub-date-${projId}`).value; const textInput = document.getElementById(`modal-proj-sub-text-${projId}`).value.trim();
         if(!textInput) return;
-        projects = projects.map(p => { if(p.id === projId) { p.subtasks.push({ id: Date.now(), date: dateInput, text: textInput, owner: ownerInput, status: 'Not Started' }); p.subtasks.sort((a,b) => new Date(a.date||'9999-12-31') - new Date(b.date||'9999-12-31')); } return p; });
+        projects = projects.map(p => { if(p.id === projId) { p.subtasks.push({ id: Date.now(), date: dateInput, text: textInput, owners: [...(window.subtaskTagState[projId]||[])], status: 'Not Started' }); p.subtasks.sort((a,b) => new Date(a.date||'9999-12-31') - new Date(b.date||'9999-12-31')); } return p; });
         saveProjects(); openProjectModal(projId);
     }
     window.updateSubtaskStatus = function(projId, subId, newStatus) { projects = projects.map(p => { if(p.id === projId) { p.subtasks = p.subtasks.map(s => s.id === subId ? { ...s, status: newStatus } : s); } return p; }); saveProjects(); openProjectModal(projId); }
@@ -785,7 +803,7 @@
         saveTasks(); openMeetingModal(meetId); 
     }
 
-    // Toggle Task & Recurring Engine
+    // --- INSTANT TOGGLE & RECURRING ENGINE ---
     window.toggleTask = function(id, event) {
         if(event) event.stopPropagation();
         let newRecurrences = [];
@@ -806,8 +824,12 @@
             return t;
         });
         if(newRecurrences.length > 0) tasks.push(...newRecurrences);
-        saveTasks();
+        
+        // INSTANT UI REFRESH
+        renderTasks(); renderSidebarPlanner();
         if(currentActiveTaskModalId === id) closeModal('taskDetailsModal');
+        // Background sync
+        saveTasks();
     }
     
     window.deleteTask = function(id, event) { if(event) event.stopPropagation(); tasks = tasks.filter(t => t.id !== id); saveTasks(); if(currentActiveTaskModalId === id) closeModal('taskDetailsModal'); }
@@ -817,14 +839,12 @@
 
     /* --- DRAG & DROP REORDERING --- */
     window.handleTileDrop = function(e, targetId) {
-        e.preventDefault(); e.stopPropagation();
-        e.currentTarget.classList.remove('drag-over');
+        e.preventDefault(); e.stopPropagation(); e.currentTarget.classList.remove('drag-over');
         const draggedId = parseFloat(e.dataTransfer.getData('text/plain'));
         
         if(draggedId && draggedId !== targetId) {
             let active = tasks.filter(t => !t.completed).sort((a,b) => (b.order || 0) - (a.order || 0));
-            const dragIdx = active.findIndex(t => t.id === draggedId);
-            const dropIdx = active.findIndex(t => t.id === targetId);
+            const dragIdx = active.findIndex(t => t.id === draggedId); const dropIdx = active.findIndex(t => t.id === targetId);
             
             if(dragIdx > -1 && dropIdx > -1) {
                 const [draggedItem] = active.splice(dragIdx, 1);
@@ -835,7 +855,7 @@
                     const originalTask = tasks.find(x => x.id === t.id);
                     if(originalTask) originalTask.order = maxOrder - i;
                 });
-                saveTasks();
+                renderTasks(); saveTasks();
             }
         }
     }
@@ -859,12 +879,11 @@
         const todayTime = new Date(); todayTime.setHours(0,0,0,0);
 
         filteredActive.sort((a,b) => {
-            const aTime = a.dueDate ? new Date(a.dueDate).setHours(0,0,0,0) : null;
-            const bTime = b.dueDate ? new Date(b.dueDate).setHours(0,0,0,0) : null;
+            const aTime = a.dueDate ? new Date(a.dueDate).setHours(0,0,0,0) : null; const bTime = b.dueDate ? new Date(b.dueDate).setHours(0,0,0,0) : null;
             const aUrgentOverdue = aTime !== null && aTime < todayTime.getTime() && a.priority === 'Urgent';
             const bUrgentOverdue = bTime !== null && bTime < todayTime.getTime() && b.priority === 'Urgent';
             if(aUrgentOverdue && !bUrgentOverdue) return -1; if(!aUrgentOverdue && bUrgentOverdue) return 1;
-            return (b.order || 0) - (a.order || 0); // Reverse order for newest on top manually
+            return (b.order || 0) - (a.order || 0); 
         });
 
         filteredActive.forEach(task => {
@@ -905,6 +924,7 @@
         });
 
         const compTile = document.createElement('div'); compTile.className = 'task-tile comp-view-tile'; compTile.onclick = () => renderCompletedModal(); compTile.innerHTML = `<h3>📁 View Completed Archive</h3>`; activeGrid.appendChild(compTile);
+        const query = document.getElementById('tileSearchInput').value; if(query) filterTiles(query);
     }
 
     window.renderCompletedModal = function() {
@@ -939,18 +959,15 @@
             return true;
         });
 
-        // Group by primary assignee
         const groups = {};
         filteredProjects.forEach(p => {
             const primary = p.assignees.length > 0 ? p.assignees[0] : 'Unassigned / Team';
-            if(!groups[primary]) groups[primary] = [];
-            groups[primary].push(p);
+            if(!groups[primary]) groups[primary] = []; groups[primary].push(p);
         });
 
         const todayTime = new Date(); todayTime.setHours(0,0,0,0);
 
         Object.keys(groups).sort().forEach(assignee => {
-            // Sort within group by targetDate
             groups[assignee].sort((a,b) => {
                 const aD = a.targetDate ? new Date(a.targetDate).getTime() : 9999999999999;
                 const bD = b.targetDate ? new Date(b.targetDate).getTime() : 9999999999999;
@@ -991,13 +1008,22 @@
             });
             container.appendChild(grid);
         });
+        const query = document.getElementById('projTileSearchInput').value; if(query) filterProjectTiles(query);
     }
 
     window.renderMeetings = function() {
         const activeGrid = document.getElementById('meetingTileGrid'); if(!activeGrid) return; activeGrid.innerHTML = ''; 
         const addTile = document.createElement('div'); addTile.className = 'task-tile add-new-tile'; addTile.onclick = () => openModal('newMeetingModal'); addTile.innerHTML = `<h3>🤝 Log New Meeting</h3>`; activeGrid.appendChild(addTile);
 
-        meetings.sort((a,b) => b.id - a.id).forEach(meet => {
+        let filteredMeetings = meetings.filter(m => {
+            if (window.currentMeetFilter.type === 'all') return true;
+            if (window.currentMeetFilter.type === 'brand') return m.brands.includes(window.currentMeetFilter.value);
+            if (window.currentMeetFilter.type === 'customer') return m.customers.includes(window.currentMeetFilter.value);
+            if (window.currentMeetFilter.type === 'assignee') return m.assignees.includes(window.currentMeetFilter.value);
+            return true;
+        });
+
+        filteredMeetings.sort((a,b) => b.id - a.id).forEach(meet => {
             const tile = document.createElement('div'); tile.className = `task-tile`;
             tile.onclick = (e) => { if(!e.target.closest('.icon-row')) openMeetingModal(meet.id); };
             let tagsHTML = '';
@@ -1010,6 +1036,8 @@
             tile.innerHTML = `<div class="task-tile-header"><div class="task-tile-title">${meet.title}</div><div class="icon-row"><button class="icon-btn del" onclick="deleteMeeting(${meet.id}, event)">🗑️</button><button class="icon-btn" onclick="openMeetingModal(${meet.id})">⛶</button></div></div><div class="task-tags">${tagsHTML}</div>`;
             activeGrid.appendChild(tile);
         });
+
+        const query = document.getElementById('meetTileSearchInput').value; if(query) filterMeetingTiles(query);
     }
 
     window.renderSidebarPlanner = function() {
@@ -1018,7 +1046,7 @@
         for(let i=0; i<3; i++) {
             const colZone = document.getElementById(`sb-col-${i}`); colZone.innerHTML = '';
             const dayTasks = tasks.filter(t => !t.completed && t.dueDate === dateStrings[i]);
-            if(dayTasks.length === 0) { colZone.innerHTML = `<div style="text-align:center; color:var(--text-muted); font-size:13px; margin-top:20px; opacity:0.6;">Drag to schedule</div>`; } 
+            if(dayTasks.length === 0) { colZone.innerHTML = `<div style="text-align:center; color:var(--text-muted); font-size:12px; margin-top:20px; opacity:0.6;">Drag to schedule</div>`; } 
             else {
                 dayTasks.forEach(task => {
                     const card = document.createElement('div'); card.className = `mini-task-card priority-${task.priority}`; card.setAttribute('draggable', 'true'); card.addEventListener('dragstart', (e) => e.dataTransfer.setData('text/plain', task.id));
@@ -1036,7 +1064,7 @@
         const taskId = parseFloat(e.dataTransfer.getData('text/plain'));
         const targetDateString = datesArray[targetDayIndex].toISOString().split('T')[0];
         tasks = tasks.map(t => t.id === taskId ? { ...t, dueDate: targetDateString } : t);
-        saveTasks();
+        renderTasks(); renderSidebarPlanner(); saveTasks();
     }
 
     function renderUpcomingDeadlines() {
@@ -1057,10 +1085,10 @@
         deadlines.forEach(d => {
             d.date.setHours(0,0,0,0); const diffDays = Math.ceil((d.date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
             const bColor = d.type.includes('Project') ? '#7c3aed' : '#3b82f6';
-            const itemHTML = `<div class="mini-task-card" style="margin-bottom:10px; padding:10px; border-left:3px solid ${bColor};"><div style="font-size:10px; color:${bColor}; margin-bottom:4px; text-transform:uppercase; font-weight:800; letter-spacing:0.05em;">${d.type} ${d.parent ? `• ${d.parent}` : ''}</div><div style="font-size:13px;">${d.text}</div><div style="font-size:11px; margin-top:6px; opacity:0.8;">🎯 ${d.date.toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</div></div>`;
+            const itemHTML = `<div class="mini-task-card" style="margin-bottom:8px; padding:8px; border-left:3px solid ${bColor};"><div style="font-size:10px; color:${bColor}; margin-bottom:4px; text-transform:uppercase; font-weight:800; letter-spacing:0.05em;">${d.type} ${d.parent ? `• ${d.parent}` : ''}</div><div style="font-size:12px;">${d.text}</div><div style="font-size:10px; margin-top:4px; opacity:0.8;">🎯 ${d.date.toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</div></div>`;
             if (diffDays <= 0) htmlToday += itemHTML; else if (diffDays <= 7) htmlThisWeek += itemHTML; else if (diffDays <= 14) htmlNextWeek += itemHTML;
         });
-        container.innerHTML = `<div class="mini-planner-col"><h4>📍 Today & Overdue</h4>${htmlToday || '<p style="font-size:12px;opacity:0.5;">No immediate deadlines.</p>'}</div><div class="mini-planner-col" style="margin-top:16px;"><h4>⏭️ This Week</h4>${htmlThisWeek || '<p style="font-size:12px;opacity:0.5;">Clear.</p>'}</div><div class="mini-planner-col" style="margin-top:16px;"><h4>⏭️ Next Week</h4>${htmlNextWeek || '<p style="font-size:12px;opacity:0.5;">Clear.</p>'}</div>`;
+        container.innerHTML = `<div class="mini-planner-col"><h4>📍 Today & Overdue</h4>${htmlToday || '<p style="font-size:11px;opacity:0.5;">No immediate deadlines.</p>'}</div><div class="mini-planner-col" style="margin-top:16px;"><h4>⏭️ This Week</h4>${htmlThisWeek || '<p style="font-size:11px;opacity:0.5;">Clear.</p>'}</div><div class="mini-planner-col" style="margin-top:16px;"><h4>⏭️ Next Week</h4>${htmlNextWeek || '<p style="font-size:11px;opacity:0.5;">Clear.</p>'}</div>`;
     }
 
     function renderExpenses() {
@@ -1083,32 +1111,56 @@
         document.getElementById('expense-total-display').innerText = `£${runningTotal.toFixed(2)}`;
     }
 
+    window.setFilter = function(type, value, element) { currentFilter = { type, value }; document.querySelectorAll('#app-sidebar-left .filter-btn').forEach(btn => btn.classList.remove('active')); if(element) element.classList.add('active'); renderTasks(); }
+    window.setProjFilter = function(type, value, element) { currentProjFilter = { type, value }; document.querySelectorAll('#app-sidebar-left-projects .filter-btn').forEach(btn => btn.classList.remove('active')); if(element) element.classList.add('active'); renderProjects(); }
+    window.setMeetFilter = function(type, value, element) { window.currentMeetFilter = { type, value }; document.querySelectorAll('#app-sidebar-left-meetings .filter-btn').forEach(btn => btn.classList.remove('active')); if(element) element.classList.add('active'); renderMeetings(); }
+
+    function renderSidebarFilters() {
+        const bCont = document.getElementById('brandFilters'), cCont = document.getElementById('customerFilters'), aCont = document.getElementById('assigneeFilters');
+        let activeT = tasks.filter(t=>!t.completed); let bC={}, cC={}, aC={};
+        activeT.forEach(t=>{ t.brands.forEach(b=>{if(b)bC[b]=(bC[b]||0)+1;}); t.customers.forEach(c=>{if(c)cC[c]=(cC[c]||0)+1;}); t.assignees.forEach(a=>{if(a)aC[a]=(aC[a]||0)+1;}); });
+        
+        bCont.innerHTML = Object.keys(bC).map(b => `<button class="filter-btn ${currentFilter.type==='brand' && currentFilter.value===b ? 'active':''}" onclick="setFilter('brand','${b}',this)">🏷️ ${b} <span class="filter-count">${bC[b]}</span></button>`).join('');
+        cCont.innerHTML = Object.keys(cC).map(c => `<button class="filter-btn ${currentFilter.type==='customer' && currentFilter.value===c ? 'active':''}" onclick="setFilter('customer','${c}',this)">🏢 ${c} <span class="filter-count">${cC[c]}</span></button>`).join('');
+        aCont.innerHTML = Object.keys(aC).map(a => `<button class="filter-btn ${currentFilter.type==='assignee' && currentFilter.value===a ? 'active':''}" onclick="setFilter('assignee','${a}',this)">👤 ${a} <span class="filter-count">${aC[a]}</span></button>`).join('');
+    }
+
     function renderProjectSidebar() {
         const liveProjs = projects.filter(p => p.status === 'Live'); const compProjs = projects.filter(p => p.status === 'Completed');
         document.getElementById('stat-live-proj').innerText = liveProjs.length; document.getElementById('stat-comp-proj').innerText = compProjs.length;
         const liveList = document.getElementById('dir-live-proj'); const compList = document.getElementById('dir-comp-proj');
         liveList.innerHTML = liveProjs.length ? liveProjs.map(p => `<li>${p.title}</li>`).join('') : '<li style="background:transparent; border:none; opacity:0.5;">No active projects</li>';
         compList.innerHTML = compProjs.length ? compProjs.map(p => `<li class="completed-dir">${p.title}</li>`).join('') : '<li style="background:transparent; border:none; opacity:0.5;">None completed</li>';
-        const bSet=new Set(), cSet=new Set(), oSet=new Set();
-        projects.forEach(p => { p.brands.forEach(b => bSet.add(b)); p.customers.forEach(c => cSet.add(c)); p.assignees.forEach(o => oSet.add(o)); });
-        document.getElementById('projBrandFilters').innerHTML = [...bSet].map(b => `<button class="filter-btn ${currentProjFilter.type==='brand' && currentProjFilter.value===b ? 'active':''}" onclick="setProjFilter('brand','${b}',this)">🏷️ ${b}</button>`).join('');
-        document.getElementById('projCustomerFilters').innerHTML = [...cSet].map(c => `<button class="filter-btn ${currentProjFilter.type==='customer' && currentProjFilter.value===c ? 'active':''}" onclick="setProjFilter('customer','${c}',this)">🏢 ${c}</button>`).join('');
-        document.getElementById('projOwnerFilters').innerHTML = [...oSet].map(o => `<button class="filter-btn ${currentProjFilter.type==='owner' && currentProjFilter.value===o ? 'active':''}" onclick="setProjFilter('owner','${o}',this)">👤 ${o}</button>`).join('');
+        
+        const bCont = document.getElementById('projBrandFilters'), cCont = document.getElementById('projCustomerFilters'), aCont = document.getElementById('projOwnerFilters');
+        let bC={}, cC={}, aC={};
+        liveProjs.forEach(p=>{ p.brands.forEach(b=>{if(b)bC[b]=(bC[b]||0)+1;}); p.customers.forEach(c=>{if(c)cC[c]=(cC[c]||0)+1;}); p.assignees.forEach(a=>{if(a)aC[a]=(aC[a]||0)+1;}); });
+        
+        bCont.innerHTML = Object.keys(bC).map(b => `<button class="filter-btn ${currentProjFilter.type==='brand' && currentProjFilter.value===b ? 'active':''}" onclick="setProjFilter('brand','${b}',this)">🏷️ ${b} <span class="filter-count">${bC[b]}</span></button>`).join('');
+        cCont.innerHTML = Object.keys(cC).map(c => `<button class="filter-btn ${currentProjFilter.type==='customer' && currentProjFilter.value===c ? 'active':''}" onclick="setProjFilter('customer','${c}',this)">🏢 ${c} <span class="filter-count">${cC[c]}</span></button>`).join('');
+        aCont.innerHTML = Object.keys(aC).map(a => `<button class="filter-btn ${currentProjFilter.type==='owner' && currentProjFilter.value===a ? 'active':''}" onclick="setProjFilter('owner','${a}',this)">👤 ${a} <span class="filter-count">${aC[a]}</span></button>`).join('');
     }
 
-    function renderSidebarFilters() {
-        const bCont = document.getElementById('brandFilters'), cCont = document.getElementById('customerFilters'), aCont = document.getElementById('assigneeFilters');
-        const bSet=[...new Set(tasks.flatMap(t=>t.brands).filter(b=>b))], cSet=[...new Set(tasks.flatMap(t=>t.customers).filter(c=>c))], aSet=[...new Set(tasks.flatMap(t=>t.assignees).filter(a=>a))];
-        bCont.innerHTML = bSet.map(b => `<button class="filter-btn ${currentFilter.type==='brand' && currentFilter.value===b ? 'active':''}" onclick="setFilter('brand','${b}',this)">🏷️ ${b}</button>`).join('');
-        cCont.innerHTML = cSet.map(c => `<button class="filter-btn ${currentFilter.type==='customer' && currentFilter.value===c ? 'active':''}" onclick="setFilter('customer','${c}',this)">🏢 ${c}</button>`).join('');
-        aCont.innerHTML = aSet.map(a => `<button class="filter-btn ${currentFilter.type==='assignee' && currentFilter.value===a ? 'active':''}" onclick="setFilter('assignee','${a}',this)">👤 ${a}</button>`).join('');
+    function renderMeetingSidebar() {
+        const bCont = document.getElementById('meetBrandFilters'), cCont = document.getElementById('meetCustomerFilters'), aCont = document.getElementById('meetAssigneeFilters');
+        let bC={}, cC={}, aC={};
+        meetings.forEach(m=>{ m.brands.forEach(b=>{if(b)bC[b]=(bC[b]||0)+1;}); m.customers.forEach(c=>{if(c)cC[c]=(cC[c]||0)+1;}); m.assignees.forEach(a=>{if(a)aC[a]=(aC[a]||0)+1;}); });
+        
+        bCont.innerHTML = Object.keys(bC).map(b => `<button class="filter-btn ${window.currentMeetFilter.type==='brand' && window.currentMeetFilter.value===b ? 'active':''}" onclick="setMeetFilter('brand','${b}',this)">🏷️ ${b} <span class="filter-count">${bC[b]}</span></button>`).join('');
+        cCont.innerHTML = Object.keys(cC).map(c => `<button class="filter-btn ${window.currentMeetFilter.type==='customer' && window.currentMeetFilter.value===c ? 'active':''}" onclick="setMeetFilter('customer','${c}',this)">🏢 ${c} <span class="filter-count">${cC[c]}</span></button>`).join('');
+        aCont.innerHTML = Object.keys(aC).map(a => `<button class="filter-btn ${window.currentMeetFilter.type==='assignee' && window.currentMeetFilter.value===a ? 'active':''}" onclick="setMeetFilter('assignee','${a}',this)">👥 ${a} <span class="filter-count">${aC[a]}</span></button>`).join('');
     }
 
     function renderInputDatalists() {
         const sData = document.getElementById('subtaskOwnerOptions');
-        const uAssigns = [...new Set([...tasks.flatMap(t=>t.assignees), ...projects.flatMap(p=>p.assignees), ...projects.flatMap(p=>p.subtasks.map(s=>s.owner)), ...tasks.flatMap(t=>t.subtasks.map(s=>s.owner))].filter(a=>a))];
+        const uAssigns = [...new Set([...tasks.flatMap(t=>t.assignees), ...projects.flatMap(p=>p.assignees), ...projects.flatMap(p=>p.subtasks.flatMap(s=>s.owners||[])), ...tasks.flatMap(t=>t.subtasks.flatMap(s=>s.owners||[]))].filter(a=>a))];
         sData.innerHTML = uAssigns.map(a=>`<option value="${a}">`).join(''); 
     }
+
+    window.filterTiles = function(query) { const lq = query.toLowerCase(); document.querySelectorAll('#taskTileGrid .task-tile:not(.add-new-tile):not(.comp-view-tile)').forEach(t => { t.style.display = t.innerText.toLowerCase().includes(lq) ? 'flex' : 'none'; }); }
+    window.filterProjectTiles = function(query) { const lq = query.toLowerCase(); document.querySelectorAll('#projectTileGridContainer .task-tile:not(.add-new-tile)').forEach(t => { t.style.display = t.innerText.toLowerCase().includes(lq) ? 'flex' : 'none'; }); }
+    window.filterMeetingTiles = function(query) { const lq = query.toLowerCase(); document.querySelectorAll('#meetingTileGrid .task-tile:not(.add-new-tile)').forEach(t => { t.style.display = t.innerText.toLowerCase().includes(lq) ? 'flex' : 'none'; }); }
+
 </script>
 </body>
 </html>

@@ -5,17 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>James C Workspace</title>
     
-    <!-- Custom JC Logo Browser Tab Icon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%234f46e5%22/><text x=%2250%22 y=%2270%22 font-family=%22Inter, sans-serif%22 font-size=%2255%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22>JC</text></svg>">
 
-    <!-- Sleek Modern Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- FIREBASE CLOUD SDK COMPATIBILITY LIBRARIES -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
     
-    <!-- TOUCHSCREEN DRAG & DROP POLYFILL -->
     <script src="https://bernardo-castilho.github.io/DragDropTouch/DragDropTouch.js"></script>
 
     <style>
@@ -136,17 +132,26 @@
         .container { width: 100%; max-width: 1600px; padding: 0; }
         .view-panel { display: none; width: 100%; }
         .view-panel.active { display: block; }
-        h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 20px 0; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+        
+        .header-action-bar { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
+        h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; margin: 0; color: var(--text-main); display: flex; align-items: center; gap: 10px; white-space: nowrap; }
 
-        .tile-search-bar { width: 100%; padding: 14px 18px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); font-size: 14px; margin-bottom: 20px; outline: none; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: all 0.2s; }
+        /* Sleek Action Bar Layout */
+        .action-controls { display: flex; gap: 10px; flex: 1; align-items: center; }
+        .tile-search-bar { flex: 1; padding: 12px 16px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main); font-size: 14px; outline: none; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: all 0.2s; min-width: 200px; }
         .tile-search-bar:focus { border-color: var(--primary-accent); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
-        .group-header { width: 100%; padding: 10px 14px; background: var(--bg-sidebar); border: 1px solid var(--border-color); border-left: 4px solid var(--primary-accent); margin: 25px 0 15px 0; border-radius: 8px; font-size: 15px; font-weight: 700; color: var(--text-main); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .btn-small { background-color: var(--primary-accent); color: #ffffff; border: none; padding: 12px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; box-shadow: 0 2px 8px rgba(79, 70, 229, 0.2); transition: all 0.2s; white-space: nowrap; }
+        .btn-small:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
+        .btn-outline { background-color: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .btn-outline:hover { background-color: var(--bg-main); color: var(--text-main); transform: translateY(-1px); }
+
+        .group-header { width: 100%; padding: 8px 12px; background: transparent; border-bottom: 2px solid var(--border-color); margin: 25px 0 15px 0; font-size: 16px; font-weight: 800; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 8px; }
 
         /* --- CONDENSED 5-COLUMN TILES --- */
-        .task-tile-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; width: 100%; margin-bottom: 20px; }
+        .task-tile-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; width: 100%; margin-bottom: 20px; }
         
-        .task-tile { background: var(--card-bg); border-radius: 10px; padding: 14px; border: 1px solid var(--border-color); border-left: 5px solid var(--border-color); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; position: relative; min-height: 120px; touch-action: pan-y; }
-        .task-tile:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); border-color: #cbd5e1; }
+        .task-tile { background: var(--card-bg); border-radius: 8px; padding: 12px; border: 1px solid var(--border-color); border-left: 4px solid var(--border-color); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; gap: 8px; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; position: relative; touch-action: pan-y; }
+        .task-tile:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-color: #cbd5e1; }
         .task-tile.drag-over { border: 2px dashed var(--primary-accent); opacity: 0.5; }
 
         .task-tile.priority-Urgent { border-left-color: var(--urgent-color); }
@@ -158,17 +163,12 @@
         .task-tile.tile-overdue { background-color: #fff1f2 !important; border-color: #fecdd3 !important; }
         .task-tile.tile-overdue-urgent { background-color: #ffe4e6 !important; border-color: #fda4af !important; border-left-color: #e11d48 !important; }
 
-        .add-new-tile { border: 2px dashed var(--primary-accent); background: var(--vibrant-brand-bg); justify-content: center; align-items: center; text-align: center; border-left: 2px dashed var(--primary-accent); box-shadow: none; }
-        .add-new-tile h3 { color: var(--primary-hover); font-size: 14px; font-weight: 700; margin: 0; }
-        .comp-view-tile { border: 2px dashed var(--low-color); background: var(--vibrant-expense-bg); border-left: 2px dashed var(--low-color); justify-content: center; align-items: center; text-align: center; box-shadow: none; }
-        .comp-view-tile h3 { color: var(--vibrant-expense-text); font-size: 14px; font-weight: 700; margin: 0; }
-
         .task-tile-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; }
-        .task-tile-title { font-size: 14px; font-weight: 700; color: var(--text-main); line-height: 1.3; }
+        .task-tile-title { font-size: 13px; font-weight: 700; color: var(--text-main); line-height: 1.3; }
 
-        /* --- TAGS & HIGH-END INPUTS --- */
+        /* --- TAGS & INPUTS --- */
         .task-tags { display: flex; gap: 4px; flex-wrap: wrap; }
-        .tag { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; display: inline-flex; align-items: center; gap: 4px; border: 1px solid rgba(0,0,0,0.05); }
+        .tag { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; display: inline-flex; align-items: center; gap: 4px; border: 1px solid rgba(0,0,0,0.05); }
         .tag .del-tag { cursor: pointer; opacity: 0.5; font-size: 12px; margin-left: 2px; } .tag .del-tag:hover { opacity: 1; color: var(--urgent-color); }
         .tag.tag-brand { background-color: var(--vibrant-brand-bg); color: var(--vibrant-brand-text); }
         .tag.tag-customer { background-color: var(--vibrant-customer-bg); color: var(--vibrant-customer-text); }
@@ -194,12 +194,12 @@
         .submit-btn:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
 
         .actions { display: flex; gap: 8px; flex-direction: column; align-items: flex-end; }
-        .action-btn { border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
+        .action-btn { border: none; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; }
         .done-btn { background-color: var(--bg-main); color: var(--text-main); border: 1px solid var(--border-color); transition: all 0.2s; }
         .done-btn:hover { background-color: var(--vibrant-expense-bg); border-color: var(--low-color); color: var(--vibrant-expense-text); }
         .delete-btn { background-color: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; }
         
-        .icon-btn { background: none; border: none; font-size: 15px; cursor: pointer; color: var(--text-muted); padding: 2px; transition: all 0.2s; }
+        .icon-btn { background: none; border: none; font-size: 14px; cursor: pointer; color: var(--text-muted); padding: 2px; transition: all 0.2s; }
         .icon-btn:hover { color: var(--primary-accent); transform: scale(1.1); }
         .icon-btn.del:hover { color: var(--urgent-color); }
 
@@ -246,6 +246,8 @@
             .workspace-body { flex-direction: column; overflow: visible; display: flex; }
             .sidebar-left, .sidebar-right { width: 100% !important; border: none; border-bottom: 1px solid var(--border-color); padding: 20px; }
             .main-content { overflow: visible; padding: 15px; width: 100%; }
+            .header-action-bar { flex-direction: column; align-items: stretch; }
+            .action-controls { flex-wrap: wrap; }
             .top-navbar { flex-direction: column; height: auto; padding: 15px; gap: 15px; text-align: center; }
             .navbar-tabs { justify-content: center; flex-wrap: wrap; width: 100%; }
             .task-tile-grid { grid-template-columns: repeat(2, 1fr); }
@@ -260,7 +262,6 @@
 </head>
 <body>
 
-    <!-- TOP NAVIGATION -->
     <div class="top-navbar">
         <div class="navbar-brand">
             <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%234f46e5'/%3E%3Ctext x='50' y='70' font-family='Arial, sans-serif' font-size='55' font-weight='bold' fill='white' text-anchor='middle'%3EJC%3C/text%3E%3C/svg%3E" alt="Logo">
@@ -275,10 +276,8 @@
         <div style="width:50px;"></div>
     </div>
 
-    <!-- CORE FRAME -->
     <div class="workspace-body">
         
-        <!-- LEFT SIDEBAR: TASK FILTERS -->
         <div class="sidebar-left" id="app-sidebar-left">
             <h2>🔎 Workspace Filters</h2>
             <div class="filter-section">
@@ -296,7 +295,6 @@
             <div class="filter-section"><h3 onclick="toggleFilter('assigneeFilters')">👤 Assignees <span class="filter-arrow">▼</span></h3><div id="assigneeFilters" class="filter-body"></div></div>
         </div>
 
-        <!-- LEFT SIDEBAR: PROJECT FILTERS -->
         <div class="sidebar-left" id="app-sidebar-left-projects" style="display:none;">
             <h2>🔎 Project Filters</h2>
             <div class="filter-section">
@@ -308,7 +306,6 @@
             <div class="filter-section"><h3 onclick="toggleFilter('projOwnerFilters')">👤 Owners <span class="filter-arrow">▼</span></h3><div id="projOwnerFilters" class="filter-body"></div></div>
         </div>
 
-        <!-- LEFT SIDEBAR: MEETING FILTERS -->
         <div class="sidebar-left" id="app-sidebar-left-meetings" style="display:none;">
             <h2>🔎 Meeting Filters</h2>
             <div class="filter-section"><button class="filter-btn active" onclick="setMeetFilter('all', 'all', this)">🏁 All Meetings</button></div>
@@ -317,29 +314,44 @@
             <div class="filter-section"><h3 onclick="toggleFilter('meetAssigneeFilters')">👥 Participants <span class="filter-arrow">▼</span></h3><div id="meetAssigneeFilters" class="filter-body"></div></div>
         </div>
 
-        <!-- MAIN VIEWPORTS -->
         <div class="main-content">
             
             <div id="panel-dashboard" class="view-panel active">
                 <div class="container">
-                    <h1>⚡ Active Workspace Tasks</h1>
-                    <input type="text" id="tileSearchInput" class="tile-search-bar" placeholder="🔍 Quick filter tiles by keyword..." onkeyup="filterTiles(this.value)">
-                    <div id="taskTileGrid" class="task-tile-grid"></div>
+                    <div class="header-action-bar">
+                        <h1>⚡ Active Tasks</h1>
+                        <div class="action-controls">
+                            <input type="text" id="tileSearchInput" class="tile-search-bar" style="margin:0;" placeholder="🔍 Quick filter tasks..." onkeyup="filterTiles(this.value)">
+                            <button class="btn-small" onclick="openModal('newTaskModal')">➕ Add Task</button>
+                            <button class="btn-small btn-outline" onclick="renderCompletedModal()">📁 Archive</button>
+                        </div>
+                    </div>
+                    <div id="taskTileGridContainer"></div>
                 </div>
             </div>
 
             <div id="panel-projects" class="view-panel">
                 <div class="container">
-                    <h1>🚀 Long-Term Strategic Projects</h1>
-                    <input type="text" id="projTileSearchInput" class="tile-search-bar" placeholder="🔍 Quick filter projects..." onkeyup="filterProjectTiles(this.value)">
+                    <div class="header-action-bar">
+                        <h1>🚀 Strategic Projects</h1>
+                        <div class="action-controls">
+                            <input type="text" id="projTileSearchInput" class="tile-search-bar" style="margin:0;" placeholder="🔍 Quick filter projects..." onkeyup="filterProjectTiles(this.value)">
+                            <button class="btn-small" onclick="openModal('newProjectModal')">🚀 Add Project</button>
+                        </div>
+                    </div>
                     <div id="projectTileGridContainer"></div>
                 </div>
             </div>
 
             <div id="panel-meetings" class="view-panel">
                 <div class="container">
-                    <h1>🤝 Meeting Transcripts</h1>
-                    <input type="text" id="meetTileSearchInput" class="tile-search-bar" placeholder="🔍 Search meetings..." onkeyup="filterMeetingTiles(this.value)">
+                    <div class="header-action-bar">
+                        <h1>🤝 Meeting Transcripts</h1>
+                        <div class="action-controls">
+                            <input type="text" id="meetTileSearchInput" class="tile-search-bar" style="margin:0;" placeholder="🔍 Search meetings..." onkeyup="filterMeetingTiles(this.value)">
+                            <button class="btn-small" onclick="openModal('newMeetingModal')">🤝 Log Meeting</button>
+                        </div>
+                    </div>
                     <div id="meetingTileGrid" class="task-tile-grid"></div>
                 </div>
             </div>
@@ -368,7 +380,6 @@
 
         </div>
 
-        <!-- RIGHT SIDEBARS -->
         <div class="sidebar-right" id="app-sidebar-right-planner">
             <h2>📅 3-Day Planner <button class="icon-btn" onclick="togglePlannerExpanded()">⛶</button></h2>
             <div class="sidebar-planner-zone">
@@ -387,8 +398,6 @@
         </div>
     </div>
 
-    <!-- MODALS -->
-    <!-- NEW TASK MODAL -->
     <div class="modal-overlay" id="newTaskModal">
         <div class="modal-content" style="max-width: 650px;">
             <div class="modal-header"><h2>➕ Initialize New Task</h2><button class="close-modal" onclick="closeModal('newTaskModal')">×</button></div>
@@ -410,7 +419,6 @@
         </div>
     </div>
 
-    <!-- NEW PROJECT MODAL -->
     <div class="modal-overlay" id="newProjectModal">
         <div class="modal-content" style="max-width: 650px;">
             <div class="modal-header"><h2>🚀 Initialize Strategic Project</h2><button class="close-modal" onclick="closeModal('newProjectModal')">×</button></div>
@@ -428,7 +436,6 @@
         </div>
     </div>
 
-    <!-- NEW MEETING MODAL -->
     <div class="modal-overlay" id="newMeetingModal">
         <div class="modal-content" style="max-width: 650px;">
             <div class="modal-header"><h2>🤝 Log New Meeting</h2><button class="close-modal" onclick="closeModal('newMeetingModal')">×</button></div>
@@ -450,13 +457,11 @@
         </div>
     </div>
 
-    <!-- DYNAMIC DETAILS MODALS -->
     <div class="modal-overlay" id="taskDetailsModal"><div class="modal-content"><div class="modal-header"><h2 id="modal-task-title" style="flex:1;"></h2><button class="close-modal" onclick="closeModal('taskDetailsModal')">×</button></div><div class="modal-body" id="modal-task-body"></div></div></div>
     <div class="modal-overlay" id="projectDetailsModal"><div class="modal-content"><div class="modal-header"><h2 id="modal-proj-title" style="flex:1;"></h2><button class="close-modal" onclick="closeModal('projectDetailsModal')">×</button></div><div class="modal-body" id="modal-proj-body"></div></div></div>
     <div class="modal-overlay" id="meetingDetailsModal"><div class="modal-content"><div class="modal-header"><h2 id="modal-meet-title" style="flex:1;"></h2><button class="close-modal" onclick="closeModal('meetingDetailsModal')">×</button></div><div class="modal-body" id="modal-meet-body"></div></div></div>
     <div class="modal-overlay" id="completedTasksModal"><div class="modal-content" style="max-width:800px;"><div class="modal-header"><h2>📁 Archive</h2><button class="close-modal" onclick="closeModal('completedTasksModal')">×</button></div><div class="modal-body" id="modal-completed-body"></div></div></div>
 
-    <!-- AUTOCOMPLETE DATALISTS (Dynamically Populated) -->
     <datalist id="brandOptions"></datalist>
     <datalist id="customerOptions"></datalist>
     <datalist id="assigneeOptions"></datalist>
@@ -629,12 +634,9 @@
         else { document.getElementById('subnav-review').classList.add('active'); document.getElementById('expense-sub-review').style.display = 'block'; renderExpenses(); }
     }
 
-    // --- UNIVERSAL TAG SYSTEM (Now natively supports datalist clicks) ---
+    // --- UNIVERSAL TAG SYSTEM ---
     window.handleGlobalTagAdd = function(e, context, arrayName) {
-        if(e.key === 'Enter') { 
-            e.preventDefault(); const val = e.target.value.trim(); 
-            if(val) { tagState[context][arrayName].push(val); e.target.value = ''; renderGlobalTagsUI(context, arrayName); } 
-        }
+        if(e.key === 'Enter') { e.preventDefault(); const val = e.target.value.trim(); if(val) { tagState[context][arrayName].push(val); e.target.value = ''; renderGlobalTagsUI(context, arrayName); } }
     }
     window.removeGlobalTag = function(context, arrayName, index) { tagState[context][arrayName].splice(index, 1); renderGlobalTagsUI(context, arrayName); }
     window.renderGlobalTagsUI = function(context, arrayName) {
@@ -888,11 +890,8 @@
             return t;
         });
         if(newRecurrences.length > 0) tasks.push(...newRecurrences);
-        
-        // INSTANT UI REFRESH
-        renderTasks(); renderSidebarPlanner();
-        if(currentActiveTaskModalId === id) closeModal('taskDetailsModal');
         saveTasks();
+        if(currentActiveTaskModalId === id) closeModal('taskDetailsModal');
     }
     
     window.deleteTask = function(id, event) { if(event) event.stopPropagation(); tasks = tasks.filter(t => t.id !== id); saveTasks(); if(currentActiveTaskModalId === id) closeModal('taskDetailsModal'); }
@@ -918,7 +917,7 @@
                     const originalTask = tasks.find(x => x.id === t.id);
                     if(originalTask) originalTask.order = maxOrder - i;
                 });
-                renderTasks(); saveTasks();
+                saveTasks();
             }
         }
     }
@@ -927,10 +926,8 @@
 
     /* --- DASHBOARD RENDERERS --- */
     window.renderTasks = function() {
-        const activeGrid = document.getElementById('taskTileGrid'); if(!activeGrid) return; activeGrid.innerHTML = ''; 
+        const container = document.getElementById('taskTileGridContainer'); if(!container) return; container.innerHTML = ''; 
 
-        const addTile = document.createElement('div'); addTile.className = 'task-tile add-new-tile'; addTile.onclick = () => openModal('newTaskModal'); addTile.innerHTML = `<h3>➕ Add New Task</h3>`; activeGrid.appendChild(addTile);
-        
         let filteredActive = tasks.filter(t => !t.completed).filter(task => {
             if (currentFilter.type === 'priority') { if (currentFilter.value === 'all') return true; return task.priority === currentFilter.value; }
             if (currentFilter.type === 'brand') return task.brands.includes(currentFilter.value);
@@ -941,19 +938,19 @@
 
         const todayTime = new Date(); todayTime.setHours(0,0,0,0);
 
-        filteredActive.sort((a,b) => {
-            const aTime = a.dueDate ? new Date(a.dueDate).setHours(0,0,0,0) : null; const bTime = b.dueDate ? new Date(b.dueDate).setHours(0,0,0,0) : null;
-            const aUrgentOverdue = aTime !== null && aTime < todayTime.getTime() && a.priority === 'Urgent';
-            const bUrgentOverdue = bTime !== null && bTime < todayTime.getTime() && b.priority === 'Urgent';
-            if(aUrgentOverdue && !bUrgentOverdue) return -1; if(!aUrgentOverdue && bUrgentOverdue) return 1;
-            return (b.order || 0) - (a.order || 0); 
-        });
+        // Sort by manual drag & drop order first
+        filteredActive.sort((a,b) => (b.order || 0) - (a.order || 0));
+
+        // Group into buckets
+        const buckets = { thisWeek: [], nextWeek: [], longTerm: [] };
 
         filteredActive.forEach(task => {
             let isOverdue = false; let titlePrefix = '';
+            let diffDays = 999;
+            
             if(task.dueDate) {
                 const dueTime = new Date(task.dueDate).setHours(0,0,0,0);
-                const diffDays = Math.ceil((dueTime - todayTime.getTime()) / (1000 * 60 * 60 * 24));
+                diffDays = Math.ceil((dueTime - todayTime.getTime()) / (1000 * 60 * 60 * 24));
                 if(diffDays < 0) isOverdue = true; else if(diffDays >= 0 && diffDays <= 2) titlePrefix = '⏰ ';
             }
             const isUrgentOverdue = isOverdue && task.priority === 'Urgent';
@@ -983,10 +980,29 @@
             if(task.comments) tagsHTML += `<span class="tag" style="background:#cbd5e1; color:#334155;">💬</span>`;
 
             tile.innerHTML = `<div class="task-tile-header"><div class="task-tile-title">${titlePrefix}${task.text}</div><div class="icon-row"><button class="icon-btn del" onclick="deleteTask(${task.id}, event)">🗑️</button><button class="icon-btn" onclick="openTaskModal(${task.id})">⛶</button></div></div><div class="task-tags">${tagsHTML}</div><div class="actions" style="flex-direction: row; justify-content: flex-end; margin-top: auto;"><button class="action-btn done-btn" onclick="toggleTask(${task.id}, event)">✓ Complete</button></div>`;
-            activeGrid.appendChild(tile);
+            
+            if(diffDays <= 7) buckets.thisWeek.push(tile);
+            else if(diffDays <= 14) buckets.nextWeek.push(tile);
+            else buckets.longTerm.push(tile);
         });
 
-        const compTile = document.createElement('div'); compTile.className = 'task-tile comp-view-tile'; compTile.onclick = () => renderCompletedModal(); compTile.innerHTML = `<h3>📁 View Completed Archive</h3>`; activeGrid.appendChild(compTile);
+        // Render Buckets
+        if(buckets.thisWeek.length > 0) {
+            container.innerHTML += `<div class="group-header">📍 This Week & Overdue</div>`;
+            const g = document.createElement('div'); g.className = 'task-tile-grid';
+            buckets.thisWeek.forEach(t => g.appendChild(t)); container.appendChild(g);
+        }
+        if(buckets.nextWeek.length > 0) {
+            container.innerHTML += `<div class="group-header">⏭️ Next Week</div>`;
+            const g = document.createElement('div'); g.className = 'task-tile-grid';
+            buckets.nextWeek.forEach(t => g.appendChild(t)); container.appendChild(g);
+        }
+        if(buckets.longTerm.length > 0) {
+            container.innerHTML += `<div class="group-header">🔭 Longer Term</div>`;
+            const g = document.createElement('div'); g.className = 'task-tile-grid';
+            buckets.longTerm.forEach(t => g.appendChild(t)); container.appendChild(g);
+        }
+
         const query = document.getElementById('tileSearchInput').value; if(query) filterTiles(query);
     }
 
@@ -1009,10 +1025,6 @@
 
     window.renderProjects = function() {
         const container = document.getElementById('projectTileGridContainer'); if(!container) return; container.innerHTML = '';
-
-        const addTileRow = document.createElement('div'); addTileRow.style.marginBottom = '30px';
-        addTileRow.innerHTML = `<div class="task-tile add-new-tile" onclick="openModal('newProjectModal')" style="width: 100%; max-width: 300px;"><h3>🚀 Add New Project</h3></div>`;
-        container.appendChild(addTileRow);
 
         let filteredProjects = projects.filter(p => {
             if (currentProjFilter.type === 'all') return true;
@@ -1076,8 +1088,7 @@
 
     window.renderMeetings = function() {
         const activeGrid = document.getElementById('meetingTileGrid'); if(!activeGrid) return; activeGrid.innerHTML = ''; 
-        const addTile = document.createElement('div'); addTile.className = 'task-tile add-new-tile'; addTile.onclick = () => openModal('newMeetingModal'); addTile.innerHTML = `<h3>🤝 Log New Meeting</h3>`; activeGrid.appendChild(addTile);
-
+        
         let filteredMeetings = meetings.filter(m => {
             if (window.currentMeetFilter.type === 'all') return true;
             if (window.currentMeetFilter.type === 'brand') return m.brands.includes(window.currentMeetFilter.value);
@@ -1128,7 +1139,7 @@
         const taskId = parseFloat(e.dataTransfer.getData('text/plain'));
         const targetDateString = datesArray[targetDayIndex].toISOString().split('T')[0];
         tasks = tasks.map(t => t.id === taskId ? { ...t, dueDate: targetDateString } : t);
-        renderTasks(); renderSidebarPlanner(); saveTasks();
+        saveTasks();
     }
 
     function renderUpcomingDeadlines() {

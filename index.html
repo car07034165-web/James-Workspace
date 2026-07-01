@@ -5,20 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>James C Workspace</title>
     
-    <!-- Custom JC Logo Browser Tab Icon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%234f46e5%22/><text x=%2250%22 y=%2270%22 font-family=%22Inter, sans-serif%22 font-size=%2255%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22>JC</text></svg>">
 
-    <!-- Sleek Modern Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- FIREBASE CLOUD SDK & TOUCH DRAG POLYFILL -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
     <script src="https://bernardo-castilho.github.io/DragDropTouch/DragDropTouch.js"></script>
 
     <style>
         :root {
-            /* Sleek Light Theme Palette */
             --bg-main: #f8fafc;          
             --bg-sidebar: #ffffff;       
             --card-bg: #ffffff;          
@@ -77,7 +73,7 @@
 
         .workspace-body { flex: 1; display: flex; overflow: hidden; position: relative; }
 
-        /* --- SIDEBARS --- */
+        /* --- LEFT SIDEBARS --- */
         .sidebar-left { width: 260px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 20px 16px; gap: 16px; overflow-y: auto; flex-shrink: 0; z-index: 5; }
         .sidebar-left h2 { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 0 0 8px 4px; }
         .filter-section { display: flex; flex-direction: column; gap: 4px; }
@@ -92,6 +88,7 @@
         .filter-btn:hover .filter-count { background: #ffffff; }
         .filter-btn.active .filter-count { background: #ffffff; color: var(--primary-accent); border-color: var(--vibrant-brand-bg); }
 
+        /* --- RIGHT SIDEBAR (3-DAY PLANNER) --- */
         .sidebar-right { width: 300px; background-color: var(--bg-sidebar); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 20px 16px; gap: 16px; overflow-y: auto; flex-shrink: 0; z-index: 5; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .sidebar-right h2 { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 0; padding-left: 4px; display: flex; justify-content: space-between; align-items: center; }
         .sidebar-right.expanded-planner { position: fixed; top: 0; right: 0; bottom: 0; width: 75vw; z-index: 50; box-shadow: -10px 0 50px rgba(0,0,0,0.1); background-color: var(--bg-main); }
@@ -141,22 +138,16 @@
         .group-header { width: 100%; padding: 4px 0; border-bottom: 1px solid var(--border-color); margin: 24px 0 12px 0; font-size: 13px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 8px; }
 
         /* --- UNIFORM GRID TILES --- */
-        .task-tile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; width: 100%; margin-bottom: 20px; align-items: start; }
+        .task-tile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; width: 100%; margin-bottom: 20px; align-items: start; }
         
-        /* Removed overflow: hidden so dropdowns can render over tiles below them */
         .task-tile { 
-            background: var(--card-bg); border-radius: 8px; padding: 10px; 
+            background: var(--card-bg); border-radius: 8px; padding: 12px; 
             border: 1px solid var(--border-color); border-left: 4px solid var(--border-color); 
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04); display: flex; flex-direction: column; 
             justify-content: space-between; cursor: pointer; transition: all 0.2s ease; 
-            position: relative; touch-action: none; height: 120px; 
+            position: relative; touch-action: none; height: 130px; 
         }
-        
-        /* z-index bump ensures hovered tile's dropdown is always on top */
-        .task-tile:hover, .task-tile:focus-within { 
-            transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.06); border-color: #cbd5e1; z-index: 100; 
-        }
-        
+        .task-tile:hover, .task-tile:focus-within { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.06); border-color: #cbd5e1; z-index: 100; }
         .task-tile.drag-over { border: 2px dashed var(--primary-accent); opacity: 0.5; }
 
         .task-tile.priority-Urgent { border-left-color: var(--urgent-color); }
@@ -169,16 +160,13 @@
         .task-tile.tile-overdue-urgent { background-color: #ffe4e6 !important; border-color: #fda4af !important; border-left-color: #e11d48 !important; }
 
         .task-tile-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; width: 100%; }
-        /* Line clamp forces text to truncate if too long */
         .task-tile-title { font-size: 12px; font-weight: 700; color: var(--text-main); line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; width: 100%; }
 
         /* --- PILL TAGS & LAYOUT --- */
-        /* Flex-wrap: nowrap keeps tags strictly on one line. Flex-shrink allows truncation. */
         .task-tile .task-tags { display: flex; gap: 4px; flex-wrap: nowrap; margin-bottom: 6px; overflow: hidden; width: 100%; align-items: center; }
         .task-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px; }
         
         .tag { padding: 2px 6px; border-radius: 9999px; font-size: 9px; font-weight: 700; text-transform: uppercase; display: inline-flex; align-items: center; gap: 2px; border: 1px solid rgba(0,0,0,0.03); letter-spacing: 0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px; flex-shrink: 1; }
-        
         .tag .del-tag { cursor: pointer; opacity: 0.4; font-size: 11px; margin-left: 2px; flex-shrink:0; } .tag .del-tag:hover { opacity: 1; color: var(--urgent-color); }
         .tag.tag-brand { background-color: var(--vibrant-brand-bg); color: var(--vibrant-brand-text); }
         .tag.tag-customer { background-color: var(--vibrant-customer-bg); color: var(--vibrant-customer-text); }
@@ -189,7 +177,6 @@
 
         /* Smart Action Dropdown */
         .tile-actions { position: relative; display: inline-block; }
-        /* Invisible bridge to prevent hover dropout */
         .tile-actions::before { content: ''; position: absolute; top: 100%; left: -10px; right: -10px; height: 15px; z-index: 1; }
         
         .action-btn { background: #f8fafc; border: 1px solid #e2e8f0; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; color: #475569; cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.02); transition: all 0.2s;}
@@ -284,7 +271,6 @@
 </head>
 <body>
 
-    <!-- TOP NAVIGATION -->
     <div class="top-navbar">
         <div class="navbar-brand">
             <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%234f46e5'/%3E%3Ctext x='50' y='70' font-family='Arial, sans-serif' font-size='55' font-weight='bold' fill='white' text-anchor='middle'%3EJC%3C/text%3E%3C/svg%3E" alt="Logo">
@@ -298,10 +284,8 @@
         </div>
     </div>
 
-    <!-- CORE FRAME -->
     <div class="workspace-body">
         
-        <!-- LEFT SIDEBAR: TASK FILTERS -->
         <div class="sidebar-left" id="app-sidebar-left">
             <h2>🔎 Workspace Filters</h2>
             <div class="filter-section">
@@ -319,7 +303,6 @@
             <div class="filter-section"><h3 onclick="toggleFilter('assigneeFilters')">👤 Assignees <span class="filter-arrow">▼</span></h3><div id="assigneeFilters" class="filter-body"></div></div>
         </div>
 
-        <!-- LEFT SIDEBAR: PROJECT FILTERS -->
         <div class="sidebar-left" id="app-sidebar-left-projects" style="display:none;">
             <h2>🔎 Project Filters</h2>
             <div class="filter-section">
@@ -331,7 +314,6 @@
             <div class="filter-section"><h3 onclick="toggleFilter('projOwnerFilters')">👤 Owners <span class="filter-arrow">▼</span></h3><div id="projOwnerFilters" class="filter-body"></div></div>
         </div>
 
-        <!-- LEFT SIDEBAR: MEETING FILTERS -->
         <div class="sidebar-left" id="app-sidebar-left-meetings" style="display:none;">
             <h2>🔎 Meeting Filters</h2>
             <div class="filter-section"><button class="filter-btn active" onclick="setMeetFilter('all', 'all', this)">🏁 All Meetings</button></div>
@@ -340,7 +322,6 @@
             <div class="filter-section"><h3 onclick="toggleFilter('meetAssigneeFilters')">👥 Participants <span class="filter-arrow">▼</span></h3><div id="meetAssigneeFilters" class="filter-body"></div></div>
         </div>
 
-        <!-- MAIN VIEWPORTS -->
         <div class="main-content">
             
             <div id="panel-dashboard" class="view-panel active">
@@ -409,7 +390,6 @@
 
         </div>
 
-        <!-- RIGHT SIDEBARS -->
         <div class="sidebar-right" id="app-sidebar-right-planner">
             <h2>📅 3-Day Planner <button class="icon-btn" onclick="togglePlannerExpanded()">⛶</button></h2>
             <div class="sidebar-planner-zone">
@@ -428,8 +408,6 @@
         </div>
     </div>
 
-    <!-- MODALS -->
-    <!-- NEW TASK MODAL -->
     <div class="modal-overlay" id="newTaskModal">
         <div class="modal-content" style="max-width: 550px;">
             <div class="modal-header"><h2>➕ Initialize New Task</h2><button class="close-modal" onclick="closeModal('newTaskModal')">×</button></div>
@@ -478,7 +456,6 @@
         </div>
     </div>
 
-    <!-- NEW PROJECT MODAL -->
     <div class="modal-overlay" id="newProjectModal">
         <div class="modal-content" style="max-width: 550px;">
             <div class="modal-header"><h2>🚀 Initialize Strategic Project</h2><button class="close-modal" onclick="closeModal('newProjectModal')">×</button></div>
@@ -524,7 +501,6 @@
         </div>
     </div>
 
-    <!-- NEW MEETING MODAL -->
     <div class="modal-overlay" id="newMeetingModal">
         <div class="modal-content" style="max-width: 550px;">
             <div class="modal-header"><h2>🤝 Log New Meeting</h2><button class="close-modal" onclick="closeModal('newMeetingModal')">×</button></div>
@@ -573,13 +549,11 @@
         </div>
     </div>
 
-    <!-- DYNAMIC DETAILS MODALS -->
     <div class="modal-overlay" id="taskDetailsModal"><div class="modal-content"><div class="modal-header"><h2 id="modal-task-title" style="flex:1;"></h2><button class="close-modal" onclick="closeModal('taskDetailsModal')">×</button></div><div class="modal-body" id="modal-task-body"></div></div></div>
     <div class="modal-overlay" id="projectDetailsModal"><div class="modal-content"><div class="modal-header"><h2 id="modal-proj-title" style="flex:1;"></h2><button class="close-modal" onclick="closeModal('projectDetailsModal')">×</button></div><div class="modal-body" id="modal-proj-body"></div></div></div>
     <div class="modal-overlay" id="meetingDetailsModal"><div class="modal-content"><div class="modal-header"><h2 id="modal-meet-title" style="flex:1;"></h2><button class="close-modal" onclick="closeModal('meetingDetailsModal')">×</button></div><div class="modal-body" id="modal-meet-body"></div></div></div>
     <div class="modal-overlay" id="completedTasksModal"><div class="modal-content" style="max-width:700px;"><div class="modal-header"><h2>📁 Archive</h2><button class="close-modal" onclick="closeModal('completedTasksModal')">×</button></div><div class="modal-body" id="modal-completed-body"></div></div></div>
 
-    <!-- AUTOCOMPLETE DATALISTS -->
     <datalist id="brandOptions"></datalist>
     <datalist id="customerOptions"></datalist>
     <datalist id="assigneeOptions"></datalist>
@@ -638,7 +612,6 @@
             tasks = data.tasks || []; projects = data.projects || [];
             meetings = data.meetings || []; expenses = data.expenses || [];
             
-            // Force strict string IDs to prevent JS calculation breakages
             tasks = tasks.map((t, idx) => {
                 if(!t.id) t.id = String(Date.now() + idx).replace('.','');
                 t.id = String(t.id);
@@ -666,15 +639,16 @@
             });
             expenses = expenses.map(e => { if(e.isOngoing === undefined) e.isOngoing = false; return e; });
 
+            // ONLY skip refresh if typing inside a modal to avoid overwriting mid-sentence.
             const activeEl = document.activeElement;
-            const isTyping = activeEl && (activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'INPUT');
-            if(!isTyping) refreshAllViews();
+            const isTypingInModal = activeEl && activeEl.closest('.modal-content') && (activeEl.tagName === 'TEXTAREA' || (activeEl.tagName === 'INPUT' && ['text','number','date','time'].includes(activeEl.type)));
+            
+            if(!isTypingInModal) refreshAllViews();
         } else { syncToCloud(); }
     });
 
     function syncToCloud() { dataRef.set({ tasks, projects, meetings, expenses }, { merge: true }); }
     
-    // UI Local Sync overrides
     window.saveTasks = function() { syncToCloud(); refreshAllViews(); }
     window.saveExpenses = function() { syncToCloud(); refreshAllViews(); }
     window.saveProjects = function() { syncToCloud(); refreshAllViews(); }
@@ -687,10 +661,15 @@
         else if (activeView === 'meetings') { renderMeetings(); }
         else if (activeView === 'expenses' && activeExpenseSubView === 'review') { renderExpenses(); }
 
-        if(currentActiveTaskModalId && document.getElementById('taskDetailsModal').style.display === 'flex') { openTaskModal(currentActiveTaskModalId); }
-        if(currentActiveProjModalId && document.getElementById('projectDetailsModal').style.display === 'flex') { openProjectModal(currentActiveProjModalId); }
-        if(currentActiveMeetModalId && document.getElementById('meetingDetailsModal').style.display === 'flex') { openMeetingModal(currentActiveMeetModalId); }
-        if(document.getElementById('completedTasksModal').style.display === 'flex') { renderCompletedModal(); }
+        const activeEl = document.activeElement;
+        const isTypingInModal = activeEl && activeEl.closest('.modal-content') && (activeEl.tagName === 'TEXTAREA' || (activeEl.tagName === 'INPUT' && ['text','number','date','time'].includes(activeEl.type)));
+        
+        if(!isTypingInModal) {
+            if(currentActiveTaskModalId && document.getElementById('taskDetailsModal').style.display === 'flex') { openTaskModal(currentActiveTaskModalId); }
+            if(currentActiveProjModalId && document.getElementById('projectDetailsModal').style.display === 'flex') { openProjectModal(currentActiveProjModalId); }
+            if(currentActiveMeetModalId && document.getElementById('meetingDetailsModal').style.display === 'flex') { openMeetingModal(currentActiveMeetModalId); }
+            if(document.getElementById('completedTasksModal').style.display === 'flex') { renderCompletedModal(); }
+        }
     }
 
     // --- PURE HTML EVENT HANDLERS ---
@@ -1074,7 +1053,7 @@
 
     // --- INSTANT ACTION ENGINE ---
     window.updateTaskStatus = function(id, newStatus, event) {
-        if(event) { event.preventDefault(); event.stopPropagation(); }
+        if(event) { event.stopPropagation(); }
         let newRecurrences = [];
         tasks = tasks.map(t => {
             if (String(t.id) === String(id)) {
@@ -1094,13 +1073,14 @@
         });
         if(newRecurrences.length > 0) tasks.push(...newRecurrences);
         
-        saveTasks();
+        renderTasks(); renderSidebarPlanner();
         if(String(currentActiveTaskModalId) === String(id) && newStatus === 'Complete') closeModal('taskDetailsModal');
+        saveTasks();
     }
     
-    window.deleteTask = function(id, event) { if(event) { event.preventDefault(); event.stopPropagation(); } tasks = tasks.filter(t => String(t.id) !== String(id)); saveTasks(); if(String(currentActiveTaskModalId) === String(id)) closeModal('taskDetailsModal'); }
-    window.deleteProject = function(id, e) { if(e) { e.preventDefault(); e.stopPropagation(); } projects = projects.filter(p => String(p.id) !== String(id)); saveProjects(); if(String(currentActiveProjModalId) === String(id)) closeModal('projectDetailsModal'); }
-    window.deleteMeeting = function(id, e) { if(e) { e.preventDefault(); e.stopPropagation(); } meetings = meetings.filter(m => String(m.id) !== String(id)); saveMeetings(); if(String(currentActiveMeetModalId) === String(id)) closeModal('meetingDetailsModal');}
+    window.deleteTask = function(id, event) { if(event) { event.stopPropagation(); } tasks = tasks.filter(t => String(t.id) !== String(id)); saveTasks(); if(String(currentActiveTaskModalId) === String(id)) closeModal('taskDetailsModal'); }
+    window.deleteProject = function(id, e) { if(e) { e.stopPropagation(); } projects = projects.filter(p => String(p.id) !== String(id)); saveProjects(); if(String(currentActiveProjModalId) === String(id)) closeModal('projectDetailsModal'); }
+    window.deleteMeeting = function(id, e) { if(e) { e.stopPropagation(); } meetings = meetings.filter(m => String(m.id) !== String(id)); saveMeetings(); if(String(currentActiveMeetModalId) === String(id)) closeModal('meetingDetailsModal');}
     window.deleteExpense = function(id) { expenses = expenses.filter(e => String(e.id) !== String(id)); saveExpenses(); }
 
     /* --- DASHBOARD RENDERERS --- */
@@ -1331,6 +1311,7 @@
                     const card = document.createElement('div'); card.className = `mini-task-card priority-${task.priority}`; 
                     card.setAttribute('draggable', 'true'); 
                     card.addEventListener('dragstart', (e) => window.handleTileDragStart(e, task.id));
+                    card.addEventListener('dragend', window.handleTileDragEnd);
                     card.innerHTML = `<div class="mini-card-left"><input type="checkbox" onclick="updateTaskStatus('${task.id}', 'Complete', event)"><span style="cursor:pointer;" onclick="openTaskModal('${task.id}')">${urgentMark}${task.text}</span></div><div class="mini-card-icons">${task.subtasks.length > 0 ? '📋' : ''} ${task.comments ? '💬' : ''}</div>`;
                     colZone.appendChild(card);
                 });
